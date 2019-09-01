@@ -13,12 +13,12 @@ enum AuthState {
   Error,
 }
 
-class OauthBLoC extends ChangeNotifier {
+class AuthBLoC extends ChangeNotifier {
   SharedPreferences _treflorPref;
   AuthState _state = AuthState.Loading;
   String _token = '';
 
-  OauthBLoC() {
+  AuthBLoC() {
     _load();
   }
 
