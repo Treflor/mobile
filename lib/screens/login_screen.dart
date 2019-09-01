@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OauthBLoC oauthBLoC = Provider.of<OauthBLoC>(context);
+    AuthBLoC oauthBLoC = Provider.of<AuthBLoC>(context);
 
     return Scaffold(
       appBar: AppBar(
