@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthBLoC oauthBLoC = Provider.of<AuthBLoC>(context);
+    AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               RaisedButton(
-                onPressed: () => oauthBLoC.signIn(
+                onPressed: () => authBLoC.signIn(
                     _emailController.text, _passwordController.text),
                 child: Row(
                   children: <Widget>[
@@ -62,7 +62,9 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               Divider(),
-              GoogleSignInButton(),
+              GoogleSignInButton(
+                onPressed: () => authBLoC.googleSignIn(),
+              ),
             ],
           ),
         ),

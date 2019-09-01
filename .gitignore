@@ -73,3 +73,4 @@
 
 # treflor config file
 **/lib/config/treflor.dart
+**/android/app/google-services.json

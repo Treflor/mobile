@@ -47,11 +47,11 @@ Widget _screen(AuthState state) {
 class TreflorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AuthBLoC oauthBLoC = Provider.of<AuthBLoC>(context);
-    print(oauthBLoC.authState);
+    AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
+    print(authBLoC.authState);
     return MaterialApp(
       title: "Treflor",
-      home: _screen(oauthBLoC.authState),
+      home: _screen(authBLoC.authState),
     );
   }
 }
