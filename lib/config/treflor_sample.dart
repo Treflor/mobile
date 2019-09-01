@@ -6,9 +6,11 @@
 // from treflor backend
 class Treflor {
   static const String BASE_URL = "https://api-treflor.herokuapp.com";
+
+// shared prefeences keys
+  static const String JWT_TOKEN_KEY = "jwt-token";
 }
 
-// from traflor backend
 class OAuthAPIs {
   static const String SIGNIN_API = Treflor.BASE_URL + "/oauth/signin";
 }
