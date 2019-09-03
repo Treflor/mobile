@@ -31,7 +31,7 @@ class AuthBLoC extends ChangeNotifier {
         _jwtToken = token;
         _state = AuthState.Authorized;
       } else {
-        _jwtToken = 'token';
+        _jwtToken = '';
         _state = AuthState.Unauthorized;
       }
     }

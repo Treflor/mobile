@@ -16,7 +16,6 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Trefor"),
@@ -54,7 +53,7 @@ class LoginScreen extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Spacer(),
-                    Icon(FontAwesomeIcons.doorOpen),
+                    Icon(FontAwesomeIcons.signInAlt),
                     SizedBox(width: 20),
                     Text("Login"),
                     Spacer(),
@@ -62,6 +61,18 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               Divider(),
+              RaisedButton(
+                onPressed: () => {},
+                child: Row(
+                  children: <Widget>[
+                    Spacer(),
+                    Icon(FontAwesomeIcons.userPlus),
+                    SizedBox(width: 20),
+                    Text("Register"),
+                    Spacer(),
+                  ],
+                ),
+              ),
               GoogleSignInButton(
                 onPressed: () => authBLoC.googleSignIn(),
               ),

@@ -22,18 +22,15 @@ class App extends StatelessWidget {
   }
 }
 
-SplashScreen _splashScreen;
-MainScreen _mainScreen;
 LoginScreen _loginScreen;
 
 Widget _screen(AuthState state) {
   switch (state) {
     case AuthState.Loading:
-      if (_splashScreen == null) _splashScreen = SplashScreen();
-      return _splashScreen;
+      return SplashScreen();
     case AuthState.Authorized:
-      if (_mainScreen == null) _mainScreen = MainScreen();
-      return _mainScreen;
+      return MainScreen();
+
     case AuthState.Unauthorized:
       if (_loginScreen == null) _loginScreen = LoginScreen();
       return _loginScreen;
@@ -49,6 +46,7 @@ class TreflorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
     print(authBLoC.authState);
+    print("jwt ${authBLoC.jwtToken}");
     return MaterialApp(
       title: "Treflor",
       home: _screen(authBLoC.authState),
