@@ -13,4 +13,5 @@ class Treflor {
 
 class OAuthAPIs {
   static const String SIGNIN_API = Treflor.BASE_URL + "/oauth/signin";
+  static const String GOOGLE_SIGNIN_API = Treflor.BASE_URL + "/oauth/google";
 }

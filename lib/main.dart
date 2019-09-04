@@ -5,6 +5,10 @@ import 'package:treflor/screens/login_screen.dart';
 import 'package:treflor/screens/main_screen.dart';
 import 'package:treflor/screens/splash_screen.dart';
 
+import 'screens/login_screen.dart' as prefix0;
+import 'screens/main_screen.dart' as prefix1;
+import 'screens/registration_screen.dart';
+
 void main() => runApp(App());
 
 class App extends StatelessWidget {
@@ -22,18 +26,15 @@ class App extends StatelessWidget {
   }
 }
 
-SplashScreen _splashScreen;
-MainScreen _mainScreen;
 LoginScreen _loginScreen;
 
 Widget _screen(AuthState state) {
   switch (state) {
     case AuthState.Loading:
-      if (_splashScreen == null) _splashScreen = SplashScreen();
-      return _splashScreen;
+      return SplashScreen();
     case AuthState.Authorized:
-      if (_mainScreen == null) _mainScreen = MainScreen();
-      return _mainScreen;
+      return MainScreen();
+
     case AuthState.Unauthorized:
       if (_loginScreen == null) _loginScreen = LoginScreen();
       return _loginScreen;
@@ -47,11 +48,15 @@ Widget _screen(AuthState state) {
 class TreflorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AuthBLoC oauthBLoC = Provider.of<AuthBLoC>(context);
-    print(oauthBLoC.authState);
+    AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
     return MaterialApp(
       title: "Treflor",
-      home: _screen(oauthBLoC.authState),
+      home: _screen(authBLoC.authState),
+      routes: {
+        LoginScreen.route: (context) => prefix0.LoginScreen(),
+        RegistrationScreen.route: (context) => RegistrationScreen(),
+        prefix1.MainScreen.route: (context) => prefix1.MainScreen(),
+      },
     );
   }
 }

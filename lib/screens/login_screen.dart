@@ -4,19 +4,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treflor/bloc/oauth_bloc.dart';
 
-class LoginScreen extends StatelessWidget {
-  TextEditingController _emailController;
-  TextEditingController _passwordController;
+import 'registration_screen.dart';
 
-  LoginScreen() {
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-  }
+class LoginScreen extends StatelessWidget {
+  static const String route = '/login';
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    AuthBLoC oauthBLoC = Provider.of<AuthBLoC>(context);
-
+    AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Trefor"),
@@ -49,12 +47,12 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               RaisedButton(
-                onPressed: () => oauthBLoC.signIn(
+                onPressed: () => authBLoC.signIn(
                     _emailController.text, _passwordController.text),
                 child: Row(
                   children: <Widget>[
                     Spacer(),
-                    Icon(FontAwesomeIcons.doorOpen),
+                    Icon(FontAwesomeIcons.signInAlt),
                     SizedBox(width: 20),
                     Text("Login"),
                     Spacer(),
@@ -62,7 +60,22 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               Divider(),
-              GoogleSignInButton(),
+              RaisedButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, RegistrationScreen.route),
+                child: Row(
+                  children: <Widget>[
+                    Spacer(),
+                    Icon(FontAwesomeIcons.userPlus),
+                    SizedBox(width: 20),
+                    Text("Register"),
+                    Spacer(),
+                  ],
+                ),
+              ),
+              GoogleSignInButton(
+                onPressed: () => authBLoC.googleSignIn(),
+              ),
             ],
           ),
         ),

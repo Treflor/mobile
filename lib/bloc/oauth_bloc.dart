@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,7 +31,7 @@ class AuthBLoC extends ChangeNotifier {
         _jwtToken = token;
         _state = AuthState.Authorized;
       } else {
-        _jwtToken = 'token';
+        _jwtToken = '';
         _state = AuthState.Unauthorized;
       }
     }
@@ -77,5 +78,31 @@ class AuthBLoC extends ChangeNotifier {
 
   void signOut() {
     _jwtToken = '';
+  }
+
+  Future<bool> googleSignIn() async {
+    try {
+      final GoogleSignIn _googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      Response response = await post(
+        OAuthAPIs.GOOGLE_SIGNIN_API,
+        body: {
+          "access_token": googleAuth.accessToken,
+        },
+      );
+
+      if (response.statusCode == 200)
+        _jwtToken = jsonDecode(response.body)['token'];
+      else
+        _jwtToken = '';
+      print(jwtToken);
+      return true;
+    } catch (error) {
+      _authState = AuthState.Error;
+      return true;
+    }
   }
 }
