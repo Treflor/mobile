@@ -4,14 +4,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treflor/bloc/oauth_bloc.dart';
 
-class LoginScreen extends StatelessWidget {
-  TextEditingController _emailController;
-  TextEditingController _passwordController;
+import 'registration_screen.dart';
 
-  LoginScreen() {
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-  }
+class LoginScreen extends StatelessWidget {
+  static const String route = '/login';
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +61,8 @@ class LoginScreen extends StatelessWidget {
               ),
               Divider(),
               RaisedButton(
-                onPressed: () => {},
+                onPressed: () =>
+                    Navigator.pushNamed(context, RegistrationScreen.route),
                 child: Row(
                   children: <Widget>[
                     Spacer(),

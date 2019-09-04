@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:treflor/bloc/oauth_bloc.dart';
 
 class MainScreen extends StatelessWidget {
+  static const String route = '/main';
   @override
   Widget build(BuildContext context) {
     AuthBLoC oauthBLoC = Provider.of<AuthBLoC>(context);

@@ -5,6 +5,10 @@ import 'package:treflor/screens/login_screen.dart';
 import 'package:treflor/screens/main_screen.dart';
 import 'package:treflor/screens/splash_screen.dart';
 
+import 'screens/login_screen.dart' as prefix0;
+import 'screens/main_screen.dart' as prefix1;
+import 'screens/registration_screen.dart';
+
 void main() => runApp(App());
 
 class App extends StatelessWidget {
@@ -45,11 +49,14 @@ class TreflorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
-    print(authBLoC.authState);
-    print("jwt ${authBLoC.jwtToken}");
     return MaterialApp(
       title: "Treflor",
       home: _screen(authBLoC.authState),
+      routes: {
+        LoginScreen.route: (context) => prefix0.LoginScreen(),
+        RegistrationScreen.route: (context) => RegistrationScreen(),
+        prefix1.MainScreen.route: (context) => prefix1.MainScreen(),
+      },
     );
   }
 }
