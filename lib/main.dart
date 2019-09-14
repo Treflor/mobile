@@ -51,6 +51,9 @@ class TreflorApp extends StatelessWidget {
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
     return MaterialApp(
       title: "Treflor",
+      theme: ThemeData(
+        brightness: Brightness.dark,
+      ),
       home: _screen(authBLoC.authState),
       routes: {
         LoginScreen.route: (context) => prefix0.LoginScreen(),

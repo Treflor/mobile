@@ -55,7 +55,7 @@ class AuthBLoC extends ChangeNotifier {
   AuthState get authState => _state;
   set _authState(AuthState state) => _state = state;
 
-  Future<bool> signIn(String email, String password) async {
+  Future<void> signIn(String email, String password) async {
     try {
       Response response = await post(
         OAuthAPIs.SIGNIN_API,
@@ -72,7 +72,6 @@ class AuthBLoC extends ChangeNotifier {
       return true;
     } catch (error) {
       _authState = AuthState.Error;
-      return true;
     }
   }
 
@@ -80,7 +79,30 @@ class AuthBLoC extends ChangeNotifier {
     _jwtToken = '';
   }
 
-  Future<bool> googleSignIn() async {
+  Future<void> signUp(String email, String password, String image,
+      String familyName, String givenName) async {
+    try {
+      Response response = await post(
+        OAuthAPIs.SIGNUP_API,
+        body: {
+          "email": email,
+          "password": password,
+          "family_name": familyName,
+          "given_name": givenName,
+          "photo": 'null',
+        },
+      );
+
+      if (response.statusCode == 200)
+        _jwtToken = jsonDecode(response.body)['token'];
+      else
+        _jwtToken = '';
+    } catch (error) {
+      _authState = AuthState.Error;
+    }
+  }
+
+  Future<void> googleSignIn() async {
     try {
       final GoogleSignIn _googleSignIn = GoogleSignIn();
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -98,11 +120,8 @@ class AuthBLoC extends ChangeNotifier {
         _jwtToken = jsonDecode(response.body)['token'];
       else
         _jwtToken = '';
-      print(jwtToken);
-      return true;
     } catch (error) {
       _authState = AuthState.Error;
-      return true;
     }
   }
 }
