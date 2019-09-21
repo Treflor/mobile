@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../bloc/oauth_bloc.dart';
+import '../../bloc/oauth_bloc.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String route = '/registration';

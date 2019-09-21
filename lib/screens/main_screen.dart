@@ -41,27 +41,22 @@ var _selectedIndex = 0;
           BottomNavigationBarItem(
             title: Text('Home'),
             icon: Icon(FontAwesomeIcons.home),
-            backgroundColor: Colors.blueGrey,
           ),
           BottomNavigationBarItem(
             title: Text('Start'),
             icon: Icon(FontAwesomeIcons.plus),
-            backgroundColor: Colors.amberAccent,
           ),
           BottomNavigationBarItem(
             title: Text('Camera'),
             icon: Icon(FontAwesomeIcons.camera),
-            backgroundColor: Colors.greenAccent,
           ),
           BottomNavigationBarItem(
             title: Text('Routes'),
             icon: Icon(FontAwesomeIcons.route),
-            backgroundColor: Colors.cyanAccent,
           ),
           BottomNavigationBarItem(
             title: Text('Settings'),
             icon: Icon(FontAwesomeIcons.cog),
-            backgroundColor: Colors.redAccent,
           ),
         ],
       ),

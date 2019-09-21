@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:treflor/bloc/oauth_bloc.dart';
-import 'package:treflor/screens/login_screen.dart';
+import 'package:treflor/screens/auth/login_screen.dart';
 import 'package:treflor/screens/main_screen.dart';
 import 'package:treflor/screens/splash_screen.dart';
 
-import 'screens/login_screen.dart' as prefix0;
+import 'screens/auth/login_screen.dart' as prefix0;
 import 'screens/main_screen.dart' as prefix1;
-import 'screens/registration_screen.dart';
+import 'screens/auth/registration_screen.dart';
 
 void main() => runApp(App());
 
