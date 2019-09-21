@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../config/treflor.dart';
+import 'package:treflor/config/treflor.dart';
 
 enum AuthState {
   Loading,

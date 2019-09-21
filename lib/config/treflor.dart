@@ -9,6 +9,8 @@ class Treflor {
 
 // shared prefeences keys
   static const String JWT_TOKEN_KEY = "jwt-token";
+
+  static const String DARK_MODE_KEY = "dark-mode";
 }
 
 class OAuthAPIs {
