@@ -15,16 +15,11 @@ enum AuthState {
 }
 
 class AuthBLoC extends ChangeNotifier {
-  SharedPreferences _treflorPref;
+  final SharedPreferences _treflorPref = Treflor.treflorPref;
   AuthState _state = AuthState.Loading;
   String _token = '';
 
   AuthBLoC() {
-    _load();
-  }
-
-  void _load() async {
-    _treflorPref = await SharedPreferences.getInstance();
     if (_treflorPref != null) {
       var token = _treflorPref.getString(Treflor.JWT_TOKEN_KEY);
       if (token != null && token.isNotEmpty) {
@@ -35,7 +30,6 @@ class AuthBLoC extends ChangeNotifier {
         _state = AuthState.Unauthorized;
       }
     }
-    notifyListeners();
   }
 
   String get jwtToken => _token;

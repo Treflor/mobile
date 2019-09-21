@@ -1,7 +1,11 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'config.dart';
 
 class Treflor {
   static const String BASE_URL = API_BASE_URL;
+
+  static SharedPreferences treflorPref;
 
 // shared prefeences keys
   static const String JWT_TOKEN_KEY = "jwt-token";
