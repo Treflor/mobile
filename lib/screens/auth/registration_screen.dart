@@ -67,13 +67,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Spacer(),
                   ],
                 ),
-                onPressed: () => authBLoC.signUp(
-                  _emailController.text,
-                  _passwordController.text,
-                  '',
-                  _familyNameController.text,
-                  _givenNameController.text,
-                ),
+                onPressed: () => authBLoC
+                    .signUp(
+                      _emailController.text,
+                      _passwordController.text,
+                      '',
+                      _familyNameController.text,
+                      _givenNameController.text,
+                    )
+                    .then((_) => Navigator.pop(context)),
               )
             ],
           ),
