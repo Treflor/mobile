@@ -30,7 +30,7 @@ dependencies:
   shared_preferences:
   font_awesome_flutter:
   url_launcher:
-  http:
+  dio:
 
 dev_dependencies:
   flutter_test:
