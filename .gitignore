@@ -63,6 +63,7 @@
 **/ios/Flutter/flutter_assets/
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/Flutter/flutter_export_environment.sh
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3
@@ -72,5 +73,5 @@
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 # treflor config file
-**/lib/config/treflor.dart
+**/lib/config/config.dart
 **/android/app/google-services.json
