@@ -10,6 +10,7 @@ import 'package:treflor/screens/main_screen.dart';
 import 'package:treflor/screens/splash_screen.dart';
 import 'package:treflor/screens/auth/registration_screen.dart';
 
+import 'bloc/user_bloc.dart';
 
 Future<void> main() async {
   Treflor.treflorPref = await SharedPreferences.getInstance();
@@ -27,6 +28,9 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider<ConfigBLoC>.value(
           value: ConfigBLoC(),
+        ),
+        ChangeNotifierProvider<UserBLoC>.value(
+          value: UserBLoC(),
         ),
       ],
       child: TreflorApp(),
@@ -58,6 +62,8 @@ class TreflorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
     ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
+    UserBLoC userBLoC = Provider.of<UserBLoC>(context);
+    authBLoC.addListener(userBLoC.refreshJWT);
     return MaterialApp(
       title: "Treflor",
       theme: ThemeData(

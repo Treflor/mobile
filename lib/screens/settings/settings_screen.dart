@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
+        actions: <Widget>[
+          CircleAvatar(
+            child: CachedNetworkImage(
+              imageUrl:
+                  "https://storage.googleapis.com/treflor/profile-images/last%40gmail.com-original.jpeg",
+            ),
+          )
+        ],
       ),
       body: Container(
         child: ListView(
@@ -36,6 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: Text("Sign out"),
               onTap: () => authBLoC.signOut(),
             ),
+            Image.network("https://storage.googleapis.com/treflor/profile-images/last%40gmail.com-original.jpeg")
           ],
         ),
       ),
