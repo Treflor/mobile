@@ -69,29 +69,11 @@ class AuthBLoC extends ChangeNotifier {
     }
   }
 
-  void signOut() {
-    _jwtToken = '';
-  }
+  void signOut() => _jwtToken = '';
 
-  Future<void> signUp(String email, String password, String image,
-      String familyName, String givenName) async {
+  Future<void> signUp(FormData data) async {
     try {
-      FormData data = FormData.fromMap({
-        "email": email,
-        "password": password,
-        "family_name": familyName,
-        "given_name": givenName,
-        "photo": 'null',
-      });
-
-      var response = await _dio.post(OAuthAPIs.SIGNUP_API, data: data,
-          onSendProgress: (send, total) {
-        print("$send : $total");
-      });
-      if (response.statusCode == 200) {
-        _jwtToken = response.data['token'];
-      } else
-        _jwtToken = '';
+      await _dio.post(OAuthAPIs.SIGNUP_API, data: data);
     } catch (error) {
       _authState = AuthState.Error;
     }

@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../bloc/oauth_bloc.dart';
@@ -16,6 +21,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _familyNameController = TextEditingController();
   final TextEditingController _givenNameController = TextEditingController();
 
+  Image _image = Image.asset("assets/images/profile.jpg");
+  File _file = null;
+
+  Future<void> _onSignup(
+      Future<void> Function(FormData) signup, context) async {
+    var base64Image = '';
+
+    if (_file == null) {
+      var byteData = await rootBundle.load("assets/images/profile.jpg");
+      var audioUint8List = byteData.buffer
+          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
+      List<int> imageListInt =
+          audioUint8List.map((eachUint8) => eachUint8.toInt()).toList();
+      base64Image = base64.encode(imageListInt);
+    } else {
+      base64Image = base64.encode(_file.readAsBytesSync());
+    }
+
+    FormData data = FormData.fromMap({
+      "email": _emailController.text,
+      "password": _passwordController.text,
+      "family_name": _familyNameController.text,
+      "given_name": _givenNameController.text,
+      "photo": base64Image,
+    });
+
+    _showProgressDialog(context);
+
+    await signup(data);
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
+  void _showProgressDialog(context) => showDialog(
+        context: context,
+        builder: (context) => Container(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
@@ -28,6 +75,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           padding: EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
+              SizedBox(
+                height: 200,
+                width: 200,
+                child: InkWell(
+                  child: ClipOval(
+                    child: _image,
+                  ),
+                  onTap: () async {
+                    _file = await ImagePicker.pickImage(
+                        source: ImageSource.gallery);
+                    setState(() {
+                      _image = _file != null
+                          ? Image.file(_file)
+                          : Image.asset("assets/images/profile.jpg");
+                    });
+                  },
+                ),
+              ),
               TextField(
                 keyboardType: TextInputType.emailAddress,
                 controller: _emailController,
@@ -67,16 +132,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Spacer(),
                   ],
                 ),
-                onPressed: () => authBLoC
-                    .signUp(
-                      _emailController.text,
-                      _passwordController.text,
-                      '',
-                      _familyNameController.text,
-                      _givenNameController.text,
-                    )
-                    .then((_) => Navigator.pop(context)),
-              )
+                onPressed: () => _onSignup(authBLoC.signUp, context),
+              ),
             ],
           ),
         ),
