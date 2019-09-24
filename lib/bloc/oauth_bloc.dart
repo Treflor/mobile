@@ -116,7 +116,7 @@ class AuthBLoC extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         _jwtToken = response.data['token'];
-        _loadUser();
+        await _loadUser();
       } else {
         _jwtToken = '';
       }

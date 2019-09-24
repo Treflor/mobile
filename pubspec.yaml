@@ -32,6 +32,7 @@ dependencies:
   url_launcher:
   dio:
   image_picker:
+  location:
 
 dev_dependencies:
   flutter_test:

@@ -10,6 +10,8 @@ import 'package:treflor/screens/main_screen.dart';
 import 'package:treflor/screens/splash_screen.dart';
 import 'package:treflor/screens/auth/registration_screen.dart';
 
+import 'screens/profile/profile.dart';
+
 Future<void> main() async {
   Treflor.treflorPref = await SharedPreferences.getInstance();
   runApp(App());
@@ -67,6 +69,7 @@ class TreflorApp extends StatelessWidget {
         LoginScreen.route: (context) => LoginScreen(),
         RegistrationScreen.route: (context) => RegistrationScreen(),
         MainScreen.route: (context) => MainScreen(),
+        ProfileScreen.route: (context) => ProfileScreen(),
       },
     );
   }

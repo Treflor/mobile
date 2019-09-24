@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treflor/bloc/config_bloc.dart';
 import 'package:treflor/bloc/oauth_bloc.dart';
+import 'package:treflor/screens/profile/profile.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -19,14 +20,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: Text("Settings"),
         actions: <Widget>[
-          CircleAvatar(
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: authBLoC.user["photo"],
+          InkWell(
+            child: CircleAvatar(
+              child: Hero(
+                tag: "profile-pic",
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: authBLoC.user["photo"],
+                  ),
                 ),
               ),
-              ),
+            ),
+            onTap: () => Navigator.pushNamed(context, ProfileScreen.route),
+          ),
         ],
       ),
       body: Container(
