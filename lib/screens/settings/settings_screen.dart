@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:treflor/bloc/config_bloc.dart';
+import 'package:treflor/bloc/oauth_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -8,9 +12,32 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("Settings"),
+    AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
+    ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Settings"),
+      ),
+      body: Container(
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(
+                configBLoC.darkMode
+                    ? FontAwesomeIcons.solidLightbulb
+                    : FontAwesomeIcons.lightbulb,
+              ),
+              title: Text("Dark Mode"),
+              onTap: () => configBLoC.toggleDarkMode(),
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(FontAwesomeIcons.signOutAlt),
+              title: Text("Sign out"),
+              onTap: () => authBLoC.signOut(),
+            ),
+          ],
+        ),
       ),
     );
   }

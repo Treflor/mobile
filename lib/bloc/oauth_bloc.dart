@@ -1,11 +1,10 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../config/treflor.dart';
+import 'package:treflor/config/treflor.dart';
 
 enum AuthState {
   Loading,
@@ -15,16 +14,12 @@ enum AuthState {
 }
 
 class AuthBLoC extends ChangeNotifier {
-  SharedPreferences _treflorPref;
+  final SharedPreferences _treflorPref = Treflor.treflorPref;
   AuthState _state = AuthState.Loading;
   String _token = '';
+  Dio _dio = Dio();
 
   AuthBLoC() {
-    _load();
-  }
-
-  void _load() async {
-    _treflorPref = await SharedPreferences.getInstance();
     if (_treflorPref != null) {
       var token = _treflorPref.getString(Treflor.JWT_TOKEN_KEY);
       if (token != null && token.isNotEmpty) {
@@ -35,7 +30,6 @@ class AuthBLoC extends ChangeNotifier {
         _state = AuthState.Unauthorized;
       }
     }
-    notifyListeners();
   }
 
   String get jwtToken => _token;
@@ -57,16 +51,16 @@ class AuthBLoC extends ChangeNotifier {
 
   Future<void> signIn(String email, String password) async {
     try {
-      Response response = await post(
+      Response response = await _dio.post(
         OAuthAPIs.SIGNIN_API,
-        body: {
+        data: {
           "email": email,
           "password": password,
         },
       );
 
       if (response.statusCode == 200)
-        _jwtToken = jsonDecode(response.body)['token'];
+        _jwtToken = response.data['token'];
       else
         _jwtToken = '';
       return true;
@@ -75,28 +69,11 @@ class AuthBLoC extends ChangeNotifier {
     }
   }
 
-  void signOut() {
-    _jwtToken = '';
-  }
+  void signOut() => _jwtToken = '';
 
-  Future<void> signUp(String email, String password, String image,
-      String familyName, String givenName) async {
+  Future<void> signUp(FormData data) async {
     try {
-      Response response = await post(
-        OAuthAPIs.SIGNUP_API,
-        body: {
-          "email": email,
-          "password": password,
-          "family_name": familyName,
-          "given_name": givenName,
-          "photo": 'null',
-        },
-      );
-
-      if (response.statusCode == 200)
-        _jwtToken = jsonDecode(response.body)['token'];
-      else
-        _jwtToken = '';
+      await _dio.post(OAuthAPIs.SIGNUP_API, data: data);
     } catch (error) {
       _authState = AuthState.Error;
     }
@@ -109,15 +86,15 @@ class AuthBLoC extends ChangeNotifier {
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      Response response = await post(
+      Response response = await _dio.post(
         OAuthAPIs.GOOGLE_SIGNIN_API,
-        body: {
+        data: {
           "access_token": googleAuth.accessToken,
         },
       );
 
       if (response.statusCode == 200)
-        _jwtToken = jsonDecode(response.body)['token'];
+        _jwtToken = response.data['token'];
       else
         _jwtToken = '';
     } catch (error) {
