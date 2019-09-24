@@ -24,8 +24,6 @@ class AuthBLoC extends ChangeNotifier {
     if (_treflorPref != null) {
       var token = _treflorPref.getString(Treflor.JWT_TOKEN_KEY);
       var userString = _treflorPref.getString(Treflor.USER_KEY);
-      print("User String");
-      print(userString);
       if (token != null && token.isNotEmpty) {
         _jwtToken = token;
         _state = AuthState.Authorized;
@@ -34,9 +32,7 @@ class AuthBLoC extends ChangeNotifier {
         _state = AuthState.Unauthorized;
       }
       if (userString != null && userString.isNotEmpty) {
-        print("ondecode");
         user = json.decode(userString);
-        print(user);
       } else {
         user = {};
       }
@@ -60,8 +56,6 @@ class AuthBLoC extends ChangeNotifier {
 
   dynamic get user => _user;
   set user(dynamic user) {
-    print("on save");
-    print(user);
     if (_treflorPref != null) {
       _user = user;
     }
@@ -132,9 +126,9 @@ class AuthBLoC extends ChangeNotifier {
   }
 
   Future<void> _loadUser() async {
-    print("get called");
     var response = await _dio.get(UserAPI.USER_API,
-        options: Options(headers: {"Authorization": jwtToken}));
+        options: Options(headers: {"authorization": jwtToken}));
+
     user = response.data['user'];
     _treflorPref.setString(Treflor.USER_KEY, json.encode(user));
   }

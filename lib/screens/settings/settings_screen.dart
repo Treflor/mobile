@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treflor/bloc/config_bloc.dart';
 import 'package:treflor/bloc/oauth_bloc.dart';
-import 'package:treflor/bloc/user_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -16,20 +15,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
     ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
-    UserBLoC userBLoC = Provider.of<UserBLoC>(context);
-    print(userBLoC.user);
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
         actions: <Widget>[
           CircleAvatar(
-            // child: ClipOval(
-            //   child: CachedNetworkImage(
-            //     fit: BoxFit.cover,
-            //     imageUrl: authBLoC.user["photo"],
-            //   ),
-            // ),
-          ),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl: authBLoC.user["photo"],
+                ),
+              ),
+              ),
         ],
       ),
       body: Container(

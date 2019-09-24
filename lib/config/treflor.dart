@@ -12,7 +12,7 @@ class Treflor {
 
   static const String DARK_MODE_KEY = "dark-mode";
 
-  static const String USER_KEY = "user";
+  static const String USER_KEY = "user-data";
 }
 
 class OAuthAPIs {

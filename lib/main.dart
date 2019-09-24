@@ -10,8 +10,6 @@ import 'package:treflor/screens/main_screen.dart';
 import 'package:treflor/screens/splash_screen.dart';
 import 'package:treflor/screens/auth/registration_screen.dart';
 
-import 'bloc/user_bloc.dart';
-
 Future<void> main() async {
   Treflor.treflorPref = await SharedPreferences.getInstance();
   runApp(App());
@@ -28,9 +26,6 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider<ConfigBLoC>.value(
           value: ConfigBLoC(),
-        ),
-        ChangeNotifierProvider<UserBLoC>.value(
-          value: UserBLoC(),
         ),
       ],
       child: TreflorApp(),
