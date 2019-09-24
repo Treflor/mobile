@@ -17,17 +17,28 @@ class AuthBLoC extends ChangeNotifier {
   final SharedPreferences _treflorPref = Treflor.treflorPref;
   AuthState _state = AuthState.Loading;
   String _token = '';
+  dynamic _user = {};
   Dio _dio = Dio();
 
   AuthBLoC() {
     if (_treflorPref != null) {
       var token = _treflorPref.getString(Treflor.JWT_TOKEN_KEY);
+      var userString = _treflorPref.getString(Treflor.USER_KEY);
+      print("User String");
+      print(userString);
       if (token != null && token.isNotEmpty) {
         _jwtToken = token;
         _state = AuthState.Authorized;
       } else {
         _jwtToken = '';
         _state = AuthState.Unauthorized;
+      }
+      if (userString != null && userString.isNotEmpty) {
+        print("ondecode");
+        print(json.decode(userString));
+        user = json.decode(userString);
+      } else {
+        user = {};
       }
     }
   }
@@ -39,10 +50,24 @@ class AuthBLoC extends ChangeNotifier {
       _treflorPref.setString(Treflor.JWT_TOKEN_KEY, token);
     }
 
-    if (token == '')
+    if (token == '') {
       _authState = AuthState.Unauthorized;
-    else
+    } else {
       _authState = AuthState.Authorized;
+    }
+    notifyListeners();
+  }
+
+  dynamic get user => _user;
+  set user(dynamic user) {
+    print("on save");
+    print(user);
+    if (_treflorPref != null) {
+      _user = user;
+      _treflorPref.setString(Treflor.USER_KEY, json.encode(user));
+      print("on pred");
+      print(_treflorPref.getString(Treflor.USER_KEY));
+    }
     notifyListeners();
   }
 
@@ -59,17 +84,22 @@ class AuthBLoC extends ChangeNotifier {
         },
       );
 
-      if (response.statusCode == 200)
+      if (response.statusCode == 200) {
         _jwtToken = response.data['token'];
-      else
+        _loadUser();
+      } else {
         _jwtToken = '';
+      }
       return true;
     } catch (error) {
       _authState = AuthState.Error;
     }
   }
 
-  void signOut() => _jwtToken = '';
+  void signOut() => {
+        _jwtToken = '',
+        user = {},
+      };
 
   Future<void> signUp(FormData data) async {
     try {
@@ -93,12 +123,21 @@ class AuthBLoC extends ChangeNotifier {
         },
       );
 
-      if (response.statusCode == 200)
+      if (response.statusCode == 200) {
         _jwtToken = response.data['token'];
-      else
+        _loadUser();
+      } else {
         _jwtToken = '';
+      }
     } catch (error) {
       _authState = AuthState.Error;
     }
+  }
+
+  Future<void> _loadUser() async {
+    var response = await _dio.get(UserAPI.USER_API,
+        options: Options(headers: {"Authorization": jwtToken}));
+
+    user = response.data['user'];
   }
 }

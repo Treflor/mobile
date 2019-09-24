@@ -62,8 +62,6 @@ class TreflorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
     ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
-    UserBLoC userBLoC = Provider.of<UserBLoC>(context);
-    authBLoC.addListener(userBLoC.refreshJWT);
     return MaterialApp(
       title: "Treflor",
       theme: ThemeData(

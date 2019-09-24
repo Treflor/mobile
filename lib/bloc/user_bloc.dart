@@ -5,26 +5,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/treflor.dart';
 
 class UserBLoC extends ChangeNotifier {
-  SharedPreferences _treflorPref = Treflor.treflorPref;
-  String _jwt = '';
-  Dio _dio = Dio();
+  final SharedPreferences _treflorPref = Treflor.treflorPref;
+  dynamic _user;
 
-  UserBLoC() {}
-  refreshJWT() {
-    print("object");
-    if (_treflorPref != null) {
-      var token = _treflorPref.getString(Treflor.JWT_TOKEN_KEY);
-      if (token != null && token.isNotEmpty) {
-        _jwt = token;
-      } else {
-        _jwt = '';
-      }
-    }
-    _dio.interceptors.add(
-      InterceptorsWrapper(onRequest: (RequestOptions options) {
-        options.headers["Authorization"] = _jwt;
-        return options;
-      }),
-    );
+  UserBLoC() {
+    user = _treflorPref?.getBool(Treflor.DARK_MODE_KEY) ?? false;
   }
+
+  dynamic get user => _user;
+
+  set user(dynamic user) {
+    _user = user;
+    _treflorPref.setString(Treflor.USER_KEY, user.toString());
+    notifyListeners();
+  }
+
+  void toggleDarkMode() {}
 }
