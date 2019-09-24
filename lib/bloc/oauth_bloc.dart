@@ -35,8 +35,8 @@ class AuthBLoC extends ChangeNotifier {
       }
       if (userString != null && userString.isNotEmpty) {
         print("ondecode");
-        print(json.decode(userString));
         user = json.decode(userString);
+        print(user);
       } else {
         user = {};
       }
@@ -64,9 +64,6 @@ class AuthBLoC extends ChangeNotifier {
     print(user);
     if (_treflorPref != null) {
       _user = user;
-      _treflorPref.setString(Treflor.USER_KEY, json.encode(user));
-      print("on pred");
-      print(_treflorPref.getString(Treflor.USER_KEY));
     }
     notifyListeners();
   }
@@ -135,9 +132,10 @@ class AuthBLoC extends ChangeNotifier {
   }
 
   Future<void> _loadUser() async {
+    print("get called");
     var response = await _dio.get(UserAPI.USER_API,
         options: Options(headers: {"Authorization": jwtToken}));
-
     user = response.data['user'];
+    _treflorPref.setString(Treflor.USER_KEY, json.encode(user));
   }
 }
