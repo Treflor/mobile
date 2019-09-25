@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class StartScreen extends StatefulWidget {
   @override
@@ -20,18 +21,15 @@ class _StartScreenState extends State<StartScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(
-        child: positions.isNotEmpty
-            ? ListView.builder(
-                itemCount: positions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                        "latitude: ${positions[index].latitude}, logitude: ${positions[index].longitude}"),
-                  );
-                },
-              )
-            : Text("not loaded"),
+      child: Stack(
+        children: <Widget>[
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: LatLng(7.458992, 80.2479298),
+              zoom: 20,
+            ),
+          )
+        ],
       ),
     );
   }
