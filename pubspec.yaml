@@ -32,7 +32,8 @@ dependencies:
   url_launcher:
   dio:
   image_picker:
-  location:
+  geolocator:
+  google_maps_flutter:
 
 dev_dependencies:
   flutter_test:
