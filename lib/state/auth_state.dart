@@ -48,7 +48,7 @@ class AuthState extends ChangeNotifier {
     return _respository.usersInfo().then((User user) {
       this._user = user;
       notifyListeners();
-      return response.success;
+      return true;
     });
   }
 
@@ -59,35 +59,20 @@ class AuthState extends ChangeNotifier {
     });
   }
 
-  // Future<void> signUp(FormData data) async {
-  //   try {
-  //     await _dio.post(OAuthAPIs.SIGNUP_API, data: data);
-  //   } catch (error) {
-  //     _authState = AuthState.Error;
-  //   }
-  // }
-
-  // Future<void> googleSignIn() async {
-  //   try {
-  //     final GoogleSignIn _googleSignIn = GoogleSignIn();
-  //     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-  //     final GoogleSignInAuthentication googleAuth =
-  //         await googleUser.authentication;
-
-  //     Response response = await _dio.post(
-  //       OAuthAPIs.GOOGLE_SIGNIN_API,
-  //       data: {
-  //         "access_token": googleAuth.accessToken,
-  //       },
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       _jwtToken = response.data['token'];
-  //     } else {
-  //       _jwtToken = '';
-  //     }
-  //   } catch (error) {
-  //     _authState = AuthState.Error;
-  //   }
-  // }
+  Future<bool> signInWithGoogle() {
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      signInOption: SignInOption.standard,
+      scopes: [
+        'profile',
+        'email',
+        'openid',
+      ],
+    );
+    return _googleSignIn.signIn().then((res) async {
+      var auth = await res.authentication;
+      return await _respository
+          .loginWithGoogle(auth.accessToken)
+          .then((response) => _loadUserData(response));
+    });
+  }
 }

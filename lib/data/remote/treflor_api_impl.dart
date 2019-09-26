@@ -19,6 +19,7 @@ class TreflorAPIImpl extends TreflorAPI {
   static const String API_URL = BASE_URL + "";
 
   static const ENDPOINT_LOGIN = "/oauth/signin";
+  static const ENDPOINT_LOGIN_WITH_GOOGLE = "/oauth/google";
   static const ENDPOINT_USER = "/user";
 
   @override
@@ -35,6 +36,16 @@ class TreflorAPIImpl extends TreflorAPI {
     );
     return _dio.get(API_URL + ENDPOINT_USER, options: options).then((response) {
       return User.fromJson(response.data['user']);
+    });
+  }
+
+  @override
+  Future<LoginResponse> loginWithGoogle(String token) {
+    return _dio.post(API_URL + ENDPOINT_LOGIN_WITH_GOOGLE,
+        data: {"access_token": token}).then((response) {
+      return LoginResponse(response.data);
+    }).catchError((err) {
+      print(err);
     });
   }
 }

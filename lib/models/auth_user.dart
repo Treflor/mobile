@@ -7,9 +7,6 @@ class AuthUser {
   AuthUser.just();
 
   Map<String, dynamic> toMap() {
-    return {
-      "email": email,
-      "password": password
-    };
+    return {"email": email, "password": password};
   }
 }

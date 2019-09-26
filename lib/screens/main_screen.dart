@@ -48,6 +48,10 @@ class _MainScreenState extends State<MainScreen> {
                 child: ClipOval(
                   child: authState.user != null
                       ? CachedNetworkImage(
+                        placeholder: (context,str){
+                          print(str);
+                          return Text("A");
+                        },
                           fit: BoxFit.cover,
                           imageUrl: authState.user.photoUrl,
                         )

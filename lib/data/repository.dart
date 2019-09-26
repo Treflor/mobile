@@ -43,6 +43,12 @@ class Repository {
     return _api.login(user).then((response) => _storeAccessToken(response));
   }
 
+  Future<LoginResponse> loginWithGoogle(String accessToken) {
+    return _api
+        .loginWithGoogle(accessToken)
+        .then((response) => _storeAccessToken(response));
+  }
+
   Future<void> logout() {
     this.accessToken = null;
     return SharedPreferences.getInstance().then((pref) async {
