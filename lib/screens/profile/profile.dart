@@ -13,32 +13,34 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(authBLoC.user.givenName + " " + authBLoC.user.familyName),
       ),
-      body: Column(
-        children: <Widget>[
-          Center(
-            child: Hero(
-              tag: "profile-pic",
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: authBLoC.user.photoUrl,
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  height: MediaQuery.of(context).size.width * 0.6,
-                  fit: BoxFit.cover,
+      body: authBLoC.user != null
+          ? Column(
+              children: <Widget>[
+                Center(
+                  child: Hero(
+                    tag: "profile-pic",
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: authBLoC.user.photoUrl,
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height: MediaQuery.of(context).size.width * 0.6,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          Center(
-            child: Text(
-              authBLoC.user.givenName + " " + authBLoC.user.familyName,
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          )
-        ],
-      ),
+                Center(
+                  child: Text(
+                    authBLoC.user.givenName + " " + authBLoC.user.familyName,
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                )
+              ],
+            )
+          : Container(),
     );
   }
 }

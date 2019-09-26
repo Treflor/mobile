@@ -16,13 +16,9 @@ class AuthBLoC extends ChangeNotifier {
   // state
   User _user;
 
-  bool get isAuthenticated => _user != null && _user.email != null;
-  bool get isLoading => _user != null && _user.email == null;
   User get user => _user;
 
   AuthBLoC() {
-    _user = User(familyName: "", givenName: "", photoUrl: "");
-    notifyListeners();
     _respository.initToken().then((isSuccess) {
       if (isSuccess) {
         _respository.usersInfoLocal().then((user) async {
@@ -62,10 +58,6 @@ class AuthBLoC extends ChangeNotifier {
       notifyListeners();
     });
   }
-
-  // void signOut() => {
-  //       _jwtToken = '',
-  //     };
 
   // Future<void> signUp(FormData data) async {
   //   try {

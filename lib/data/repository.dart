@@ -16,6 +16,8 @@ class Repository {
   Future<bool> initToken() {
     return SharedPreferences.getInstance().then((pref) {
       String token = pref.getString(Treflor.JWT_TOKEN_KEY);
+      print("key");
+      print(token);
       if (token != null) {
         accessToken = token;
         return true;

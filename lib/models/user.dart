@@ -17,4 +17,7 @@ class User {
     familyName = json['family_name'];
     photoUrl = json['photo'];
   }
+
+  toString() =>
+      "email: $email, givenName: $givenName, familyName: $familyName, photoUrl: $photoUrl";
 }

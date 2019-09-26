@@ -7,7 +7,7 @@ class ConfigBLoC extends ChangeNotifier {
   bool _darkMode = false;
 
   ConfigBLoC() {
-    darkMode = _treflorPref?.getBool(Treflor.DARK_MODE_KEY) ?? false;
+    // darkMode = _treflorPref?.getBool(Treflor.DARK_MODE_KEY) ?? false;
   }
 
   bool get darkMode => _darkMode;
