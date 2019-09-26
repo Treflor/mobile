@@ -3,7 +3,7 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treflor/bloc/oauth_bloc.dart';
-
+import 'package:treflor/models/auth_user.dart';
 import 'registration_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -47,8 +47,8 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               RaisedButton(
-                onPressed: () => authBLoC.signIn(
-                    _emailController.text, _passwordController.text),
+                onPressed: () => authBLoC.signin(
+                    AuthUser(_emailController.text, _passwordController.text)),
                 child: Row(
                   children: <Widget>[
                     Spacer(),

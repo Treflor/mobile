@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treflor/config/treflor.dart';
+import 'package:treflor/models/auth_user.dart';
+import 'package:treflor/data/repository.dart';
+import 'package:treflor/data/remote/dto/login_response.dart';
+import 'package:treflor/models/user.dart';
 
 enum AuthState {
   Loading,
@@ -14,6 +18,8 @@ enum AuthState {
 }
 
 class AuthBLoC extends ChangeNotifier {
+  final Repository _respository = Repository();
+
   final SharedPreferences _treflorPref = Treflor.treflorPref;
   AuthState _state = AuthState.Loading;
   String _token = '';
@@ -65,26 +71,39 @@ class AuthBLoC extends ChangeNotifier {
   AuthState get authState => _state;
   set _authState(AuthState state) => _state = state;
 
-  Future<void> signIn(String email, String password) async {
-    try {
-      Response response = await _dio.post(
-        OAuthAPIs.SIGNIN_API,
-        data: {
-          "email": email,
-          "password": password,
-        },
-      );
+  // Future<void> signIn(String email, String password) async {
+  //   try {
+  //     Response response = await _dio.post(
+  //       OAuthAPIs.SIGNIN_API,
+  //       data: {
+  //         "email": email,
+  //         "password": password,
+  //       },
+  //     );
 
-      if (response.statusCode == 200) {
-        _jwtToken = response.data['token'];
-        _loadUser();
-      } else {
-        _jwtToken = '';
-      }
-      return true;
-    } catch (error) {
-      _authState = AuthState.Error;
-    }
+  //     if (response.statusCode == 200) {
+  //       _jwtToken = response.data['token'];
+  //       _loadUser();
+  //     } else {
+  //       _jwtToken = '';
+  //     }
+  //     return true;
+  //   } catch (error) {
+  //     _authState = AuthState.Error;
+  //   }
+  // }
+
+  Future<bool> signin(AuthUser user) {
+    return _respository.login(user).then((response) => _loadUserData(response));
+  }
+
+  Future<bool> _loadUserData(LoginResponse response) {
+    print("Success: " + response.token);
+    return _respository.usersInfo().then((User user) {
+      this.user = user;
+      notifyListeners();
+      return response.success;
+    });
   }
 
   void signOut() => {
@@ -121,6 +140,7 @@ class AuthBLoC extends ChangeNotifier {
         _jwtToken = '';
       }
     } catch (error) {
+      
       _authState = AuthState.Error;
     }
   }
