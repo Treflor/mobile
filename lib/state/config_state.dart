@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../data/repository.dart';
 
-class ConfigBLoC extends ChangeNotifier {
+class ConfigState extends ChangeNotifier {
   final Repository _repository = Repository();
 
   bool _darkMode = false;
 
-  ConfigBLoC() {
+  ConfigState() {
     _repository.getDarkMode().then((mode) {
       this._darkMode = mode;
       notifyListeners();

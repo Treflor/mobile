@@ -10,7 +10,7 @@ import 'package:treflor/data/repository.dart';
 import 'package:treflor/data/remote/dto/login_response.dart';
 import 'package:treflor/models/user.dart';
 
-class AuthBLoC extends ChangeNotifier {
+class AuthState extends ChangeNotifier {
   final Repository _respository = Repository();
 
   // state
@@ -18,7 +18,7 @@ class AuthBLoC extends ChangeNotifier {
 
   User get user => _user;
 
-  AuthBLoC() {
+  AuthState() {
     _respository.initToken().then((isSuccess) {
       if (isSuccess) {
         _respository.usersInfoLocal().then((user) async {

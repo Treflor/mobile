@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:treflor/state/oauth_bloc.dart';
+import 'package:treflor/state/auth_state.dart';
 import 'package:treflor/models/auth_user.dart';
 import 'registration_screen.dart';
 
@@ -14,7 +14,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
+    AuthState authState = Provider.of<AuthState>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Trefor"),
@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               RaisedButton(
-                onPressed: () => authBLoC.signin(
+                onPressed: () => authState.signin(
                     AuthUser(_emailController.text, _passwordController.text)),
                 child: Row(
                   children: <Widget>[
@@ -74,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               GoogleSignInButton(
-                // onPressed: () => authBLoC.googleSignIn(),
+                // onPressed: () => authState.googleSignIn(),
                 onPressed: () => null,
               ),
             ],

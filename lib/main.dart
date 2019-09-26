@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:treflor/state/oauth_bloc.dart';
+import 'package:treflor/state/auth_state.dart';
+import 'package:treflor/state/config_state.dart';
 import 'package:treflor/treflor_app.dart';
 
-import 'state/config_bloc.dart';
-
 void main() => runApp(
+  
       MultiProvider(
         providers: [
-          ChangeNotifierProvider<AuthBLoC>.value(
-            value: AuthBLoC(),
+          ChangeNotifierProvider<AuthState>.value(
+            value: AuthState(),
           ),
-          ChangeNotifierProvider<ConfigBLoC>.value(
-            value: ConfigBLoC(),
+          ChangeNotifierProvider<ConfigState>.value(
+            value: ConfigState(),
           ),
         ],
         child: TreflorApp(),

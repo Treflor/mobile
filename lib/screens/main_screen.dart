@@ -7,10 +7,9 @@ import 'package:treflor/screens/home/home_screen.dart';
 import 'package:treflor/screens/route/route_screen.dart';
 import 'package:treflor/screens/settings/settings_screen.dart';
 import 'package:treflor/screens/start/start_screen.dart';
-import 'package:treflor/state/oauth_bloc.dart';
-
+import 'package:treflor/state/auth_state.dart';
 import 'package:treflor/routes/application.dart';
-import 'package:treflor/state/config_bloc.dart';
+import 'package:treflor/state/config_state.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -36,8 +35,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
-    AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
+    ConfigState configState = Provider.of<ConfigState>(context);
+    AuthState authState = Provider.of<AuthState>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Treflor"),
@@ -47,10 +46,10 @@ class _MainScreenState extends State<MainScreen> {
               child: Hero(
                 tag: "profile-pic",
                 child: ClipOval(
-                  child: authBLoC.user != null
+                  child: authState.user != null
                       ? CachedNetworkImage(
                           fit: BoxFit.cover,
-                          imageUrl: authBLoC.user.photoUrl,
+                          imageUrl: authState.user.photoUrl,
                         )
                       : Image.asset(
                           "assets/images/profile.jpg",
@@ -59,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-            onTap: () => authBLoC.user != null
+            onTap: () => authState.user != null
                 ? _goToLogin(context, "/profile")
                 : _goToLogin(context, "/login"),
           ),
@@ -69,12 +68,14 @@ class _MainScreenState extends State<MainScreen> {
         child: _screens[_selectedIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: configBLoC.darkMode ? Colors.blueGrey : Colors.grey,
-        selectedItemColor: configBLoC.darkMode ? Colors.white : Colors.blueGrey,
-        unselectedItemColor: configBLoC.darkMode ? Colors.grey : Colors.grey,
+        backgroundColor: configState.darkMode ? Colors.blueGrey : Colors.grey,
+        selectedItemColor:
+            configState.darkMode ? Colors.white : Colors.blueGrey,
+        unselectedItemColor: configState.darkMode ? Colors.grey : Colors.white,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
+          showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
             title: Text('Home'),

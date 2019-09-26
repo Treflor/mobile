@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import 'package:treflor/state/oauth_bloc.dart';
+import 'package:treflor/state/auth_state.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String route = '/registration';
@@ -65,7 +65,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
+    AuthState authState = Provider.of<AuthState>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Registration"),
@@ -132,7 +132,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Spacer(),
                   ],
                 ),
-                // onPressed: () => _onSignup(authBLoC.signUp, context),
+                // onPressed: () => _onSignup(authState.signUp, context),
                 onPressed: () => null,
               ),
             ],
