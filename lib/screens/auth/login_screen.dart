@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:treflor/bloc/oauth_bloc.dart';
+import 'package:treflor/state/oauth_bloc.dart';
 import 'package:treflor/models/auth_user.dart';
 import 'registration_screen.dart';
 
@@ -74,7 +74,8 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               GoogleSignInButton(
-                onPressed: () => authBLoC.googleSignIn(),
+                // onPressed: () => authBLoC.googleSignIn(),
+                onPressed: () => null,
               ),
             ],
           ),

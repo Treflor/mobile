@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../bloc/oauth_bloc.dart';
+import 'package:treflor/state/oauth_bloc.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String route = '/registration';
@@ -132,7 +132,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Spacer(),
                   ],
                 ),
-                onPressed: () => _onSignup(authBLoC.signUp, context),
+                // onPressed: () => _onSignup(authBLoC.signUp, context),
+                onPressed: () => null,
               ),
             ],
           ),
