@@ -14,21 +14,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
-    // ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
+    ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
     return Scaffold(
       body: Container(
         child: ListView(
           children: <Widget>[
             ListTile(
               leading: Icon(
-                // configBLoC.darkMode
-                    // ? FontAwesomeIcons.solidLightbulb
-                    // : FontAwesomeIcons.lightbulb,
-                     FontAwesomeIcons.lightbulb,
+                configBLoC.darkMode
+                    ? FontAwesomeIcons.solidLightbulb
+                    : FontAwesomeIcons.lightbulb,
               ),
               title: Text("Dark Mode"),
-              // onTap: () => configBLoC.toggleDarkMode(),
-              onTap: () => {},
+              onTap: () => configBLoC.toggleDarkMode(),
             ),
             Divider(),
             ListTile(

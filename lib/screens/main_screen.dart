@@ -9,7 +9,8 @@ import 'package:treflor/screens/settings/settings_screen.dart';
 import 'package:treflor/screens/start/start_screen.dart';
 import 'package:treflor/state/oauth_bloc.dart';
 
-import '../routes/application.dart';
+import 'package:treflor/routes/application.dart';
+import 'package:treflor/state/config_bloc.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
+    ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
     AuthBLoC authBLoC = Provider.of<AuthBLoC>(context);
     return Scaffold(
       appBar: AppBar(
@@ -68,9 +69,9 @@ class _MainScreenState extends State<MainScreen> {
         child: _screens[_selectedIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        // backgroundColor: configBLoC.darkMode ? Colors.blueGrey : Colors.grey,
-        // selectedItemColor: configBLoC.darkMode ? Colors.white : Colors.blueGrey,
-        // unselectedItemColor: configBLoC.darkMode ? Colors.grey : Colors.grey,
+        backgroundColor: configBLoC.darkMode ? Colors.blueGrey : Colors.grey,
+        selectedItemColor: configBLoC.darkMode ? Colors.white : Colors.blueGrey,
+        unselectedItemColor: configBLoC.darkMode ? Colors.grey : Colors.grey,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.shifting,

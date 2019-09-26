@@ -16,12 +16,11 @@ class TreflorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
+    ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
     return MaterialApp(
       title: "Treflor",
       theme: ThemeData(
-        // brightness: configBLoC.darkMode ? Brightness.dark : Brightness.light,
-        brightness: Brightness.dark,
+        brightness: configBLoC.darkMode ? Brightness.dark : Brightness.light,
       ),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: Application.router.generator,

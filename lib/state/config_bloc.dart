@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:treflor/config/treflor.dart';
+
+import '../data/repository.dart';
 
 class ConfigBLoC extends ChangeNotifier {
-  final SharedPreferences _treflorPref = Treflor.treflorPref;
+  final Repository _repository = Repository();
+
   bool _darkMode = false;
 
   ConfigBLoC() {
-    // darkMode = _treflorPref?.getBool(Treflor.DARK_MODE_KEY) ?? false;
+    _repository.getDarkMode().then((mode) {
+      this._darkMode = mode;
+      notifyListeners();
+    });
   }
 
   bool get darkMode => _darkMode;
 
-  set darkMode(bool value) {
-    _darkMode = value;
-    _treflorPref.setBool(Treflor.DARK_MODE_KEY, value);
-    notifyListeners();
-  }
-
-  void toggleDarkMode() {
-    darkMode = !darkMode;
+  Future<void> toggleDarkMode() {
+    return _repository.toggleDarkMode(_darkMode).then((mode) {
+      _darkMode = mode;
+      notifyListeners();
+    });
   }
 }

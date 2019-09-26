@@ -16,14 +16,26 @@ class Repository {
   Future<bool> initToken() {
     return SharedPreferences.getInstance().then((pref) {
       String token = pref.getString(Treflor.JWT_TOKEN_KEY);
-      print("key");
-      print(token);
       if (token != null) {
         accessToken = token;
         return true;
       } else {
         return false;
       }
+    });
+  }
+
+  Future<bool> getDarkMode() {
+    return SharedPreferences.getInstance().then((pref) {
+      bool darkMode = pref.getBool(Treflor.DARK_MODE_KEY);
+      return darkMode ?? false;
+    });
+  }
+
+  Future<bool> toggleDarkMode(bool currentMode) {
+    return SharedPreferences.getInstance().then((pref) {
+      pref.setBool(Treflor.DARK_MODE_KEY, !currentMode);
+      return !currentMode;
     });
   }
 
