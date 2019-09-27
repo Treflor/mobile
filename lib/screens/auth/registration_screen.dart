@@ -75,8 +75,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: 200,
-                width: 200,
+                height: 120,
+                width: 120,
                 child: InkWell(
                   child: ClipOval(
                     child: _image,

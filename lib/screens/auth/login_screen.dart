@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treflor/state/auth_state.dart';
 import 'package:treflor/models/auth_user.dart';
 import 'package:treflor/wigets/custom_text_form_field.dart';
-import 'package:treflor/screens/auth/registration_screen.dart';
 import 'package:treflor/routes/application.dart';
-
-import '../../state/config_state.dart';
+import 'package:treflor/state/config_state.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String route = '/login';

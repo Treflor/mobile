@@ -25,7 +25,6 @@ dependencies:
   cupertino_icons: ^0.1.2
   provider:
   google_sign_in:
-  flutter_auth_buttons:
   cached_network_image:
   shared_preferences:
   font_awesome_flutter:

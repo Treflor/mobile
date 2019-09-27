@@ -41,6 +41,9 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: Text("Treflor"),
         actions: <Widget>[
+          SizedBox(
+            width: 5,
+          ),
           CircleAvatar(
             child: InkWell(
               borderRadius: BorderRadius.circular(50),
@@ -49,9 +52,11 @@ class _MainScreenState extends State<MainScreen> {
                 child: ClipOval(
                   child: authState.user != null
                       ? CachedNetworkImage(
-                          placeholder: (context, str) {
-                            print(str);
-                            return Text("A");
+                          placeholder: (context, _) {
+                            return Text(
+                              authState.user.givenName.substring(0, 1),
+                              style: TextStyle(fontSize: 20),
+                            );
                           },
                           fit: BoxFit.cover,
                           imageUrl: authState.user.photoUrl,
@@ -66,6 +71,9 @@ class _MainScreenState extends State<MainScreen> {
                   ? _goToLogin(context, "/profile")
                   : _goToLogin(context, "/login"),
             ),
+          ),
+          SizedBox(
+            width: 5,
           ),
         ],
       ),

@@ -1,10 +1,5 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:treflor/config/treflor.dart';
 import 'package:treflor/models/auth_user.dart';
 import 'package:treflor/data/repository.dart';
 import 'package:treflor/data/remote/dto/login_response.dart';
@@ -72,7 +67,8 @@ class AuthState extends ChangeNotifier {
       var auth = await res.authentication;
       return await _respository
           .loginWithGoogle(auth.accessToken)
-          .then((response) => _loadUserData(response));
+          .then((response) => _loadUserData(response))
+          .catchError((e) => print);
     });
   }
 }
