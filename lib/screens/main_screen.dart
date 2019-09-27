@@ -41,17 +41,18 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: Text("Treflor"),
         actions: <Widget>[
-          InkWell(
-            child: CircleAvatar(
+          CircleAvatar(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(50),
               child: Hero(
                 tag: "profile-pic",
                 child: ClipOval(
                   child: authState.user != null
                       ? CachedNetworkImage(
-                        placeholder: (context,str){
-                          print(str);
-                          return Text("A");
-                        },
+                          placeholder: (context, str) {
+                            print(str);
+                            return Text("A");
+                          },
                           fit: BoxFit.cover,
                           imageUrl: authState.user.photoUrl,
                         )
@@ -61,10 +62,10 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                 ),
               ),
+              onTap: () => authState.user != null
+                  ? _goToLogin(context, "/profile")
+                  : _goToLogin(context, "/login"),
             ),
-            onTap: () => authState.user != null
-                ? _goToLogin(context, "/profile")
-                : _goToLogin(context, "/login"),
           ),
         ],
       ),
@@ -79,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
-          showUnselectedLabels: false,
+        showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
             title: Text('Home'),

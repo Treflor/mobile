@@ -36,6 +36,7 @@ dependencies:
   google_maps_flutter:
   fluro:
   rxdart:
+  flutter_signin_button:
 
 dev_dependencies:
   flutter_test:

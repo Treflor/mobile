@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treflor/state/auth_state.dart';
@@ -7,6 +8,8 @@ import 'package:treflor/models/auth_user.dart';
 import 'package:treflor/wigets/custom_text_form_field.dart';
 import 'package:treflor/screens/auth/registration_screen.dart';
 import 'package:treflor/routes/application.dart';
+
+import '../../state/config_state.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String route = '/login';
@@ -23,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ConfigState configState = Provider.of<ConfigState>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Trefor"),
@@ -33,6 +37,17 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Hero(
+                tag: "profile-pic",
+                child: ClipOval(
+                  child: Image.asset(
+                    "assets/images/profile.jpg",
+                    height: 120,
+                    width: 120,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
               Form(
                 key: _loginFormKey,
                 child: Column(
@@ -41,12 +56,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 16,
                     ),
                     CustomTextFormField(
-                      labelText: "Email",
-                      onSaved: (String value) {
-                        _user.email = value;
-                      },
-                      validator: _validateEmail,
-                    ),
+                        labelText: "Email",
+                        onSaved: (String value) {
+                          _user.email = value;
+                        },
+                        validator: _validateEmail,
+                        dark: configState.darkMode),
                     SizedBox(
                       height: 16,
                     ),
@@ -57,6 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         _user.password = value;
                       },
                       validator: _validatePassword,
+                      dark: configState.darkMode,
                     ),
                     SizedBox(
                       height: 16,
@@ -64,7 +80,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     RaisedButton(
                       elevation: 0,
                       color: Theme.of(context).buttonColor,
-                      colorBrightness: Brightness.dark,
+                      colorBrightness: configState.darkMode
+                          ? Brightness.dark
+                          : Brightness.light,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -77,21 +95,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Divider(),
-              RaisedButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, RegistrationScreen.route),
-                child: Row(
-                  children: <Widget>[
-                    Spacer(),
-                    Icon(FontAwesomeIcons.userPlus),
-                    SizedBox(width: 20),
-                    Text("Register"),
-                    Spacer(),
-                  ],
-                ),
+              SignInButton(
+                Buttons.GoogleDark,
+                onPressed: () => !_onProcess ? _signInWithGoogle() : null,
               ),
-              GoogleSignInButton(
-                onPressed: _signInWithGoogle,
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20),
+                child: Text("or Create an account?"),
+                onPressed: _onCreateAccount,
               ),
             ],
           ),
@@ -104,12 +118,22 @@ class _LoginScreenState extends State<LoginScreen> {
     if (email.isEmpty) {
       return "Email can't be empty";
     }
+
+    if (!RegExp(
+            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+        .hasMatch(email)) {
+      return "Email not in valid format";
+    }
+
     return null;
   }
 
   String _validatePassword(String password) {
     if (password.isEmpty) {
       return "Password can't be empty";
+    }
+    if (password.length < 4) {
+      return "Password lenght must be more than 4";
     }
     return null;
   }
@@ -160,5 +184,9 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       print(err.toString());
     });
+  }
+
+  void _onCreateAccount() {
+    Application.router.navigateTo(context, "/signup");
   }
 }

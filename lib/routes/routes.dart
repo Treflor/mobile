@@ -13,5 +13,7 @@ class Routes {
         handler: loginHandler, transitionType: TransitionType.fadeIn);
     router.define(profile,
         handler: profileHandler, transitionType: TransitionType.fadeIn);
+    router.define(signup,
+        handler: signupHandler, transitionType: TransitionType.fadeIn);
   }
 }

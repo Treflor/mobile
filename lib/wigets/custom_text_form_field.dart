@@ -9,6 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
   final Function validator;
   final Function onSaved;
+  final bool dark;
 
   CustomTextFormField({
     this.hintText,
@@ -19,6 +20,7 @@ class CustomTextFormField extends StatelessWidget {
     this.labelText,
     this.validator,
     this.onSaved,
+    this.dark = false,
   });
 
   @override
@@ -30,9 +32,9 @@ class CustomTextFormField extends StatelessWidget {
           hintText: hintText,
           labelText: labelText,
           errorText: errorText,
-          labelStyle: TextStyle(color: Colors.black45),
+          labelStyle: TextStyle(color: dark ? Colors.white54 : Colors.black45),
           filled: true,
-          fillColor: Colors.black12,
+          fillColor: dark ? Colors.white12 : Colors.black12,
           border: InputBorder.none,
         ),
         textCapitalization: textCapitalization,
