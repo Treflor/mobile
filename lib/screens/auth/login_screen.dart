@@ -29,10 +29,17 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Text(
+                "Sign In",
+                style: Theme.of(context).textTheme.headline,
+              ),
+              SizedBox(
+                height: 16,
+              ),
               Hero(
                 tag: "profile-pic",
                 child: ClipOval(
@@ -94,6 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
               SignInButton(
                 Buttons.GoogleDark,
                 onPressed: () => !_onProcess ? _signInWithGoogle() : null,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
               FlatButton(
                 shape: RoundedRectangleBorder(
@@ -114,13 +124,11 @@ class _LoginScreenState extends State<LoginScreen> {
     if (email.isEmpty) {
       return "Email can't be empty";
     }
-
     if (!RegExp(
             r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
         .hasMatch(email)) {
       return "Email not in valid format";
     }
-
     return null;
   }
 

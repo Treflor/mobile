@@ -3,141 +3,230 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import 'package:treflor/wigets/custom_image_from_field.dart';
+import 'package:treflor/wigets/custom_text_form_field.dart';
+import 'package:treflor/models/register_user.dart';
+import 'package:treflor/routes/application.dart';
 import 'package:treflor/state/auth_state.dart';
+import 'package:treflor/state/config_state.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  static const String route = '/registration';
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _familyNameController = TextEditingController();
-  final TextEditingController _givenNameController = TextEditingController();
-
-  Image _image = Image.asset("assets/images/profile.jpg");
-  File _file = null;
-
-  Future<void> _onSignup(
-      Future<void> Function(FormData) signup, context) async {
-    var base64Image = '';
-
-    if (_file == null) {
-      var byteData = await rootBundle.load("assets/images/profile.jpg");
-      var audioUint8List = byteData.buffer
-          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
-      List<int> imageListInt =
-          audioUint8List.map((eachUint8) => eachUint8.toInt()).toList();
-      base64Image = base64.encode(imageListInt);
-    } else {
-      base64Image = base64.encode(_file.readAsBytesSync());
-    }
-
-    FormData data = FormData.fromMap({
-      "email": _emailController.text,
-      "password": _passwordController.text,
-      "family_name": _familyNameController.text,
-      "given_name": _givenNameController.text,
-      "photo": base64Image,
-    });
-
-    _showProgressDialog(context);
-
-    await signup(data);
-    Navigator.pop(context);
-    Navigator.pop(context);
-  }
-
-  void _showProgressDialog(context) => showDialog(
-        context: context,
-        builder: (context) => Container(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
+  GlobalKey<FormState> _key = GlobalKey();
+  RegisterUser _user = RegisterUser.just();
+  bool _isRegistering = false;
 
   @override
   Widget build(BuildContext context) {
+    ConfigState configState = Provider.of<ConfigState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registration"),
+        title: Text(""),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(10),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16.0, right: 16, top: 16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
-                height: 120,
-                width: 120,
-                child: InkWell(
-                  child: ClipOval(
-                    child: _image,
-                  ),
-                  onTap: () async {
-                    _file = await ImagePicker.pickImage(
-                        source: ImageSource.gallery);
-                    setState(() {
-                      _image = _file != null
-                          ? Image.file(_file)
-                          : Image.asset("assets/images/profile.jpg");
-                    });
-                  },
-                ),
+              Text(
+                "Sign Up",
+                style: Theme.of(context).textTheme.headline,
               ),
-              TextField(
-                keyboardType: TextInputType.emailAddress,
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: "Email",
-                  prefixIcon: Icon(FontAwesomeIcons.pencilAlt),
-                ),
-              ),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: "Password",
-                  prefixIcon: Icon(FontAwesomeIcons.pencilAlt),
-                ),
-              ),
-              TextField(
-                controller: _givenNameController,
-                decoration: InputDecoration(
-                  labelText: "First Name",
-                  prefixIcon: Icon(FontAwesomeIcons.pencilAlt),
-                ),
-              ),
-              TextField(
-                controller: _familyNameController,
-                decoration: InputDecoration(
-                  labelText: "Last name",
-                  prefixIcon: Icon(FontAwesomeIcons.pencilAlt),
-                ),
-              ),
-              RaisedButton(
-                child: Row(
+              Form(
+                key: _key,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Spacer(),
-                    Icon(FontAwesomeIcons.userPlus),
-                    SizedBox(width: 20),
-                    Text("Register"),
-                    Spacer(),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomImageFormField(
+                      onSaved: _onSavedImage,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomTextFormField(
+                      dark: configState.darkMode,
+                      labelText: "email",
+                      onSaved: (String value) {
+                        _user.email = value;
+                      },
+                      validator: _validateEmail,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomTextFormField(
+                      dark: configState.darkMode,
+                      labelText: "Password",
+                      isObscure: true,
+                      onSaved: (String value) {
+                        _user.password = value;
+                      },
+                      validator: _validatePassword,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomTextFormField(
+                      dark: configState.darkMode,
+                      labelText: "Confirm Password",
+                      isObscure: true,
+                      onSaved: (String value) {
+                        _user.password2 = value;
+                      },
+                      validator: _validateConfirmPassword,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomTextFormField(
+                      dark: configState.darkMode,
+                      labelText: "Given Name",
+                      textCapitalization: TextCapitalization.words,
+                      onSaved: (String value) {
+                        _user.givenName = value;
+                      },
+                      validator: _validateName,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomTextFormField(
+                      dark: configState.darkMode,
+                      labelText: "Family Name",
+                      onSaved: (String value) {
+                        _user.familyName = value;
+                      },
+                      validator: _validateName,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    RaisedButton(
+                      elevation: 0,
+                      color: Theme.of(context).buttonColor,
+                      colorBrightness: configState.darkMode
+                          ? Brightness.dark
+                          : Brightness.light,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child:
+                          _isRegistering ? Text("Signnig Up") : Text("Sign Up"),
+                      onPressed: _isRegistering ? null : _onSubmit,
+                    ),
                   ],
                 ),
-                // onPressed: () => _onSignup(authState.signUp, context),
-                onPressed: () => null,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              FlatButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text("Already have an account?"),
+                onPressed: _onSignIn,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String _validateName(String name) {
+    if (name.isEmpty) {
+      return "Name can't be empty";
+    }
+    return null;
+  }
+
+  String _validateEmail(String email) {
+    if (email.isEmpty) {
+      return "Email can't be empty";
+    }
+    if (!RegExp(
+            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+        .hasMatch(email)) {
+      return "Email not in valid format";
+    }
+
+    return null;
+  }
+
+  String _validatePassword(String password) {
+    if (password.isEmpty) {
+      return "Password can't be empty";
+    }
+    if (password.length < 4) {
+      return "Password lenght must be more than 4";
+    }
+    return null;
+  }
+
+  String _validateConfirmPassword(String password) {
+    if (password.isEmpty || _user.password != _user.password2) {
+      return "Passwords doesn't match";
+    }
+    return null;
+  }
+
+  void _onSavedImage(File file) async {
+    var base64Image = '';
+
+    if (file == null) {
+      var byteData = await rootBundle.load("assets/images/profile.jpg");
+      var imageUint8List = byteData.buffer
+          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
+      List<int> imageListInt =
+          imageUint8List.map((eachUint8) => eachUint8.toInt()).toList();
+      base64Image = base64.encode(imageListInt);
+    } else {
+      base64Image = base64.encode(file.readAsBytesSync());
+    }
+    _user.base64Image = base64Image;
+  }
+
+  void _onSignIn() {
+    Application.router.pop(context);
+  }
+
+  void _onSubmit() {
+    _key.currentState.save();
+    if (_key.currentState.validate()) {
+      setState(() {
+        _isRegistering = true;
+      });
+      Provider.of<AuthState>(context).signup(_user).then((success) {
+        if (success) {
+          Application.router
+              .navigateTo(context, "/", replace: true, clearStack: true);
+        } else {
+          setState(() {
+            _isRegistering = false;
+          });
+        }
+      }).catchError((err) {
+        setState(() {
+          _isRegistering = false;
+        });
+        print(err.toString());
+        // Scaffold.of(context).showSnackBar(SnackBar(
+        //   content: Text("Sign in failed!"),
+        // ));
+      });
+    }
   }
 }

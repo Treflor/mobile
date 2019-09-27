@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:treflor/models/auth_user.dart';
 import 'package:treflor/data/repository.dart';
-import 'package:treflor/data/remote/dto/login_response.dart';
+import 'package:treflor/data/remote/dto/auth_response.dart';
 import 'package:treflor/models/user.dart';
+import 'package:treflor/models/register_user.dart';
 
 class AuthState extends ChangeNotifier {
   final Repository _respository = Repository();
@@ -38,20 +39,10 @@ class AuthState extends ChangeNotifier {
     return _respository.login(user).then((response) => _loadUserData(response));
   }
 
-  Future<bool> _loadUserData(LoginResponse response) {
-    print("Success: " + response.token);
-    return _respository.usersInfo().then((User user) {
-      this._user = user;
-      notifyListeners();
-      return true;
-    });
-  }
-
-  Future<void> signout() {
-    return _respository.logout().then((_) {
-      _user = null;
-      notifyListeners();
-    });
+  Future<bool> signup(RegisterUser user) {
+    return _respository
+        .signup(user)
+        .then((response) => _loadUserData(response));
   }
 
   Future<bool> signInWithGoogle() {
@@ -69,6 +60,22 @@ class AuthState extends ChangeNotifier {
           .loginWithGoogle(auth.accessToken)
           .then((response) => _loadUserData(response))
           .catchError((e) => print);
+    });
+  }
+
+  Future<void> signout() {
+    return _respository.logout().then((_) {
+      _user = null;
+      notifyListeners();
+    });
+  }
+
+  Future<bool> _loadUserData(AuthResponse response) {
+    print("Success: " + response.token);
+    return _respository.usersInfo().then((User user) {
+      this._user = user;
+      notifyListeners();
+      return true;
     });
   }
 }

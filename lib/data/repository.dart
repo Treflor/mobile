@@ -1,11 +1,12 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treflor/models/auth_user.dart';
-import 'package:treflor/data/remote/dto/login_response.dart';
+import 'package:treflor/data/remote/dto/auth_response.dart';
 import 'package:treflor/data/remote/treflor_api.dart';
 import 'package:treflor/config/treflor.dart';
 import 'package:treflor/data/local/entities/user_provider.dart';
 import 'package:treflor/data/remote/treflor_api_impl.dart';
 import 'package:treflor/models/user.dart';
+import 'package:treflor/models/register_user.dart';
 
 class Repository {
   TreflorAPI _api;
@@ -39,14 +40,20 @@ class Repository {
     });
   }
 
-  Future<LoginResponse> login(AuthUser user) {
+  Future<AuthResponse> login(AuthUser user) {
     return _api.login(user).then((response) => _storeAccessToken(response));
   }
 
-  Future<LoginResponse> loginWithGoogle(String accessToken) {
+  Future<AuthResponse> loginWithGoogle(String accessToken) {
     return _api
         .loginWithGoogle(accessToken)
         .then((response) => _storeAccessToken(response));
+  }
+
+  Future<AuthResponse> signup(RegisterUser user) {
+    return _api.signup(user).then((response) {
+      return login(user);
+    });
   }
 
   Future<void> logout() {
@@ -69,7 +76,7 @@ class Repository {
     return _userProvider.getUser();
   }
 
-  LoginResponse _storeAccessToken(LoginResponse response) {
+  AuthResponse _storeAccessToken(AuthResponse response) {
     this.accessToken = response.token;
     SharedPreferences.getInstance().then((pref) {
       pref.setString(Treflor.JWT_TOKEN_KEY, response.token);

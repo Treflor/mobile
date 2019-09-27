@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import 'package:treflor/models/auth_user.dart';
-import 'package:treflor/data/remote/dto/login_response.dart';
+import 'package:treflor/data/remote/dto/auth_response.dart';
 import 'package:treflor/data/remote/treflor_api.dart';
 import 'package:treflor/config/config.dart';
+import 'package:treflor/models/register_user.dart';
 import 'package:treflor/models/user.dart';
 
 class TreflorAPIImpl extends TreflorAPI {
@@ -19,14 +20,15 @@ class TreflorAPIImpl extends TreflorAPI {
   static const String API_URL = BASE_URL + "";
 
   static const ENDPOINT_LOGIN = "/oauth/signin";
+  static const ENDPOINT_SIGNUP = "/oauth/signup";
   static const ENDPOINT_LOGIN_WITH_GOOGLE = "/oauth/google";
   static const ENDPOINT_USER = "/user";
 
   @override
-  Future<LoginResponse> login(AuthUser user) {
+  Future<AuthResponse> login(AuthUser user) {
     return _dio
         .post(API_URL + ENDPOINT_LOGIN, data: user.toMap())
-        .then((response) => LoginResponse(response.data));
+        .then((response) => AuthResponse(response.data));
   }
 
   @override
@@ -40,12 +42,23 @@ class TreflorAPIImpl extends TreflorAPI {
   }
 
   @override
-  Future<LoginResponse> loginWithGoogle(String token) {
+  Future<AuthResponse> loginWithGoogle(String token) {
     return _dio.post(API_URL + ENDPOINT_LOGIN_WITH_GOOGLE,
         data: {"access_token": token}).then((response) {
-      return LoginResponse(response.data);
+      return AuthResponse(response.data);
     }).catchError((err) {
       print(err);
+    });
+  }
+
+  @override
+  Future<AuthResponse> signup(RegisterUser user) {
+    return _dio
+        .post(API_URL + ENDPOINT_SIGNUP, data: user.toMap())
+        .then((response) {
+      return AuthResponse(response.data);
+    }).catchError((err) {
+      throw Exception(err.toString());
     });
   }
 }
