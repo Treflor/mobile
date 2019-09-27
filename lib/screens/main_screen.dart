@@ -1,16 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:treflor/bloc/config_bloc.dart';
 import 'package:treflor/screens/camera/camera_screen.dart';
 import 'package:treflor/screens/home/home_screen.dart';
 import 'package:treflor/screens/route/route_screen.dart';
 import 'package:treflor/screens/settings/settings_screen.dart';
 import 'package:treflor/screens/start/start_screen.dart';
+import 'package:treflor/state/auth_state.dart';
+import 'package:treflor/routes/application.dart';
+import 'package:treflor/state/config_state.dart';
 
 class MainScreen extends StatefulWidget {
-  static const String route = '/main';
-
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -34,18 +35,60 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ConfigBLoC configBLoC = Provider.of<ConfigBLoC>(context);
+    ConfigState configState = Provider.of<ConfigState>(context);
+    AuthState authState = Provider.of<AuthState>(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Treflor"),
+        actions: <Widget>[
+          SizedBox(
+            width: 5,
+          ),
+          CircleAvatar(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(50),
+              child: Hero(
+                tag: "profile-pic",
+                child: ClipOval(
+                  child: authState.user != null
+                      ? CachedNetworkImage(
+                          placeholder: (context, _) {
+                            return Text(
+                              authState.user.givenName.substring(0, 1),
+                              style: TextStyle(fontSize: 20),
+                            );
+                          },
+                          fit: BoxFit.cover,
+                          imageUrl: authState.user.photoUrl,
+                        )
+                      : Image.asset(
+                          "assets/images/profile.jpg",
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+              onTap: () => authState.user != null
+                  ? _goToLogin(context, "/profile")
+                  : _goToLogin(context, "/login"),
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+        ],
+      ),
       body: Container(
         child: _screens[_selectedIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor:configBLoC.darkMode ? Colors.blueGrey : Colors.grey,
-        selectedItemColor:configBLoC.darkMode ? Colors.white : Colors.blueGrey,
-        unselectedItemColor:configBLoC.darkMode ? Colors.grey : Colors.grey,
+        backgroundColor: configState.darkMode ? Colors.blueGrey : Colors.grey,
+        selectedItemColor:
+            configState.darkMode ? Colors.white : Colors.blueGrey,
+        unselectedItemColor: configState.darkMode ? Colors.grey : Colors.white,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
+        showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
             title: Text('Home'),
@@ -70,5 +113,9 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
+  }
+
+  void _goToLogin(BuildContext context, uri) {
+    Application.router.navigateTo(context, uri);
   }
 }
