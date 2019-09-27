@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +20,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   GlobalKey<FormState> _key = GlobalKey();
   RegisterUser _user = RegisterUser.just();
   bool _isRegistering = false;
+  var _base64Image = '';
+
+  _RegistrationScreenState() {
+    loadInitialImageString();
+  }
+
+  void loadInitialImageString() async {
+    var byteData = await rootBundle.load("assets/images/profile.jpg");
+    var imageUint8List = byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
+    List<int> imageListInt =
+        imageUint8List.map((eachUint8) => eachUint8.toInt()).toList();
+    _base64Image = base64.encode(imageListInt);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,12 +200,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     var base64Image = '';
 
     if (file == null) {
-      var byteData = await rootBundle.load("assets/images/profile.jpg");
-      var imageUint8List = byteData.buffer
-          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
-      List<int> imageListInt =
-          imageUint8List.map((eachUint8) => eachUint8.toInt()).toList();
-      base64Image = base64.encode(imageListInt);
+      base64Image = this._base64Image;
     } else {
       base64Image = base64.encode(file.readAsBytesSync());
     }

@@ -22,4 +22,6 @@ class RegisterUser extends AuthUser {
       "photo": base64Image
     };
   }
+
+  AuthUser toAuthUser() => AuthUser(email, password);
 }

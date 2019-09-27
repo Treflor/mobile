@@ -52,7 +52,7 @@ class Repository {
 
   Future<AuthResponse> signup(RegisterUser user) {
     return _api.signup(user).then((response) {
-      return login(user);
+      return login(user.toAuthUser());
     });
   }
 
