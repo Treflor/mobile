@@ -36,6 +36,7 @@ dependencies:
   fluro:
   rxdart:
   flutter_signin_button:
+  flutter_swiper:
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +61,8 @@ flutter:
 
   assets:
     - assets/images/profile.jpg
+    - assets/images/treflor_logo.png
+    - assets/images/hiker.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
