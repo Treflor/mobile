@@ -25,7 +25,8 @@ class _LoginScreenState extends State<LoginScreen> {
     ConfigState configState = Provider.of<ConfigState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Trefor"),
+        title: Image.asset("assets/images/treflor_logo.png", height: 40.0,),
+        backgroundColor: configState.darkMode ? Color.fromRGBO(13, 71, 161, 0.6) : Color.fromRGBO(13, 71, 161, 1),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -82,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     RaisedButton(
                       elevation: 0,
-                      color: Theme.of(context).buttonColor,
+                      color: configState.darkMode ? Color.fromRGBO(130, 199, 165, 0.8) : Color.fromRGBO(130, 199, 165, 1),
                       colorBrightness: configState.darkMode
                           ? Brightness.dark
                           : Brightness.light,
@@ -100,6 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Divider(),
               SignInButton(
                 Buttons.GoogleDark,
+                //TODO align the content center and change the color to green
                 onPressed: () => !_onProcess ? _signInWithGoogle() : null,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),

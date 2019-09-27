@@ -28,6 +28,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: Text("Dark Mode"),
               onTap: () => configBLoC.toggleDarkMode(),
             ),
+            ListTile(
+            leading: Icon(Icons.account_circle),
+            title: Text('General')
+          ),
+          ListTile(
+            leading: Icon(Icons.notifications),
+            title: Text('Notifications')
+          ),
+          ListTile(
+            leading: Icon(Icons.lock),
+            title: Text('Privacy')
+          ),
+          ListTile(
+            leading: Icon(Icons.security),
+            title: Text('Security')
+          ),
+          ListTile(
+            leading: Icon(Icons.help),
+            title: Text('Help')
+          ),
+          ListTile(
+            leading: Icon(Icons.report),
+            title: Text('About')
+          ),
+          // Padding(padding: EdgeInsets.only(top: 300.0),),
             Divider(),
             ListTile(
               leading: Icon(FontAwesomeIcons.signOutAlt),
