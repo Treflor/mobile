@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ import 'package:treflor/routes/application.dart';
 import 'package:treflor/state/auth_state.dart';
 import 'package:treflor/state/config_state.dart';
 import 'package:treflor/wigets/custom_date_picker_form_field.dart';
+import 'package:treflor/wigets/CustomDropDownFormField.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -132,6 +134,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       dark: configState.darkMode,
                       context: context,
                       format: DateFormat("dd - MMMM - yyyy"),
+                      onSaved: (DateTime date) {
+                        _user.birthday = date ?? DateTime.now();
+                      },
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomDropDownFormField(
+                      dark: configState.darkMode,
+                      labelText: "Gender",
+                      items: {
+                        "Select": FontAwesomeIcons.user,
+                        "Male": FontAwesomeIcons.male,
+                        "Female": FontAwesomeIcons.female,
+                      },
+                      onSaved: (dynamic value) {
+                        _user.gender = value;
+                      },
                     ),
                     SizedBox(
                       height: 16,
@@ -225,6 +245,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void _onSubmit() {
     _key.currentState.save();
+    print(_user.toMap());
     if (_key.currentState.validate()) {
       setState(() {
         _isRegistering = true;
