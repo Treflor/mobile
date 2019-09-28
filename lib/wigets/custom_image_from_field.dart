@@ -20,16 +20,13 @@ class CustomImageFormField extends FormField<File> {
             return Column(
               children: <Widget>[
                 state.value == null
-                    ? Hero(
-                        child: ClipOval(
-                          child: Image.asset(
-                            "assets/images/profile.jpg",
-                            fit: BoxFit.cover,
-                            width: width,
-                            height: height,
-                          ),
+                    ? ClipOval(
+                        child: Image.asset(
+                          "assets/images/profile.jpg",
+                          fit: BoxFit.cover,
+                          width: width,
+                          height: height,
                         ),
-                        tag: "profile-pic",
                       )
                     : ClipOval(
                         child: Image.file(

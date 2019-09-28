@@ -40,15 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 16,
               ),
-              Hero(
-                tag: "profile-pic",
-                child: ClipOval(
-                  child: Image.asset(
-                    "assets/images/profile.jpg",
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.cover,
-                  ),
+              ClipOval(
+                child: Image.asset(
+                  "assets/images/profile.jpg",
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.cover,
                 ),
               ),
               Form(
