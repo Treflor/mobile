@@ -173,7 +173,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     Provider.of<AuthState>(context).signInWithGoogle().then((success) {
       if (success) {
-        Application.router.pop(context);
+        Application.router.navigateTo(context, '/update/rest',
+            clearStack: true, replace: true);
       } else {
         setState(() {
           _onProcess = false;
