@@ -45,6 +45,12 @@ class AuthState extends ChangeNotifier {
         .then((response) => _loadUserData(response));
   }
 
+  Future<bool> update(User user) {
+    return _respository
+        .update(user)
+        .then((response) => _loadUserData(response));
+  }
+
   Future<bool> signInWithGoogle() {
     GoogleSignIn _googleSignIn = GoogleSignIn(
       signInOption: SignInOption.standard,
@@ -59,7 +65,7 @@ class AuthState extends ChangeNotifier {
       return await _respository
           .loginWithGoogle(auth.accessToken)
           .then((response) => _loadUserData(response))
-          .catchError((e) => print);
+          .catchError((e) => false);
     });
   }
 

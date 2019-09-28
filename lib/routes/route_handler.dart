@@ -5,6 +5,8 @@ import 'package:treflor/screens/main_screen.dart';
 import 'package:treflor/screens/auth/login_screen.dart';
 import 'package:treflor/screens/profile/profile.dart';
 
+import '../screens/auth/update_rest_screen.dart';
+
 var mainHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return MainScreen();
@@ -23,4 +25,9 @@ var profileHandler = Handler(
 var signupHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return RegistrationScreen();
+});
+
+var updateRestHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return UpdateRestScreen();
 });

@@ -56,6 +56,12 @@ class Repository {
     });
   }
 
+  Future<AuthResponse> update(User user) {
+    return _api.update(user, accessToken).then((response) {
+      return AuthResponse({"token": accessToken});
+    });
+  }
+
   Future<void> logout() {
     this.accessToken = null;
     return SharedPreferences.getInstance().then((pref) async {

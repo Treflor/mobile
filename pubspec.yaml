@@ -36,6 +36,7 @@ dependencies:
   fluro:
   rxdart:
   flutter_signin_button:
+  intl:
 
 dev_dependencies:
   flutter_test:

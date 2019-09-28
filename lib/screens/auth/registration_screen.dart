@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:treflor/wigets/custom_image_from_field.dart';
@@ -10,6 +12,8 @@ import 'package:treflor/models/register_user.dart';
 import 'package:treflor/routes/application.dart';
 import 'package:treflor/state/auth_state.dart';
 import 'package:treflor/state/config_state.dart';
+import 'package:treflor/wigets/custom_date_picker_form_field.dart';
+import 'package:treflor/wigets/CustomDropDownFormField.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -40,7 +44,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     ConfigState configState = Provider.of<ConfigState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(""),
+        title: Text("Treflor"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -61,6 +65,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       height: 16,
                     ),
                     CustomImageFormField(
+                      dark: configState.darkMode,
                       onSaved: _onSavedImage,
                     ),
                     SizedBox(
@@ -101,6 +106,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     SizedBox(
                       height: 16,
                     ),
+                    Divider(),
                     CustomTextFormField(
                       dark: configState.darkMode,
                       labelText: "Given Name",
@@ -120,6 +126,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         _user.familyName = value;
                       },
                       validator: _validateName,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomDatePickerFormField(
+                      dark: configState.darkMode,
+                      context: context,
+                      format: DateFormat("dd - MMMM - yyyy"),
+                      onSaved: (DateTime date) {
+                        _user.birthday = date ?? DateTime.now();
+                      },
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomDropDownFormField(
+                      dark: configState.darkMode,
+                      labelText: "Gender",
+                      items: {
+                        "Select": FontAwesomeIcons.user,
+                        "Male": FontAwesomeIcons.male,
+                        "Female": FontAwesomeIcons.female,
+                      },
+                      onSaved: (dynamic value) {
+                        _user.gender = value;
+                      },
                     ),
                     SizedBox(
                       height: 16,
@@ -213,6 +245,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void _onSubmit() {
     _key.currentState.save();
+    print(_user.toMap());
     if (_key.currentState.validate()) {
       setState(() {
         _isRegistering = true;

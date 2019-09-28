@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
     ConfigState configState = Provider.of<ConfigState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Trefor"),
+        title: Text("Treflor"),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -40,15 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 16,
               ),
-              Hero(
-                tag: "profile-pic",
-                child: ClipOval(
-                  child: Image.asset(
-                    "assets/images/profile.jpg",
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.cover,
-                  ),
+              ClipOval(
+                child: Image.asset(
+                  "assets/images/profile.jpg",
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.cover,
                 ),
               ),
               Form(
@@ -176,7 +173,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     Provider.of<AuthState>(context).signInWithGoogle().then((success) {
       if (success) {
-        Application.router.pop(context);
+        Application.router.navigateTo(context, '/update/rest',
+            clearStack: true, replace: true);
       } else {
         setState(() {
           _onProcess = false;
