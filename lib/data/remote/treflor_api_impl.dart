@@ -22,7 +22,7 @@ class TreflorAPIImpl extends TreflorAPI {
   static const ENDPOINT_LOGIN = "/oauth/signin";
   static const ENDPOINT_SIGNUP = "/oauth/signup";
   static const ENDPOINT_LOGIN_WITH_GOOGLE = "/oauth/google";
-  static const ENDPOINT_USER = "/user";
+  static const ENDPOINT_USER_INFO = "/user/info";
 
   @override
   Future<AuthResponse> login(AuthUser user) {
@@ -36,7 +36,9 @@ class TreflorAPIImpl extends TreflorAPI {
     Options options = Options(
       headers: {HttpHeaders.authorizationHeader: token},
     );
-    return _dio.get(API_URL + ENDPOINT_USER, options: options).then((response) {
+    return _dio
+        .get(API_URL + ENDPOINT_USER_INFO, options: options)
+        .then((response) {
       return User.fromJson(response.data['user']);
     });
   }
