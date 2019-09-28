@@ -11,7 +11,7 @@ class CustomImageFormField extends FormField<File> {
     File initialValue,
     double height = 120,
     double width = 120,
-    @required bool dark,
+    bool dark = false,
   }) : super(
           onSaved: onSaved,
           validator: validator,

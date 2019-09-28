@@ -8,7 +8,7 @@ class CustomDatePickerFormField extends FormField<DateTime> {
     FormFieldValidator<DateTime> validator,
     DateTime initialValue,
     @required BuildContext context,
-    @required bool dark,
+     bool dark = false,
     @required DateFormat format,
   }) : super(
             initialValue: initialValue,
