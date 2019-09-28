@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
     ConfigState configState = Provider.of<ConfigState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Trefor"),
+        title: Text("Treflor"),
       ),
       body: SingleChildScrollView(
         child: Container(

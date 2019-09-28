@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
-class CustomDatePickerField extends FormField<DateTime> {
-  CustomDatePickerField({
+class CustomDatePickerFormField extends FormField<DateTime> {
+  CustomDatePickerFormField({
     FormFieldSetter<DateTime> onSaved,
     FormFieldValidator<DateTime> validator,
     DateTime initialValue,

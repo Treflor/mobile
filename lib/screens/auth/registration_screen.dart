@@ -11,8 +11,7 @@ import 'package:treflor/models/register_user.dart';
 import 'package:treflor/routes/application.dart';
 import 'package:treflor/state/auth_state.dart';
 import 'package:treflor/state/config_state.dart';
-
-import '../../wigets/custom_date_picker_field.dart';
+import 'package:treflor/wigets/custom_date_picker_form_field.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -43,7 +42,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     ConfigState configState = Provider.of<ConfigState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(""),
+        title: Text("Treflor"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -129,7 +128,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     SizedBox(
                       height: 16,
                     ),
-                    CustomDatePickerField(
+                    CustomDatePickerFormField(
                       dark: configState.darkMode,
                       context: context,
                       format: DateFormat("dd - MMMM - yyyy"),
