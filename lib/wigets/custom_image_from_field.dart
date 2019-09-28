@@ -5,14 +5,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CustomImageFormField extends FormField<File> {
-  final double width;
-  final double height;
   CustomImageFormField({
     FormFieldSetter<File> onSaved,
     FormFieldValidator<File> validator,
     File initialValue,
-    this.height = 120,
-    this.width = 120,
+    double height = 120,
+    double width = 120,
+    @required bool dark,
   }) : super(
           onSaved: onSaved,
           validator: validator,
@@ -43,7 +42,7 @@ class CustomImageFormField extends FormField<File> {
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   decoration: BoxDecoration(
-                      color: Colors.white30,
+                      color: dark ? Colors.white30 : Colors.black38,
                       borderRadius: BorderRadius.circular(15)),
                   padding: EdgeInsets.all(3),
                   child: Wrap(
@@ -60,6 +59,7 @@ class CustomImageFormField extends FormField<File> {
                         },
                         icon: Icon(
                           FontAwesomeIcons.camera,
+                          color: dark ? Colors.white70 : Colors.black87,
                           size: 26,
                         ),
                       ),
@@ -74,6 +74,7 @@ class CustomImageFormField extends FormField<File> {
                         },
                         icon: Icon(
                           FontAwesomeIcons.photoVideo,
+                          color: dark ? Colors.white70 : Colors.black87,
                           size: 26,
                         ),
                       ),

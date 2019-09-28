@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:treflor/wigets/custom_image_from_field.dart';
@@ -10,6 +11,8 @@ import 'package:treflor/models/register_user.dart';
 import 'package:treflor/routes/application.dart';
 import 'package:treflor/state/auth_state.dart';
 import 'package:treflor/state/config_state.dart';
+
+import '../../wigets/custom_date_picker_field.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -61,6 +64,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       height: 16,
                     ),
                     CustomImageFormField(
+                      dark: configState.darkMode,
                       onSaved: _onSavedImage,
                     ),
                     SizedBox(
@@ -101,6 +105,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     SizedBox(
                       height: 16,
                     ),
+                    Divider(),
                     CustomTextFormField(
                       dark: configState.darkMode,
                       labelText: "Given Name",
@@ -120,6 +125,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         _user.familyName = value;
                       },
                       validator: _validateName,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    CustomDatePickerField(
+                      dark: configState.darkMode,
+                      context: context,
+                      format: DateFormat("dd - MMMM - yyyy"),
                     ),
                     SizedBox(
                       height: 16,
