@@ -15,7 +15,7 @@ class _StartScreenState extends State<StartScreen> {
   @override
   void initState() {
     super.initState();
-    initLocation();
+    // initLocation();
   }
 
   @override

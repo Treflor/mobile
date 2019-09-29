@@ -13,7 +13,6 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    AuthState authState = Provider.of<AuthState>(context);
     ConfigState configBLoC = Provider.of<ConfigState>(context);
     return Scaffold(
       body: Container(
@@ -29,11 +28,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () => configBLoC.toggleDarkMode(),
             ),
             Divider(),
-            ListTile(
-              leading: Icon(FontAwesomeIcons.signOutAlt),
-              title: Text("Sign out"),
-              onTap: () => authState.signout(),
-            ),
           ],
         ),
       ),
