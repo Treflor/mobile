@@ -56,10 +56,10 @@ class Repository {
     });
   }
 
-  Future<AuthResponse> update(User user) {
+  Future<bool> update(User user) {
     return _api.update(user, accessToken).then((response) {
-      return AuthResponse({"token": accessToken});
-    });
+      return response.success;
+    }).catchError((onError) => false);
   }
 
   Future<void> logout() {

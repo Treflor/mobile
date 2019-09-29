@@ -46,9 +46,19 @@ class AuthState extends ChangeNotifier {
   }
 
   Future<bool> update(User user) {
-    return _respository
-        .update(user)
-        .then((response) => _loadUserData(response));
+    return _respository.update(user).then((success) async {
+      if (success) {
+        await _respository.usersInfoLocal().then((user) async {
+          this._user = user;
+          notifyListeners();
+          await _respository.usersInfo().then((User user) {
+            this._user = user;
+            notifyListeners();
+          }).catchError((err) {});
+        });
+      }
+      return success;
+    }).catchError((err) => false);
   }
 
   Future<bool> signInWithGoogle() {

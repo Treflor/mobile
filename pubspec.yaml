@@ -37,6 +37,9 @@ dependencies:
   rxdart:
   flutter_signin_button:
   intl:
+  bloc:
+  flutter_bloc:
+  equatable:
 
 dev_dependencies:
   flutter_test:
