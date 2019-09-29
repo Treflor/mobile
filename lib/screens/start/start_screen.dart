@@ -1,8 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'my_location_bloc/index.dart';
 
 class StartScreen extends StatefulWidget {
   @override
@@ -10,57 +10,41 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  List<Position> positions = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // initLocation();
-  }
+  MyLocationBloc _myLocationBloc = MyLocationBloc();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(7.458992, 80.2479298),
-              zoom: 20,
+    return BlocBuilder(
+      builder: (context, state) {
+        print(state);
+        print("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+        if (state is OnMyLocationState) {
+          return Container(
+            child: Stack(
+              children: <Widget>[
+                GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(7.458992, 80.2479298),
+                    zoom: 15,
+                  ),
+                  markers: state.markers,
+                ),
+              ],
             ),
-          )
-        ],
-      ),
+          );
+        } else {
+          return Container(
+            child: Text("No Map "),
+          );
+        }
+      },
+      bloc: _myLocationBloc,
     );
   }
 
-  void initLocation() async {
-    var geolocator = Geolocator();
-    var locationOptions =
-        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-
-    StreamSubscription<Position> positionStream = geolocator
-        .getPositionStream(locationOptions)
-        .listen((Position position) {
-      print(position.toString());
-      print("from subscription");
-      setState(() {
-        this.positions.add(position);
-      });
-    });
-
-    print("position.toString()");
-    Position position = await Geolocator()
-        .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
-    print(position.toString());
-    setState(() {
-      this.positions.add(position);
-    });
-    position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print(position.toString());
-    setState(() {
-      this.positions.add(position);
-    });
+  @override
+  void dispose() {
+    _myLocationBloc.dispose();
+    super.dispose();
   }
 }
