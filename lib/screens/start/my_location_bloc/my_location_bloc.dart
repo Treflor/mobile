@@ -33,7 +33,7 @@ class MyLocationBloc extends Bloc<MyLocationEvent, MyLocationState> {
   }
 
   @override
-  MyLocationState get initialState => NoMyLocationState();
+  MyLocationState get initialState => InitialMyLocationState();
 
   @override
   Stream<MyLocationState> mapEventToState(

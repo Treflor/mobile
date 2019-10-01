@@ -6,7 +6,7 @@ abstract class MyLocationState extends Equatable {
   const MyLocationState();
 }
 
-class NoMyLocationState extends MyLocationState {
+class InitialMyLocationState extends MyLocationState {
   @override
   List<Object> get props => null;
 }

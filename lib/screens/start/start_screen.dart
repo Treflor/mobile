@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'my_location_bloc/index.dart';
@@ -16,25 +17,13 @@ class _StartScreenState extends State<StartScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder(
       builder: (context, state) {
-        print(state);
-        print("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
         if (state is OnMyLocationState) {
-          return Container(
-            child: Stack(
-              children: <Widget>[
-                GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(7.458992, 80.2479298),
-                    zoom: 15,
-                  ),
-                  markers: state.markers,
-                ),
-              ],
-            ),
-          );
+          return _mapScreen(state);
         } else {
           return Container(
-            child: Text("No Map "),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
       },
@@ -46,5 +35,34 @@ class _StartScreenState extends State<StartScreen> {
   void dispose() {
     _myLocationBloc.dispose();
     super.dispose();
+  }
+
+  Widget _mapScreen(OnMyLocationState state) {
+    return Container(
+      child: Stack(
+        children: <Widget>[
+          GoogleMap(
+            
+            initialCameraPosition: CameraPosition(
+              target: LatLng(7.658992, 80.6479298),
+              zoom: 15,
+            ),
+            markers: state.markers,
+          ),
+          Positioned(
+            right: 10,
+            bottom: 10,
+            child: FloatingActionButton(
+              mini: true,
+              backgroundColor: Colors.white,
+              onPressed: null,
+              child: Icon(
+                FontAwesomeIcons.hiking,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

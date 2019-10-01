@@ -18,8 +18,9 @@ class OnMyLocationEvent extends MyLocationEvent {
   @override
   Future<MyLocationState> execute(
       {@required MyLocationState currentState}) async {
+        print(position.toString());
     Marker myLocationMarker = Marker(
-        markerId: MarkerId(position.timestamp.toIso8601String()),
+        markerId: MarkerId("my-location"),
         position: LatLng(position.latitude, position.longitude),
         icon: await BitmapDescriptor.fromAssetImage(
             ImageConfiguration(size: Size(20, 20)), "assets/icons/user.png"));
