@@ -44,7 +44,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     ConfigState configState = Provider.of<ConfigState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Treflor"),
+        title: Image.asset("assets/images/treflor_logo.png", height: 50.0,),
+        backgroundColor: configState.darkMode ? Color.fromRGBO(13, 71, 161, 0.6) : Color.fromRGBO(13, 71, 161, 1),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -158,7 +159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     RaisedButton(
                       elevation: 0,
-                      color: Theme.of(context).buttonColor,
+                      color: configState.darkMode ? Color.fromRGBO(130, 199, 165, 0.8) : Color.fromRGBO(130, 199, 165, 1),
                       colorBrightness: configState.darkMode
                           ? Brightness.dark
                           : Brightness.light,

@@ -36,6 +36,7 @@ dependencies:
   fluro:
   rxdart:
   flutter_signin_button:
+  flutter_swiper:
   intl:
   bloc:
   flutter_bloc:
@@ -64,6 +65,8 @@ flutter:
 
   assets:
     - assets/images/profile.jpg
+    - assets/images/treflor_logo.png
+    - assets/images/hiker.png
     - assets/icons/user.png
     - assets/jsons/map_dark.json
 
