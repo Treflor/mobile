@@ -1,11 +1,12 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:treflor/screens/auth/registration_screen.dart';
 import 'package:treflor/screens/main_screen.dart';
 import 'package:treflor/screens/auth/login_screen.dart';
-import 'package:treflor/screens/profile/profile.dart';
 
 import '../screens/auth/update_rest_screen.dart';
+import '../screens/profile/index.dart';
 
 var mainHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -19,7 +20,11 @@ var loginHandler = Handler(
 
 var profileHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return ProfileScreen();
+  return Provider<ProfileBloc>(
+    builder: (context) => ProfileBloc(),
+    dispose: (context, bloc) => bloc.dispose(),
+    child: ProfileScreen(),
+  );
 });
 
 var signupHandler = Handler(

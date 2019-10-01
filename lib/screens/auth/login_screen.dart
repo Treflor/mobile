@@ -167,14 +167,22 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _signInWithGoogle() async {
+    AuthState authState = Provider.of<AuthState>(context);
     setState(() {
       _onProcess = true;
     });
 
-    Provider.of<AuthState>(context).signInWithGoogle().then((success) {
+    authState.signInWithGoogle().then((success) {
       if (success) {
-        Application.router.navigateTo(context, '/update/rest',
-            clearStack: true, replace: true);
+        if (authState.user.birthday
+                .compareTo(DateTime.fromMillisecondsSinceEpoch(0)) ==
+            0) {
+          Application.router.navigateTo(context, '/update/rest',
+              clearStack: true, replace: true);
+        } else {
+          Application.router
+              .navigateTo(context, '/', clearStack: true, replace: true);
+        }
       } else {
         setState(() {
           _onProcess = false;

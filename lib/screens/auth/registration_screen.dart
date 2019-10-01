@@ -144,14 +144,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     CustomDropDownFormField(
                       dark: configState.darkMode,
                       labelText: "Gender",
-                      items: {
-                        "Select": FontAwesomeIcons.user,
-                        "Male": FontAwesomeIcons.male,
-                        "Female": FontAwesomeIcons.female,
-                      },
+                      items: [
+                        "Male",
+                        "Female"
+                      ],
                       onSaved: (dynamic value) {
                         _user.gender = value;
                       },
+                      validator: _validateGender,
                     ),
                     SizedBox(
                       height: 16,
@@ -228,6 +228,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return null;
   }
 
+  String _validateGender(String gender) {
+    if (gender == null) {
+      return "gender can't be empty";
+    }
+    return null;
+  }
+
   void _onSavedImage(File file) async {
     var base64Image = '';
 
@@ -245,7 +252,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void _onSubmit() {
     _key.currentState.save();
-    print(_user.toMap());
     if (_key.currentState.validate()) {
       setState(() {
         _isRegistering = true;

@@ -77,14 +77,11 @@ class _UpdateRestScreenState extends State<UpdateRestScreen> {
                     CustomDropDownFormField(
                       dark: configState.darkMode,
                       labelText: "Gender",
-                      items: {
-                        "Select": FontAwesomeIcons.user,
-                        "Male": FontAwesomeIcons.male,
-                        "Female": FontAwesomeIcons.female,
-                      },
+                      items: ["Male","Female"],
                       onSaved: (dynamic value) {
                         _user.gender = value;
                       },
+                      validator: _validateGender,
                     ),
                     SizedBox(
                       height: 16,
@@ -122,6 +119,13 @@ class _UpdateRestScreenState extends State<UpdateRestScreen> {
         ),
       ),
     );
+  }
+
+  String _validateGender(String gender) {
+    if (gender == null) {
+      return "gender can't be empty";
+    }
+    return null;
   }
 
   void _onSkip() {
