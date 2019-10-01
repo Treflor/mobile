@@ -8,6 +8,8 @@ class UserProvider {
       pref.setString("user-given-name", user.givenName);
       pref.setString("user-family-name", user.familyName);
       pref.setString("user-photo-url", user.photoUrl);
+      pref.setString("user-gender", user.gender);
+      pref.setInt("user-birthday", user.birthday.millisecondsSinceEpoch);
     });
   }
 
@@ -18,6 +20,9 @@ class UserProvider {
       user.givenName = pref.getString("user-given-name");
       user.familyName = pref.getString("user-family-name");
       user.photoUrl = pref.getString("user-photo-url");
+      user.gender = pref.getString("user-gender");
+      user.birthday =
+          DateTime.fromMillisecondsSinceEpoch(pref.getInt("user-birthday"));
       if (user.email == null) return null;
       return user;
     });
@@ -29,6 +34,8 @@ class UserProvider {
       pref.setString("user-given-name", null);
       pref.setString("user-family-name", null);
       pref.setString("user-photo-url", null);
+      pref.setString("user-gender", null);
+      pref.setInt("user-birthday", null);
     });
   }
 }

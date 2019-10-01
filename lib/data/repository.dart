@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:treflor/models/auth_user.dart';
 import 'package:treflor/data/remote/dto/auth_response.dart';
@@ -7,10 +8,13 @@ import 'package:treflor/data/local/entities/user_provider.dart';
 import 'package:treflor/data/remote/treflor_api_impl.dart';
 import 'package:treflor/models/user.dart';
 import 'package:treflor/models/register_user.dart';
+import 'package:treflor/data/local/entities/journey_provider.dart';
+import 'package:treflor/models/journey.dart';
 
 class Repository {
   TreflorAPI _api;
   UserProvider _userProvider;
+  JourneyProvider _journeyProvider;
 
   String accessToken;
 
@@ -26,10 +30,10 @@ class Repository {
     });
   }
 
+// App configurations
   Future<bool> getDarkMode() {
     return SharedPreferences.getInstance().then((pref) {
-      bool darkMode = pref.getBool(Treflor.DARK_MODE_KEY);
-      return darkMode ?? false;
+      return pref.getBool(Treflor.DARK_MODE_KEY) ?? false;
     });
   }
 
@@ -40,6 +44,7 @@ class Repository {
     });
   }
 
+// user section
   Future<AuthResponse> login(AuthUser user) {
     return _api.login(user).then((response) => _storeAccessToken(response));
   }
@@ -54,6 +59,12 @@ class Repository {
     return _api.signup(user).then((response) {
       return login(user.toAuthUser());
     });
+  }
+
+  Future<bool> update(User user) {
+    return _api.update(user, accessToken).then((response) {
+      return response.success;
+    }).catchError((onError) => false);
   }
 
   Future<void> logout() {
@@ -84,6 +95,25 @@ class Repository {
     return response;
   }
 
+  //journey section
+  Future<void> startJourney({@required Journey journey}) {
+    return _journeyProvider.make().then((_) {
+      return _journeyProvider.start(journey: journey);
+    });
+  }
+
+  Future<void> endJourney({@required Journey journey}) {
+    return _journeyProvider.unmake().then((_) {
+      return _journeyProvider.end();
+    });
+  }
+
+  Future<Journey> getJourney() {
+    return _journeyProvider.getState().then((state) {
+      return state ? _journeyProvider.getJourney() : null;
+    });
+  }
+
   // Singleton
   static final Repository _repository = Repository._internal();
 
@@ -93,5 +123,6 @@ class Repository {
 
   Repository._internal()
       : _api = TreflorAPIImpl(),
-        _userProvider = UserProvider();
+        _userProvider = UserProvider(),
+        _journeyProvider = JourneyProvider();
 }

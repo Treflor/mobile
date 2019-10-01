@@ -45,6 +45,22 @@ class AuthState extends ChangeNotifier {
         .then((response) => _loadUserData(response));
   }
 
+  Future<bool> update(User user) {
+    return _respository.update(user).then((success) async {
+      if (success) {
+        await _respository.usersInfoLocal().then((user) async {
+          this._user = user;
+          notifyListeners();
+          await _respository.usersInfo().then((User user) {
+            this._user = user;
+            notifyListeners();
+          }).catchError((err) {});
+        });
+      }
+      return success;
+    }).catchError((err) => false);
+  }
+
   Future<bool> signInWithGoogle() {
     GoogleSignIn _googleSignIn = GoogleSignIn(
       signInOption: SignInOption.standard,
@@ -59,7 +75,7 @@ class AuthState extends ChangeNotifier {
       return await _respository
           .loginWithGoogle(auth.accessToken)
           .then((response) => _loadUserData(response))
-          .catchError((e) => print);
+          .catchError((e) => false);
     });
   }
 

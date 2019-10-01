@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:treflor/data/remote/dto/tresponse.dart';
 
 import 'package:treflor/models/auth_user.dart';
 import 'package:treflor/data/remote/dto/auth_response.dart';
@@ -22,7 +23,8 @@ class TreflorAPIImpl extends TreflorAPI {
   static const ENDPOINT_LOGIN = "/oauth/signin";
   static const ENDPOINT_SIGNUP = "/oauth/signup";
   static const ENDPOINT_LOGIN_WITH_GOOGLE = "/oauth/google";
-  static const ENDPOINT_USER = "/user";
+  static const ENDPOINT_USER_INFO = "/user/info";
+  static const ENDPOINT_EDIT_USER = "/user/edit";
 
   @override
   Future<AuthResponse> login(AuthUser user) {
@@ -36,7 +38,9 @@ class TreflorAPIImpl extends TreflorAPI {
     Options options = Options(
       headers: {HttpHeaders.authorizationHeader: token},
     );
-    return _dio.get(API_URL + ENDPOINT_USER, options: options).then((response) {
+    return _dio
+        .get(API_URL + ENDPOINT_USER_INFO, options: options)
+        .then((response) {
       return User.fromJson(response.data['user']);
     });
   }
@@ -57,6 +61,21 @@ class TreflorAPIImpl extends TreflorAPI {
         .post(API_URL + ENDPOINT_SIGNUP, data: user.toMap())
         .then((response) {
       return AuthResponse(response.data);
+    }).catchError((err) {
+      throw Exception(err.toString());
+    });
+  }
+
+  @override
+  Future<TResponse> update(User user, String token) {
+    Options options = Options(
+      headers: {HttpHeaders.authorizationHeader: token},
+    );
+    return _dio
+        .post(API_URL + ENDPOINT_EDIT_USER,
+            data: user.toMap(), options: options)
+        .then((response) {
+      return TResponse(response.data);
     }).catchError((err) {
       throw Exception(err.toString());
     });

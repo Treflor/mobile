@@ -37,6 +37,10 @@ dependencies:
   rxdart:
   flutter_signin_button:
   flutter_swiper:
+  intl:
+  bloc:
+  flutter_bloc:
+  equatable:
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +67,8 @@ flutter:
     - assets/images/profile.jpg
     - assets/images/treflor_logo.png
     - assets/images/hiker.png
+    - assets/icons/user.png
+    - assets/jsons/map_dark.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
