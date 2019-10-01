@@ -16,7 +16,6 @@ class MyLocationBloc extends Bloc<MyLocationEvent, MyLocationState> {
         .getPositionStream(locationOptions)
         .listen((Position position) {
       dispatch(OnMyLocationEvent(position: position));
-       print("stream dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
        
     });
 

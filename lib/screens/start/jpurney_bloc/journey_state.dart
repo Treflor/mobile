@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+import 'package:treflor/models/journey.dart';
 
 abstract class JourneyState extends Equatable {
   const JourneyState();
@@ -15,6 +17,10 @@ class NoJourneyState extends JourneyState {
 }
 
 class OnJourneyState extends JourneyState {
+  final Journey journey;
+
+  OnJourneyState({@required this.journey});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [journey];
 }
