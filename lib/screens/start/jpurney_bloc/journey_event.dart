@@ -41,3 +41,19 @@ class LoadJourneyEvent extends JourneyEvent {
     });
   }
 }
+
+class StopJourneyEvent extends JourneyEvent {
+  final Journey journey;
+  final Repository _repository;
+  StopJourneyEvent({@required this.journey}) : _repository = Repository();
+
+  @override
+  List<Object> get props => [_repository];
+
+  @override
+  Future<JourneyState> execute() {
+    return _repository.endJourney(journey: journey).then((_) {
+      return NoJourneyState();
+    });
+  }
+}

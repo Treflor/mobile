@@ -16,6 +16,11 @@ class NoJourneyState extends JourneyState {
   List<Object> get props => [];
 }
 
+class LoadJourneyState extends JourneyState {
+  @override
+  List<Object> get props => [];
+}
+
 class OnJourneyState extends JourneyState {
   final Journey journey;
 

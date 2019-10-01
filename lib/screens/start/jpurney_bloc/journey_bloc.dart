@@ -3,6 +3,10 @@ import 'package:bloc/bloc.dart';
 import './bloc.dart';
 
 class JourneyBloc extends Bloc<JourneyEvent, JourneyState> {
+  JourneyBloc() {
+    dispatch(LoadJourneyEvent());
+  }
+
   @override
   JourneyState get initialState => InitialJourneyState();
 
@@ -10,6 +14,11 @@ class JourneyBloc extends Bloc<JourneyEvent, JourneyState> {
   Stream<JourneyState> mapEventToState(
     JourneyEvent event,
   ) async* {
-    // TODO: Add Logic
+    try {
+      yield LoadJourneyState();
+      yield await event.execute();
+    } catch (_) {
+      yield currentState;
+    }
   }
 }
