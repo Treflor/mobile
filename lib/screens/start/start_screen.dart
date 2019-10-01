@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:treflor/screens/start/jpurney_bloc/bloc.dart';
 import 'package:treflor/screens/start/my_location_bloc/index.dart';
 import 'package:treflor/models/journey.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:treflor/state/config_state.dart';
 
 class StartScreen extends StatefulWidget {
   @override
@@ -14,6 +16,16 @@ class StartScreen extends StatefulWidget {
 
 class _StartScreenState extends State<StartScreen> {
   MyLocationBloc _myLocationBloc = MyLocationBloc();
+  GoogleMapController _mapController;
+
+  void _changeMapTheme(mode) async {
+    if (mode) {
+      _mapController.setMapStyle(
+          await rootBundle.loadString("assets/jsons/map_dark.json"));
+    } else {
+      _mapController.setMapStyle("[]");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +57,13 @@ class _StartScreenState extends State<StartScreen> {
       child: Stack(
         children: <Widget>[
           GoogleMap(
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+              _changeMapTheme(Provider.of<ConfigState>(context).darkMode);
+            },
             initialCameraPosition: CameraPosition(
               target: LatLng(7.658992, 80.6479298),
-              zoom: 15,
+              zoom: 10,
             ),
             markers: state.markers,
           ),
@@ -64,6 +80,7 @@ class _StartScreenState extends State<StartScreen> {
                     onPressed: null,
                     child: Icon(
                       FontAwesomeIcons.info,
+                      color: Colors.black,
                     ),
                   );
                 }
@@ -78,6 +95,7 @@ class _StartScreenState extends State<StartScreen> {
                     ),
                     child: Icon(
                       FontAwesomeIcons.hiking,
+                      color: Colors.black,
                     ),
                   );
                 }
@@ -91,6 +109,7 @@ class _StartScreenState extends State<StartScreen> {
                   ),
                   child: Icon(
                     FontAwesomeIcons.hourglassEnd,
+                    color: Colors.black,
                   ),
                 );
               },
