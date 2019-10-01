@@ -6,6 +6,7 @@ class Routes {
   static const login = "/login";
   static const signup = "/signup";
   static const profile = "/profile";
+  static const updateRest = "/update/rest";
 
   static void configureRouter(Router router) {
     router.define(main, handler: mainHandler);
@@ -15,5 +16,7 @@ class Routes {
         handler: profileHandler, transitionType: TransitionType.fadeIn);
     router.define(signup,
         handler: signupHandler, transitionType: TransitionType.fadeIn);
+    router.define(updateRest,
+        handler: updateRestHandler, transitionType: TransitionType.inFromRight);
   }
 }

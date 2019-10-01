@@ -1,0 +1,3 @@
+class Journey {
+  Journey();
+}

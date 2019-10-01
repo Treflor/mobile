@@ -1,19 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treflor/state/config_state.dart';
-import 'package:treflor/state/auth_state.dart';
 
-class SettingsScreen extends StatefulWidget {
-  @override
-  _SettingsScreenState createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
+class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AuthState authState = Provider.of<AuthState>(context);
     ConfigState configBLoC = Provider.of<ConfigState>(context);
     return Scaffold(
       body: Container(
@@ -27,12 +19,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               title: Text("Dark Mode"),
               onTap: () => configBLoC.toggleDarkMode(),
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(FontAwesomeIcons.signOutAlt),
-              title: Text("Sign out"),
-              onTap: () => authState.signout(),
             ),
           ],
         ),

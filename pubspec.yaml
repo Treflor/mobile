@@ -36,6 +36,10 @@ dependencies:
   fluro:
   rxdart:
   flutter_signin_button:
+  intl:
+  bloc:
+  flutter_bloc:
+  equatable:
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +64,8 @@ flutter:
 
   assets:
     - assets/images/profile.jpg
+    - assets/icons/user.png
+    - assets/jsons/map_dark.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
