@@ -39,7 +39,8 @@ class _MainScreenState extends State<MainScreen> {
     AuthState authState = Provider.of<AuthState>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Treflor"),
+        title: Image.asset("assets/images/treflor_logo.png", height: 40.0,),
+        backgroundColor: configState.darkMode ? Color.fromRGBO(13, 71, 161, 0.6) : Color.fromRGBO(13, 71, 161, 1),
         actions: <Widget>[
           SizedBox(
             width: 5,
@@ -81,10 +82,10 @@ class _MainScreenState extends State<MainScreen> {
         child: _screens[_selectedIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: configState.darkMode ? Colors.blueGrey : Colors.grey,
+        backgroundColor: configState.darkMode ? Color.fromRGBO(13, 71, 161, 0.6) : Color.fromRGBO(13, 71, 161, 1),
         selectedItemColor:
-            configState.darkMode ? Colors.white : Colors.blueGrey,
-        unselectedItemColor: configState.darkMode ? Colors.grey : Colors.white,
+            configState.darkMode ? Color.fromRGBO(130, 199, 165, 0.8) : Color.fromRGBO(130, 199, 165, 1),
+        unselectedItemColor: configState.darkMode ? Colors.white : Colors.grey,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,

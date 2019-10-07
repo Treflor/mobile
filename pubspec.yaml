@@ -64,6 +64,8 @@ flutter:
 
   assets:
     - assets/images/profile.jpg
+    - assets/images/treflor_logo.png
+    - assets/images/hiker.png
     - assets/icons/user.png
     - assets/jsons/map_dark.json
 
