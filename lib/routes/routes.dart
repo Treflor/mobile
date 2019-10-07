@@ -7,6 +7,8 @@ class Routes {
   static const signup = "/signup";
   static const profile = "/profile";
   static const updateRest = "/update/rest";
+  static const about = "/about";
+  static const help = "/help";
 
   static void configureRouter(Router router) {
     router.define(main, handler: mainHandler);
@@ -18,5 +20,9 @@ class Routes {
         handler: signupHandler, transitionType: TransitionType.fadeIn);
     router.define(updateRest,
         handler: updateRestHandler, transitionType: TransitionType.inFromRight);
+    router.define(about,
+        handler: aboutHandler, transitionType: TransitionType.fadeIn);
+    router.define(help,
+        handler: helpHandler, transitionType: TransitionType.fadeIn);
   }
 }
