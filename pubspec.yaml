@@ -36,6 +36,7 @@ dependencies:
   fluro:
   rxdart:
   flutter_signin_button:
+  flutter_swiper:
   intl:
   bloc:
   flutter_bloc:
