@@ -1,25 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:background="@color/blueGray600"
-    tools:context=".ui.MainActivity">
+    android:orientation="horizontal"
+    tools:context=".ui.MainActivity"
+    android:id="@+id/fragmentContainer">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/blueGray800"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/app_name"
             android:textColor="@android:color/white"
-            android:textSize="23dp"
-            android:text="Treflor"/>
+            android:textSize="23sp" />
     </androidx.appcompat.widget.Toolbar>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/navbar_menu"
+        app:itemIconTint="@color/blueGray600"
+        app:itemTextColor="@color/blueGray600"
+        />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
