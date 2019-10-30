@@ -1,7 +1,8 @@
-package com.treflor
+package com.treflor.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.treflor.R
 
 class MainActivity : AppCompatActivity() {
 
