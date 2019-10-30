@@ -2,6 +2,7 @@ package com.treflor.ui.profile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.treflor.R
 
 class ProfileActivity : AppCompatActivity() {
 
