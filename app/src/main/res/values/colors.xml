@@ -3,4 +3,16 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+
+    <color name="blueGray50">#eceff1</color>
+    <color name="blueGray100">#cfd8dc</color>
+    <color name="blueGray200">#b0bec5</color>
+    <color name="blueGray300">#90a4ae</color>
+    <color name="blueGray400">#78909c</color>
+    <color name="blueGray500">#607d8b</color>
+    <color name="blueGray600">#546e7a</color>
+    <color name="blueGray700">#455a64</color>
+    <color name="blueGray900">#263238</color>
+    <color name="blueGray800">#37474f</color>
 </resources>
