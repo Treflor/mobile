@@ -26,19 +26,19 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(HomeFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.bottom_journey-> {
+                R.id.bottom_journey -> {
                     replaceFragment(JourneyFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.bottom_camera-> {
+                R.id.bottom_camera -> {
                     replaceFragment(CameraFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.bottom_route-> {
+                R.id.bottom_route -> {
                     replaceFragment(RoutesFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.bottom_menu-> {
+                R.id.bottom_menu -> {
                     replaceFragment(MenuFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
@@ -50,6 +50,5 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(fragmentContainer.id, fragment).commit()
-
     }
 }
