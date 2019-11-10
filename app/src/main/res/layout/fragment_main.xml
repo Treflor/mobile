@@ -6,39 +6,4 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            app:titleTextColor="@android:color/white">
-
-            <info.androidhive.fontawesome.FontTextView
-                android:id="@+id/account_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:text="@string/fa_user_circle"
-                android:textColor="#eeeeee"
-                android:textSize="30sp"
-                app:solid_icon="true" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="2dp" />
-        </androidx.appcompat.widget.Toolbar>
-    </LinearLayout>
-
 </FrameLayout>
