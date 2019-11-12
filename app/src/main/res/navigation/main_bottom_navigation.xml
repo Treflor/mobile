@@ -23,10 +23,18 @@
         android:id="@+id/homeFragment"
         android:name="com.treflor.ui.home.HomeFragment"
         android:label="home_fragment"
-        tools:layout="@layout/home_fragment" />
+        tools:layout="@layout/home_fragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/journeyFragment"
         android:name="com.treflor.ui.journey.JourneyFragment"
         android:label="journey_fragment"
         tools:layout="@layout/journey_fragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.treflor.ui.login.LoginFragment"
+        android:label="LoginFragment" />
 </navigation>
