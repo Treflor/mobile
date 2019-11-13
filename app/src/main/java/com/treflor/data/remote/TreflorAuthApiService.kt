@@ -1,6 +1,7 @@
-package com.treflor.data.remote.response
+package com.treflor.data.remote
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.treflor.data.remote.response.AuthResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -35,8 +36,11 @@ interface TreflorAuthApiService {
     ): Deferred<AuthResponse>
 
     companion object {
-        operator fun invoke(): TreflorAuthApiService {
+        operator fun invoke(
+            connectivityInterceptor: ConnectivityInterceptor
+        ): TreflorAuthApiService {
             val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(connectivityInterceptor)
                 .build()
 
             return Retrofit.Builder()

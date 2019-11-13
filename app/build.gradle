@@ -112,3 +112,5 @@ dependencies {
     def google_auth_version = "17.0.0"
     implementation "com.google.android.gms:play-services-auth:$google_auth_version"
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -3,6 +3,9 @@ package com.treflor
 import android.app.Application
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.JWTProviderImpl
+import com.treflor.data.remote.*
+import com.treflor.data.repository.Repository
+import com.treflor.data.repository.RepositoryImpl
 import com.treflor.ui.login.LoginViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -18,7 +21,11 @@ class TreflorApplication : Application(), KodeinAware {
         import(androidXModule(this@TreflorApplication))
 
         bind<JWTProvider>() with singleton { JWTProviderImpl(instance()) }
-        bind() from provider { LoginViewModelFactory(instance()) }
+        bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
+        bind() from singleton { TreflorAuthApiService(instance()) }
+        bind<AuthenticationNetworkDataSource>() with singleton { AuthenticationNetworkDataSourceImpl(instance()) }
+        bind<Repository>() with singleton { RepositoryImpl(instance(),instance()) }
+        bind() from provider { LoginViewModelFactory(instance(),instance()) }
     }
 
 }

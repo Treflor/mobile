@@ -26,7 +26,12 @@
         tools:layout="@layout/home_fragment" >
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/fade_out"
+            app:popExitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/fade_in"
+            />
     </fragment>
     <fragment
         android:id="@+id/journeyFragment"
