@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/routesFragment"
+        android:name="com.treflor.ui.routes.RoutesFragment"
+        android:label="routes_fragment"
+        tools:layout="@layout/routes_fragment" />
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.treflor.ui.camera.CameraFragment"
+        android:label="camera_fragment"
+        tools:layout="@layout/camera_fragment" />
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.treflor.ui.menu.MenuFragment"
+        android:label="fragment_menu"
+        tools:layout="@layout/fragment_menu" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.treflor.ui.home.HomeFragment"
+        android:label="home_fragment"
+        tools:layout="@layout/home_fragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/fade_out"
+            app:popExitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/fade_in"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/journeyFragment"
+        android:name="com.treflor.ui.journey.JourneyFragment"
+        android:label="journey_fragment"
+        tools:layout="@layout/journey_fragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.treflor.ui.login.LoginFragment"
+        android:label="LoginFragment" />
+</navigation>
