@@ -1,4 +1,4 @@
-package com.treflor.internal
+package com.treflor.internal.eventexcecutor
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer

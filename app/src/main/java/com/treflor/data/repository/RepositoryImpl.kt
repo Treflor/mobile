@@ -1,15 +1,25 @@
 package com.treflor.data.repository
 
+import androidx.lifecycle.LiveData
+import com.treflor.data.db.dao.UserDao
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import com.treflor.data.remote.datasources.UserNetworkDataSource
+import com.treflor.models.User
+import kotlinx.coroutines.*
 
 class RepositoryImpl(
     private val jwtProvider: JWTProvider,
-    private val authenticationNetworkDataSource: AuthenticationNetworkDataSource
+    private val authenticationNetworkDataSource: AuthenticationNetworkDataSource,
+    private val userNetworkDataSource: UserNetworkDataSource,
+    private val userDao: UserDao
 ) : Repository {
+
+    init {
+        userNetworkDataSource.apply {
+            user.observeForever { user -> persistFetchedUser(user) }
+        }
+    }
 
     override fun signInWithGoogle(accessToken: String) = runBlocking {
         val jwt = withContext(Dispatchers.IO) {
@@ -20,7 +30,20 @@ class RepositoryImpl(
         }
     }
 
+    override suspend fun getUser(): LiveData<User> {
+        return withContext(Dispatchers.IO) {
+            userNetworkDataSource.fetchUser()
+            return@withContext userDao.getUser()
+        }
+    }
+
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
     private fun getJWT(): String = jwtProvider.getJWT()
     private fun setJWT(jwt: String): Boolean = jwtProvider.setJWT(jwt)
+
+    private fun persistFetchedUser(user: User) {
+        GlobalScope.launch(Dispatchers.IO) {
+            userDao.upsert(user)
+        }
+    }
 }
