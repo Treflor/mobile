@@ -1,8 +1,7 @@
 package com.treflor.data.repository
 
-import android.util.Log
 import com.treflor.data.provider.JWTProvider
-import com.treflor.data.remote.AuthenticationNetworkDataSource
+import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -16,8 +15,9 @@ class RepositoryImpl(
         val jwt = withContext(Dispatchers.IO) {
             authenticationNetworkDataSource.signInWithGoogle(accessToken)
         }
-        if (jwt != null) setJWT(jwt)
-        println(jwt)
+        if (jwt != null) {
+            setJWT(jwt)
+        }
     }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
