@@ -14,6 +14,9 @@ interface UserDao {
     fun upsert(user: User)
 
     @Query("SELECT * FROM user WHERE pk = $CURRENT_USER_PK")
-    fun getUser():LiveData<User>
+    fun getUser(): User
+
+    @Query("DELETE FROM user WHERE pk = $CURRENT_USER_PK")
+    fun delete()
 }
 

@@ -1,10 +1,13 @@
 package com.treflor.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.treflor.data.db.dao.UserDao
+import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
+import com.treflor.internal.AuthState
 import com.treflor.models.User
 import kotlinx.coroutines.*
 
@@ -12,10 +15,20 @@ class RepositoryImpl(
     private val jwtProvider: JWTProvider,
     private val authenticationNetworkDataSource: AuthenticationNetworkDataSource,
     private val userNetworkDataSource: UserNetworkDataSource,
-    private val userDao: UserDao
+    private val userDBDataSource: UserDBDataSource
 ) : Repository {
 
+
     init {
+
+        jwtProvider.apply {
+            authState.observeForever {
+                GlobalScope.launch(Dispatchers.IO) {
+                    userNetworkDataSource.fetchUser()
+                }
+            }
+        }
+
         userNetworkDataSource.apply {
             user.observeForever { user -> persistFetchedUser(user) }
         }
@@ -33,20 +46,18 @@ class RepositoryImpl(
     override suspend fun getUser(): LiveData<User> {
         return withContext(Dispatchers.IO) {
             userNetworkDataSource.fetchUser()
-            val user = userDao.getUser()
-            println("Reading user...............................${user.value}")
-            return@withContext user
+            return@withContext userDBDataSource.user
         }
     }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
     private fun getJWT(): String? = jwtProvider.getJWT()
     private fun setJWT(jwt: String): Boolean = jwtProvider.setJWT(jwt)
-    fun isLogged(): Boolean = !getJWT().isNullOrEmpty()
 
-    private fun persistFetchedUser(user: User) {
+    private fun persistFetchedUser(user: User?) {
         GlobalScope.launch(Dispatchers.IO) {
-            userDao.upsert(user)
+            if (user == null) return@launch userDBDataSource.delete()
+            userDBDataSource.upsert(user)
         }
     }
 }

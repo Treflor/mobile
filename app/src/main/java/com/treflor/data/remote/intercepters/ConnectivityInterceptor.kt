@@ -1,4 +1,4 @@
-package com.treflor.data.remote
+package com.treflor.data.remote.intercepters
 
 import okhttp3.Interceptor
 

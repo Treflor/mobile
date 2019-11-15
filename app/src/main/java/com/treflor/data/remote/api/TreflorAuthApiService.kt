@@ -1,7 +1,7 @@
 package com.treflor.data.remote.api
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.treflor.data.remote.ConnectivityInterceptor
+import com.treflor.data.remote.intercepters.ConnectivityInterceptor
 import com.treflor.data.remote.response.AuthResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
