@@ -20,6 +20,7 @@ class UserNetworkDataSourceImpl(
 
     override suspend fun fetchUser() {
         try {
+            //TODO:handle 401
             val fetchedUser =
                 if (!jwtProvider.getJWT().isNullOrEmpty()) treflorUserApiService.getUser(jwtProvider.getJWT()!!).await() else null
             _user.postValue(fetchedUser)

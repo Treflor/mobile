@@ -9,7 +9,8 @@ import com.treflor.models.User
 
 @Database(
     entities = [User::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class TreflorDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao

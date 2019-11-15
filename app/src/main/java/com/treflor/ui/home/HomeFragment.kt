@@ -54,6 +54,7 @@ class HomeFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAware 
     private fun bindUI() = launch {
         val user = viewModel.user.await()
         user.observe(this@HomeFragment, Observer {
+            account_icon.visibility = if (it == null) View.VISIBLE else View.GONE
             if (it == null) return@Observer
             homeFragmentBinding.user = it
         })

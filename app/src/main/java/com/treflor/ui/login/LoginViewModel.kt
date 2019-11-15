@@ -3,7 +3,6 @@ package com.treflor.ui.login
 import android.accounts.Account
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.GoogleAuthUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn

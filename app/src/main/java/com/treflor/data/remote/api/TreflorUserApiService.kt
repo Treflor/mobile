@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
+import java.util.concurrent.TimeUnit
 
 interface TreflorUserApiService {
 
@@ -22,6 +23,8 @@ interface TreflorUserApiService {
         ): TreflorUserApiService {
 
             val okHttpClient = OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(connectivityInterceptor)
                 .build()
 
