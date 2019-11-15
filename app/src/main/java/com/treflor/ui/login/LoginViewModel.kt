@@ -35,7 +35,6 @@ class LoginViewModel(
         .build()
     private val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
-    @BindingAdapter("android:onClick")
     fun signInWithGoogle() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResultEvent.sendEvent {

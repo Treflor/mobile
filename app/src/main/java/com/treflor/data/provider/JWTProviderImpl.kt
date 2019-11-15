@@ -5,7 +5,7 @@ import android.content.Context
 const val JWT_TOKEN = "JWT_TOKEN"
 
 class JWTProviderImpl(context: Context) : PreferenceProvider(context), JWTProvider {
-    override fun getJWT(): String {
+    override fun getJWT(): String? {
         return preferences.getString(JWT_TOKEN, "")!!
     }
 

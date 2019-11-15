@@ -33,13 +33,16 @@ class RepositoryImpl(
     override suspend fun getUser(): LiveData<User> {
         return withContext(Dispatchers.IO) {
             userNetworkDataSource.fetchUser()
-            return@withContext userDao.getUser()
+            val user = userDao.getUser()
+            println("Reading user...............................${user.value}")
+            return@withContext user
         }
     }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
-    private fun getJWT(): String = jwtProvider.getJWT()
+    private fun getJWT(): String? = jwtProvider.getJWT()
     private fun setJWT(jwt: String): Boolean = jwtProvider.setJWT(jwt)
+    fun isLogged(): Boolean = !getJWT().isNullOrEmpty()
 
     private fun persistFetchedUser(user: User) {
         GlobalScope.launch(Dispatchers.IO) {

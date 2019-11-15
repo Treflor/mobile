@@ -5,15 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.treflor.data.db.dao.UserDao
+import com.treflor.models.User
 
 @Database(
-    entities = [UserDao::class],
+    entities = [User::class],
     version = 1
 )
 abstract class TreflorDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     companion object {
+        @Volatile
         private var instance: TreflorDatabase? = null
         private val LOCK = Any()
 
@@ -23,7 +25,8 @@ abstract class TreflorDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) = Room.databaseBuilder(
             context.applicationContext,
-            TreflorDatabase::class.java, "treflorEntries.db"
+            TreflorDatabase::class.java,
+            "treflor.db"
         )
             .build()
     }

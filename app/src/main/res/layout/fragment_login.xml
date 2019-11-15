@@ -21,6 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/fuck"
-            app:setOnClickListener="@{() -> viewModel.signInWithGoogle()}" />
+            app:setOnClickListener="@{(v) -> viewModel.signInWithGoogle()}" />
     </LinearLayout>
 </layout>

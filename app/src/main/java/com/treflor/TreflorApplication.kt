@@ -13,6 +13,8 @@ import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSourceImpl
 import com.treflor.data.repository.Repository
 import com.treflor.data.repository.RepositoryImpl
+import com.treflor.ui.home.HomeViewModel
+import com.treflor.ui.home.HomeViewModelFactory
 import com.treflor.ui.login.LoginViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -66,6 +68,7 @@ class TreflorApplication : Application(), KodeinAware {
 
         //view model factories
         bind() from provider { LoginViewModelFactory(instance(), instance()) }
+        bind() from provider { HomeViewModelFactory(instance()) }
     }
 
 }

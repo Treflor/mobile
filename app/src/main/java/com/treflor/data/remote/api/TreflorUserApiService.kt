@@ -13,7 +13,7 @@ import retrofit2.http.GET
 
 interface TreflorUserApiService {
 
-    @GET("/info")
+    @GET("info")
     fun getUser(): Deferred<User>
 
     companion object {
@@ -26,9 +26,10 @@ interface TreflorUserApiService {
                     .headers()
                     .newBuilder()
                     .add("authorization", jwtProvider.getJWT())
-                    .build();
+                    .build()
                 val request = chain.request()
                     .newBuilder()
+                    .url(chain.request().url())
                     .headers(headers)
                     .build()
                 return@Interceptor chain.proceed(request)

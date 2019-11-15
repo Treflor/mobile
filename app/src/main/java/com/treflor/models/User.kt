@@ -19,12 +19,11 @@ data class User(
     val gender: String,
     @SerializedName("given_name")
     val givenName: String,
-    @PrimaryKey(autoGenerate = false)
     @SerializedName("id")
     val id: String,
     @SerializedName("photo")
     val photo: String
 ) {
     @PrimaryKey(autoGenerate = false)
-    val pk: Int = CURRENT_USER_PK
+    var pk: Int = CURRENT_USER_PK
 }
