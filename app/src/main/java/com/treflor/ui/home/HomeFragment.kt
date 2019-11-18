@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
 
 import com.treflor.R
 import com.treflor.databinding.HomeFragmentBinding
 import com.treflor.internal.ui.base.TreflorScopedFragment
+import com.treflor.models.User
 import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -54,9 +56,20 @@ class HomeFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAware 
     private fun bindUI() = launch {
         val user = viewModel.user.await()
         user.observe(this@HomeFragment, Observer {
-            account_icon.visibility = if (it == null) View.VISIBLE else View.GONE
+            profilePicture(it)
             if (it == null) return@Observer
             homeFragmentBinding.user = it
+
         })
+    }
+
+    private fun profilePicture(user: User?) {
+        account_icon.visibility = if (user == null) View.VISIBLE else View.GONE
+        profile_image.visibility = if (user != null) View.VISIBLE else View.GONE
+        if (user == null) return
+            Glide.with(this@HomeFragment)
+            .load(user.photo)
+            .centerCrop()
+            .into(profile_image)
     }
 }
