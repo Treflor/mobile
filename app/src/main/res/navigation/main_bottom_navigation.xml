@@ -5,11 +5,6 @@
     android:id="@+id/main_navigation"
     app:startDestination="@id/homeFragment">
     <fragment
-        android:id="@+id/routesFragment"
-        android:name="com.treflor.ui.routes.RoutesFragment"
-        android:label="routes_fragment"
-        tools:layout="@layout/routes_fragment" />
-    <fragment
         android:id="@+id/cameraFragment"
         android:name="com.treflor.ui.camera.CameraFragment"
         android:label="camera_fragment"
@@ -23,16 +18,7 @@
         android:id="@+id/homeFragment"
         android:name="com.treflor.ui.home.HomeFragment"
         android:label="home_fragment"
-        tools:layout="@layout/home_fragment" >
-        <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_in_down"
-            app:exitAnim="@anim/fade_out"
-            app:popExitAnim="@anim/slide_out_down"
-            app:popEnterAnim="@anim/fade_in"
-            />
-    </fragment>
+        tools:layout="@layout/home_fragment" />
     <fragment
         android:id="@+id/journeyFragment"
         android:name="com.treflor.ui.journey.JourneyFragment"
@@ -42,4 +28,13 @@
         android:id="@+id/loginFragment"
         android:name="com.treflor.ui.login.LoginFragment"
         android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.treflor.ui.profile.ProfileFragment"
+        android:label="profile_fragment"
+        tools:layout="@layout/profile_fragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

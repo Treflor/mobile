@@ -44,10 +44,10 @@ class RepositoryImpl(
     }
 
     override suspend fun getUser(): LiveData<User> {
-        return withContext(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             userNetworkDataSource.fetchUser()
-            return@withContext userDBDataSource.user
         }
+        return userDBDataSource.user
     }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
