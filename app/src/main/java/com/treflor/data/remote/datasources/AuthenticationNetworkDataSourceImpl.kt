@@ -1,6 +1,7 @@
-package com.treflor.data.remote
+package com.treflor.data.remote.datasources
 
 import android.util.Log
+import com.treflor.data.remote.api.TreflorAuthApiService
 import com.treflor.internal.NoConnectivityException
 
 class AuthenticationNetworkDataSourceImpl(

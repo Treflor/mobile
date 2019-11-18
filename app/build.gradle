@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: "kotlin-kapt"
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def googleMapApiKey = properties.getProperty('google.map.key')
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -57,7 +63,7 @@ dependencies {
     // Room
     def room_version = '2.2.1'
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     // Navigation
     def nav_version = "2.1.0"
@@ -111,6 +117,7 @@ dependencies {
     //google sign in
     def google_auth_version = "17.0.0"
     implementation "com.google.android.gms:play-services-auth:$google_auth_version"
+
 }
 
 apply plugin: 'com.google.gms.google-services'

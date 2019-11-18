@@ -3,8 +3,6 @@ package com.treflor.ui.login
 import android.accounts.Account
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.GoogleAuthUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -12,15 +10,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.treflor.R
 import com.treflor.data.repository.Repository
-import com.treflor.internal.ActivityNavigation
-import com.treflor.internal.LiveMessageEvent
-import com.treflor.internal.NoConnectivityException
+import com.treflor.internal.eventexcecutor.ActivityNavigation
+import com.treflor.internal.eventexcecutor.LiveMessageEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 private const val GOOGLE_SIGN_IN = 9001
@@ -30,7 +25,8 @@ class LoginViewModel(
     private val repository: Repository
 ) : ViewModel() {
 
-    val startActivityForResultEvent = LiveMessageEvent<ActivityNavigation>()
+    val startActivityForResultEvent =
+        LiveMessageEvent<ActivityNavigation>()
     private val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestEmail()
         .requestProfile()
@@ -38,7 +34,6 @@ class LoginViewModel(
         .build()
     private val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
-    @BindingAdapter("android:onClick")
     fun signInWithGoogle() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResultEvent.sendEvent {
