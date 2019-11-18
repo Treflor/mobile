@@ -2,20 +2,33 @@ package com.treflor.ui.home
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
 
 import com.treflor.R
+import com.treflor.databinding.HomeFragmentBinding
+import com.treflor.internal.ui.base.TreflorScopedFragment
+import com.treflor.models.User
 import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.coroutines.launch
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
-class HomeFragment : Fragment(),View.OnClickListener {
+class HomeFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAware {
 
-private lateinit var navController: NavController
+    override val kodein: Kodein by closestKodein()
+    private val viewModelFactory: HomeViewModelFactory by instance()
+
+    private lateinit var navController: NavController
     private lateinit var viewModel: HomeViewModel
+    private lateinit var homeFragmentBinding: HomeFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,14 +40,36 @@ private lateinit var navController: NavController
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-        viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
         account_icon.setOnClickListener(this)
+        homeFragmentBinding =
+            HomeFragmentBinding.bind(view)
+        bindUI()
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
-            R.id.account_icon -> navController!!.navigate(R.id.action_homeFragment_to_loginFragment)
+        when (v!!.id) {
+            R.id.account_icon -> navController.navigate(R.id.action_homeFragment_to_loginFragment)
         }
     }
 
+    private fun bindUI() = launch {
+        val user = viewModel.user.await()
+        user.observe(this@HomeFragment, Observer {
+            profilePicture(it)
+            if (it == null) return@Observer
+            homeFragmentBinding.user = it
+
+        })
+    }
+
+    private fun profilePicture(user: User?) {
+        account_icon.visibility = if (user == null) View.VISIBLE else View.GONE
+        profile_image.visibility = if (user != null) View.VISIBLE else View.GONE
+        if (user == null) return
+            Glide.with(this@HomeFragment)
+            .load(user.photo)
+            .centerCrop()
+            .into(profile_image)
+    }
 }
