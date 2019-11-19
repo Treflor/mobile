@@ -38,22 +38,22 @@
                 android:inputType="textPassword" />
 
             <Button
+                android:id="@+id/btn_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Sign in"
-                android:background="@drawable/button_background"/>
+                android:text="Sign in"/>
 
             <Button
+                android:id="@+id/btn_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="40dp"
-                android:text="Sign up"
-                android:background="@drawable/button_background"/>
+                android:text="Sign up"/>
 
             <com.google.android.gms.common.SignInButton
-                android:id="@+id/google_sign_in_button"
+                android:id="@+id/btn_google_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

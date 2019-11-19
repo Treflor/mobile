@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import com.treflor.R
 import com.treflor.databinding.FragmentLoginBinding
 import com.treflor.internal.eventexcecutor.ActivityNavigation
+import kotlinx.android.synthetic.main.fragment_login.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -23,7 +24,7 @@ import org.kodein.di.generic.instance
  * A simple [Fragment] subclass.
  */
 class LoginFragment : Fragment(), KodeinAware,
-    ActivityNavigation {
+    ActivityNavigation ,View.OnClickListener{
 
     override val kodein: Kodein by closestKodein()
     private val viewModelFactory: LoginViewModelFactory by instance()
@@ -50,6 +51,7 @@ class LoginFragment : Fragment(), KodeinAware,
         loginFragmentBinding.viewModel = viewModel
 
         viewModel.startActivityForResultEvent.setEventReceiver(this, this)
+        btn_sign_up.setOnClickListener(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -58,4 +60,12 @@ class LoginFragment : Fragment(), KodeinAware,
     }
 
     override fun navigateUp(): Boolean = navController.navigateUp()
+
+    override fun onClick(v: View?) {
+        when (v!!.id) {
+            R.id.btn_sign_up ->{
+                print("am i working?")
+                navController.navigate(R.id.action_loginFragment_to_signUpFragment)}
+        }
+    }
 }
