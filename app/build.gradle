@@ -14,7 +14,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.treflor"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -115,9 +115,15 @@ dependencies {
     def android_material_version = "1.2.0-alpha01"
     implementation "com.google.android.material:material:$android_material_version"
 
-    //google sign in
+    // google sign in
     def google_auth_version = "17.0.0"
     implementation "com.google.android.gms:play-services-auth:$google_auth_version"
+
+    // image picker
+    def image_picker_version = "2.2.0"
+    implementation "com.github.esafirm.android-image-picker:imagepicker:$image_picker_version"
+    implementation "com.github.esafirm.android-image-picker:rximagepicker:$image_picker_version"
+
 }
 
 apply plugin: 'com.google.gms.google-services'
