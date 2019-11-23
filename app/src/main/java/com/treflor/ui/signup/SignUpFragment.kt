@@ -25,7 +25,10 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        gender_spinner.adapter = ArrayAdapter<String>(this@SignUpFragment,android.R.layout.simple_spinner_item,Array<String>("Male","Female"))
+        gender_spinner.adapter = ArrayAdapter<String>(
+            this.context!!, android.R.layout.simple_spinner_dropdown_item,
+            listOf( "Male", "Female")
+        )
     }
 
 }
