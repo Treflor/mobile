@@ -1,8 +1,12 @@
 package com.treflor.ui.login
 
 import android.accounts.Account
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.GoogleAuthUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -25,8 +29,13 @@ class LoginViewModel(
     private val repository: Repository
 ) : ViewModel() {
 
-    val startActivityForResultEvent =
+    val signingIn: LiveData<Boolean> get() = _signingIn
+    private val _signingIn = MutableLiveData<Boolean>(false)
+
+    // for send events to fragment
+    val liveMessageEvent =
         LiveMessageEvent<ActivityNavigation>()
+
     private val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestEmail()
         .requestProfile()
@@ -35,8 +44,12 @@ class LoginViewModel(
     private val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
     fun signInWithGoogle() {
+        // show the progress bar
+        _signingIn.postValue(true)
+
+        // sending sign in event from emails
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResultEvent.sendEvent {
+        liveMessageEvent.sendEvent {
             startActivityForResult(
                 signInIntent,
                 GOOGLE_SIGN_IN
@@ -45,11 +58,15 @@ class LoginViewModel(
     }
 
     fun onResultFromActivity(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            GOOGLE_SIGN_IN -> {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                googleSignInComplete(task)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                GOOGLE_SIGN_IN -> {
+                    val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                    googleSignInComplete(task)
+                }
             }
+        } else {
+            _signingIn.postValue(false)
         }
     }
 
@@ -57,8 +74,8 @@ class LoginViewModel(
         try {
             val account = completedTask.getResult(ApiException::class.java)
             account?.apply {
+                // access token according to the account
                 requestAccessToken(account.account)
-                startActivityForResultEvent.sendEvent { navigateUp() }
             }
         } catch (e: ApiException) {
             println("exception? $e")
@@ -72,13 +89,17 @@ class LoginViewModel(
         val accessToken = try {
             GoogleAuthUtil.getToken(context, account, scope)
         } catch (e: IOException) {
-            //TODO: show the stupid your to no connection
+            //TODO: show the stupid user to no connection
             // note send it through LiveMessage event to view
-            println("no connection")
+            Log.e("Google access token", "no connection")
             null
         }
-        if (accessToken != null) repository.signInWithGoogle(accessToken)
+        if (accessToken != null) {
+            repository.signInWithGoogle(accessToken)
+            // now we can navigate to profile
+            GlobalScope.launch(Dispatchers.Main) { liveMessageEvent.sendEvent { navigateUp() } }
+        }
+        _signingIn.postValue(false)
     }
-
 
 }
