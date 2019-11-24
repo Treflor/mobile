@@ -52,7 +52,7 @@ class LoginFragment : Fragment(), KodeinAware,
         loginFragmentBinding.viewModel = viewModel
 
         viewModel.liveMessageEvent.setEventReceiver(this, this)
-        btn_sign_up.setOnClickListener(this)
+
 
         bindUI()
     }
@@ -64,6 +64,8 @@ class LoginFragment : Fragment(), KodeinAware,
             btn_sign_in.isEnabled = !signingIn
             btn_sign_up.isEnabled = !signingIn
         })
+        btn_sign_up.setOnClickListener(this)
+        btn_sign_in.setOnClickListener(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,6 +79,9 @@ class LoginFragment : Fragment(), KodeinAware,
         when (v!!.id) {
             R.id.btn_sign_up -> {
                 navController.navigate(R.id.action_loginFragment_to_signUpFragment)
+            }
+            R.id.btn_sign_in -> {
+                viewModel.signIn(txt_email.text.toString(),txt_password.text.toString())
             }
         }
     }

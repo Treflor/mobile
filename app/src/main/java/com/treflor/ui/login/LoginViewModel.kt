@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -55,6 +56,15 @@ class LoginViewModel(
                 GOOGLE_SIGN_IN
             )
         }
+    }
+
+    fun signIn(email: String?, password: String?) {
+//     TODO:   validateEmailAndPassword()
+        _signingIn.postValue(true)
+        repository.signIn(email!!, password!!)
+        // now we can navigate to profile
+        GlobalScope.launch(Dispatchers.Main) { liveMessageEvent.sendEvent { navigateUp() } }
+        _signingIn.postValue(false)
     }
 
     fun onResultFromActivity(requestCode: Int, resultCode: Int, data: Intent?) {
