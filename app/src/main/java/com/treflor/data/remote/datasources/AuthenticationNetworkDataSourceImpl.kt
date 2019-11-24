@@ -16,4 +16,14 @@ class AuthenticationNetworkDataSourceImpl(
             null
         }
     }
+
+    override suspend fun signIn(email: String, password: String): String? {
+        return try {
+            val authResponse = treflorAuthApiService.signIn(email, password).await()
+            authResponse.token
+        } catch (e: NoConnectivityException) {
+            Log.e("Connectivity", "No internet connection.", e)
+            null
+        }
+    }
 }

@@ -7,5 +7,6 @@ import com.treflor.models.User
 interface Repository {
 
     fun signInWithGoogle(accessToken: String)
+    fun signIn(email: String,password:String)
     suspend fun getUser(): LiveData<User>
 }

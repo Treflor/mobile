@@ -10,7 +10,9 @@ class UserDBDataSourceImpl(
 ) : UserDBDataSource {
 
     override val user: LiveData<User> get() = _user
-    private val _user by lazy { MutableLiveData<User>() }
+    private val _user by lazy {
+        MutableLiveData<User>(userDao.getUser())
+    }
 
     override fun upsert(user: User) {
         userDao.upsert(user)

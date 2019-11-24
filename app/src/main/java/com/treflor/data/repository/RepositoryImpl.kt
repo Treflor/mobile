@@ -43,11 +43,20 @@ class RepositoryImpl(
         }
     }
 
-    override suspend fun getUser(): LiveData<User> {
-        return withContext(Dispatchers.IO) {
-            userNetworkDataSource.fetchUser()
-            return@withContext userDBDataSource.user
+    override fun signIn(email: String, password: String) = runBlocking {
+        val jwt = withContext(Dispatchers.IO) {
+            authenticationNetworkDataSource.signIn(email, password)
         }
+        if (jwt != null) {
+            setJWT(jwt)
+        }
+    }
+
+    override suspend fun getUser(): LiveData<User> {
+        GlobalScope.launch(Dispatchers.IO) {
+            userNetworkDataSource.fetchUser()
+        }
+        return userDBDataSource.user
     }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
