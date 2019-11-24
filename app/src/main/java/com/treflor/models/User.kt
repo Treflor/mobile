@@ -20,7 +20,7 @@ data class User(
     @SerializedName("given_name")
     val givenName: String,
     @SerializedName("id")
-    val id: String,
+    val id: String?,
     @SerializedName("photo")
     val photo: String
 ) {

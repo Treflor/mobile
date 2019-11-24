@@ -43,6 +43,15 @@ class RepositoryImpl(
         }
     }
 
+    override fun signIn(email: String, password: String) = runBlocking {
+        val jwt = withContext(Dispatchers.IO) {
+            authenticationNetworkDataSource.signIn(email, password)
+        }
+        if (jwt != null) {
+            setJWT(jwt)
+        }
+    }
+
     override suspend fun getUser(): LiveData<User> {
         GlobalScope.launch(Dispatchers.IO) {
             userNetworkDataSource.fetchUser()
