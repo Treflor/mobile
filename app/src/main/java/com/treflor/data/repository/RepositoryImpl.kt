@@ -7,6 +7,7 @@ import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
+import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.internal.AuthState
 import com.treflor.models.User
 import kotlinx.coroutines.*
@@ -46,6 +47,15 @@ class RepositoryImpl(
     override fun signIn(email: String, password: String) = runBlocking {
         val jwt = withContext(Dispatchers.IO) {
             authenticationNetworkDataSource.signIn(email, password)
+        }
+        if (jwt != null) {
+            setJWT(jwt)
+        }
+    }
+
+    override fun signUp(signUpRequest: SignUpRequest) = runBlocking {
+        val jwt = withContext(Dispatchers.IO) {
+            authenticationNetworkDataSource.signUp(signUpRequest)
         }
         if (jwt != null) {
             setJWT(jwt)
