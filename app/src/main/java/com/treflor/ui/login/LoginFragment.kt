@@ -53,7 +53,6 @@ class LoginFragment : Fragment(), KodeinAware,
 
         viewModel.liveMessageEvent.setEventReceiver(this, this)
 
-
         bindUI()
     }
 
@@ -81,7 +80,7 @@ class LoginFragment : Fragment(), KodeinAware,
                 navController.navigate(R.id.action_loginFragment_to_signUpFragment)
             }
             R.id.btn_sign_in -> {
-                viewModel.signIn(txt_email.text.toString(),txt_password.text.toString())
+                viewModel.signIn(txt_email.text.toString(), txt_password.text.toString())
             }
         }
     }

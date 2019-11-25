@@ -16,7 +16,7 @@ data class SignUpRequest(
     @SerializedName(value = "gender")
     var gender: String = "male",
     @SerializedName(value = "birthday")
-    var birthday: Int = 0,
+    var birthday: Long = 0,
     @SerializedName(value = "photo")
-    var photo: String?
+    var photo: String
 )
