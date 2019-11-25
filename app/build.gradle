@@ -130,7 +130,6 @@ dependencies {
     // map and place
     implementation name: 'maps-sdk-3.0.0-beta', ext: 'aar'
     implementation name: 'places-maps-sdk-3.0.0-beta', ext: 'aar'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     // map utils - for custom markers
     implementation 'com.google.maps.android:android-maps-utils-sdk-v3-compat:0.1'
