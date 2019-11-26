@@ -30,17 +30,13 @@ class JourneyFragment : Fragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val mapViewBundle = savedInstanceState?.getBundle(MAPVIEW_BUNDLE_KEY)
-        println("MAPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ${journey_map == null}")
         viewModel = ViewModelProviders.of(this).get(JourneyViewModel::class.java)
-        journey_map.onCreate(mapViewBundle)
+        journey_map.onCreate(savedInstanceState)
         journey_map.getMapAsync(this)
-        println("MAPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ${journey_map == null}")
 
     }
 
     override fun onMapReady(map: GoogleMap?) {
-        print("map not ready??????????????????????????????????????????????? $map")
         map?.addMarker(
             MarkerOptions()
                 .position(LatLng(0.0, 1.0))
