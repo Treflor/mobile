@@ -142,6 +142,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-basement:17.1.1'
     implementation 'com.google.android.gms:play-services-base:17.1.0'
 
+    // android permission check
+    implementation 'com.karumi:dexter:6.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
