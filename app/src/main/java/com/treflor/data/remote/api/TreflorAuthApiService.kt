@@ -2,15 +2,13 @@ package com.treflor.data.remote.api
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.treflor.data.remote.intercepters.ConnectivityInterceptor
+import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.AuthResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 interface TreflorAuthApiService {
@@ -22,15 +20,8 @@ interface TreflorAuthApiService {
 
 
     @POST("signup")
-    fun signup(
-        @Query("email") email: String,
-        @Query("password") password: String,
-        @Query("password2") password2: String,
-        @Query("given_name") givenName: String,
-        @Query("family_name") familyName: String,
-        @Query("gender") gender: String,
-        @Query("birthday") birthday: String,
-        @Query("photo") photo: String
+    fun signUp(
+        @Body signUpRequest: SignUpRequest
     ): Deferred<AuthResponse>
 
     @FormUrlEncoded

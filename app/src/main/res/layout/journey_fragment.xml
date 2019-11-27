@@ -5,9 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.journey.JourneyFragment">
 
+    <com.google.android.libraries.maps.MapView
+        android:id="@+id/journey_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <TextView
+        android:id="@+id/txt_permission"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello journey" />
+        android:text="Permission not granted!"
+        android:visibility="gone" />
 
 </FrameLayout>

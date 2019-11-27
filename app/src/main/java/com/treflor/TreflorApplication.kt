@@ -84,7 +84,7 @@ class TreflorApplication : Application(), KodeinAware {
         bind() from provider { LoginViewModelFactory(instance(), instance()) }
         bind() from provider { HomeViewModelFactory(instance()) }
         bind() from provider { ProfileViewModelFactory(instance()) }
-        bind() from provider { SignUpViewModelFactory() }
+        bind() from provider { SignUpViewModelFactory(instance()) }
     }
 
 }
