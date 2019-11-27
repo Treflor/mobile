@@ -21,55 +21,13 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
-class HomeFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAware {
+class HomeFragment : TreflorScopedFragment() {
 
-    override val kodein: Kodein by closestKodein()
-    private val viewModelFactory: HomeViewModelFactory by instance()
-
-    private lateinit var navController: NavController
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var homeFragmentBinding: HomeFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.home_fragment, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
-        account_icon.setOnClickListener(this)
-        homeFragmentBinding =
-            HomeFragmentBinding.bind(view)
-        bindUI()
-    }
-
-    override fun onClick(v: View?) {
-        when (v!!.id) {
-            R.id.account_icon -> navController.navigate(R.id.action_homeFragment_to_loginFragment)
-        }
-    }
-
-    private fun bindUI() = launch {
-        val user = viewModel.user.await()
-        user.observe(this@HomeFragment, Observer {
-            profilePicture(it)
-            if (it == null) return@Observer
-            homeFragmentBinding.user = it
-
-        })
-    }
-
-    private fun profilePicture(user: User?) {
-        account_icon.visibility = if (user == null) View.VISIBLE else View.GONE
-        profile_image.visibility = if (user != null) View.VISIBLE else View.GONE
-        if (user == null) return
-            Glide.with(this@HomeFragment)
-            .load(user.photo)
-            .centerCrop()
-            .into(profile_image)
     }
 }

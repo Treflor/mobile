@@ -20,6 +20,8 @@ import com.treflor.data.repository.Repository
 import com.treflor.data.repository.RepositoryImpl
 import com.treflor.ui.home.HomeViewModelFactory
 import com.treflor.ui.login.LoginViewModelFactory
+import com.treflor.ui.profile.ProfileViewModelFactory
+import com.treflor.ui.signup.SignUpViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -81,6 +83,8 @@ class TreflorApplication : Application(), KodeinAware {
         //view model factories
         bind() from provider { LoginViewModelFactory(instance(), instance()) }
         bind() from provider { HomeViewModelFactory(instance()) }
+        bind() from provider { ProfileViewModelFactory(instance()) }
+        bind() from provider { SignUpViewModelFactory(instance()) }
     }
 
 }

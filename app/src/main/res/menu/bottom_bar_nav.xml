@@ -6,18 +6,18 @@
         android:title="Home" />
     <item
         android:id="@+id/journeyFragment"
-        android:icon="@drawable/ic_hiking"
+        android:icon="@drawable/ic_place_black_24dp"
         android:title="Journey" />
     <item
         android:id="@+id/cameraFragment"
         android:icon="@drawable/ic_camera"
         android:title="Camera" />
     <item
-        android:id="@+id/routesFragment"
-        android:icon="@drawable/ic_route"
-        android:title="Route" />
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_person"
+        android:title="Account" />
     <item
         android:id="@+id/menuFragment"
-        android:icon="@drawable/ic_menu"
-        android:title="Menu" />
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="Settings" />
 </menu>
