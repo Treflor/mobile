@@ -35,9 +35,9 @@ class RepositoryImpl(
         }
     }
 
-    override fun signInWithGoogle(accessToken: String) = runBlocking {
+    override fun signInWithGoogle(idToken: String) = runBlocking {
         val jwt = withContext(Dispatchers.IO) {
-            authenticationNetworkDataSource.signInWithGoogle(accessToken)
+            authenticationNetworkDataSource.signInWithGoogle(idToken)
         }
         if (jwt != null) {
             setJWT(jwt)
