@@ -3,8 +3,12 @@ package com.treflor.data.provider
 import android.content.Context
 import android.location.Location
 import android.location.LocationManager
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.treflor.internal.LocationUpdateReciever
 
@@ -19,9 +23,37 @@ class LocationProviderImpl(
     private val _location = MutableLiveData<Location>()
     private val fusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
+    private val locationUpdateReceiver = mutableListOf<LocationUpdateReciever>()
+
+    private val locationRequest = LocationRequest().apply {
+        interval = 700
+        fastestInterval = 500
+        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            locationResult ?: return
+            if (locationResult.lastLocation != null) {
+                persistLocation(locationResult.lastLocation)
+                _location.postValue(locationResult.lastLocation)
+            }
+        }
+
+    }
 
     override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (locationUpdateReceiver.isEmpty()) {
+            getLastKnownLocation()
+            fusedLocationProviderClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+        }
+        locationUpdateReceiver.add(updateReceiver)
+        return location
     }
 
     override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> {
@@ -49,7 +81,7 @@ class LocationProviderImpl(
         }
         val location = Location(LocationManager.GPS_PROVIDER)
         location.latitude = latitude.toDouble()
-        location.longitude = latitude.toDouble()
+        location.longitude = longitude.toDouble()
         return location
     }
 }

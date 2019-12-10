@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
 import com.google.android.libraries.maps.model.LatLng
+import com.google.android.libraries.maps.model.Marker
 import com.google.android.libraries.maps.model.MarkerOptions
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -32,6 +34,8 @@ class JourneyFragment : Fragment(), OnMapReadyCallback, KodeinAware {
     override val kodein: Kodein by closestKodein()
     private val viewModelFactory: JourneyViewModelFactory by instance()
     private lateinit var viewModel: JourneyViewModel
+    private var myPositionMarker: Marker? = null
+    private var googleMap: GoogleMap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,17 +77,31 @@ class JourneyFragment : Fragment(), OnMapReadyCallback, KodeinAware {
         journey_map.onCreate(savedInstanceState)
         journey_map.getMapAsync(this)
         viewModel.location.observe(this, Observer {
-            Log.e("Fucking location","::::::::::: ${it.longitude} ::::::::::: ${it.longitude}:::::")
+            if (myPositionMarker == null) {
+                myPositionMarker = googleMap?.addMarker(
+                    MarkerOptions()
+                        .title("My location")
+                        .snippet("I am here")
+                        .position(LatLng(it.latitude, it.longitude))
+                )
+                googleMap?.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(
+                            it.latitude,
+                            it.longitude
+                        ), 15f
+                    )
+                )
+            } else {
+                myPositionMarker?.position = LatLng(it.latitude, it.longitude)
+            }
         })
     }
 
 
     override fun onMapReady(map: GoogleMap?) {
-        map?.addMarker(
-            MarkerOptions()
-                .position(LatLng(0.0, 1.0))
-                .title("Marker")
-        )
+        googleMap = map
+        map?.uiSettings?.isMapToolbarEnabled = false
     }
 
 }

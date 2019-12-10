@@ -73,13 +73,11 @@ class RepositoryImpl(
         return userDBDataSource.user
     }
 
-    override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
+        locationProvider.requestLocationUpdate(updateReceiver)
 
-    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
+        locationProvider.removeLocationUpdate(updateReceiver)
 
     override fun getLastKnownLocation(): LiveData<Location> =
         locationProvider.getLastKnownLocation()
