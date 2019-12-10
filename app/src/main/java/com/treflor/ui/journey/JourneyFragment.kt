@@ -1,8 +1,9 @@
 package com.treflor.ui.journey
 
 import android.Manifest
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
+import com.google.android.libraries.maps.model.BitmapDescriptorFactory
 import com.google.android.libraries.maps.model.LatLng
 import com.google.android.libraries.maps.model.Marker
 import com.google.android.libraries.maps.model.MarkerOptions
@@ -78,11 +80,17 @@ class JourneyFragment : Fragment(), OnMapReadyCallback, KodeinAware {
         journey_map.getMapAsync(this)
         viewModel.location.observe(this, Observer {
             if (myPositionMarker == null) {
+
+                val b = BitmapFactory.decodeResource(resources, R.drawable.ic_hiking);
+                val smallMarker = Bitmap.createScaledBitmap(b, 70, 70, false)
                 myPositionMarker = googleMap?.addMarker(
                     MarkerOptions()
                         .title("My location")
                         .snippet("I am here")
                         .position(LatLng(it.latitude, it.longitude))
+                        .icon(
+                            BitmapDescriptorFactory.fromBitmap(smallMarker)
+                        )
                 )
                 googleMap?.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
