@@ -18,10 +18,12 @@ import com.google.android.libraries.maps.model.LatLng
 import com.google.android.libraries.maps.model.Marker
 import com.google.android.libraries.maps.model.MarkerOptions
 import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
 import com.treflor.R
 import kotlinx.android.synthetic.main.journey_fragment.*
@@ -54,22 +56,30 @@ class JourneyFragment : Fragment(), OnMapReadyCallback, KodeinAware {
 
     private fun checkPermissions(savedInstanceState: Bundle?) {
         Dexter.withActivity(activity)
-            .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-            .withListener(object : PermissionListener {
-                override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                    bindUI(savedInstanceState)
+            .withPermissions(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    if (report != null) {
+                        if (report.areAllPermissionsGranted()) {
+                            bindUI(savedInstanceState)
+                        }
+                        if (report.isAnyPermissionPermanentlyDenied) {
+                            journey_map.visibility = View.GONE
+                            txt_permission.visibility = View.VISIBLE
+                        }
+                    } else {
+                        journey_map.visibility = View.GONE
+                        txt_permission.visibility = View.VISIBLE
+                    }
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    permission: PermissionRequest?,
+                    permissions: MutableList<PermissionRequest>?,
                     token: PermissionToken?
                 ) {
-
-                }
-
-                override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                    journey_map.visibility = View.GONE
-                    txt_permission.visibility = View.VISIBLE
                 }
             })
             .check()
