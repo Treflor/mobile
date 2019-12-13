@@ -6,15 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 
 import com.treflor.R
 
 class StartJourneyFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = StartJourneyFragment()
-    }
 
+    private lateinit var navController: NavController
     private lateinit var viewModel: StartJourneyViewModel
 
     override fun onCreateView(
@@ -24,10 +24,14 @@ class StartJourneyFragment : Fragment() {
         return inflater.inflate(R.layout.start_journey_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(StartJourneyViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
+        BindUI()
+    }
+
+    private fun BindUI() {
+
     }
 
 }
