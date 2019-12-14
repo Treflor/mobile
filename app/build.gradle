@@ -129,7 +129,7 @@ dependencies {
     implementation "com.github.esafirm.android-image-picker:imagepicker:$image_picker_version"
     implementation "com.github.esafirm.android-image-picker:rximagepicker:$image_picker_version"
 
-    // map and place
+    // map
     implementation name: 'maps-sdk-3.0.0-beta', ext: 'aar'
     implementation name: 'places-maps-sdk-3.0.0-beta', ext: 'aar'
 
@@ -147,6 +147,9 @@ dependencies {
     // android permission check
     implementation 'com.karumi:dexter:6.0.0'
 
+    //places SDK
+    def places_version ="2.1.0"
+    implementation "com.google.android.libraries.places:places:$places_version"
 }
 
 apply plugin: 'com.google.gms.google-services'
