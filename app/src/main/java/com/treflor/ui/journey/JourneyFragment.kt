@@ -133,7 +133,7 @@ class JourneyFragment : Fragment(), OnMapReadyCallback, KodeinAware, View.OnClic
         )
         viewModel.location.value?.let {
             camPosUpdatedOnFirstLaunch = true
-            googleMap?.animateCamera(
+            googleMap?.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(
                         it.latitude,
