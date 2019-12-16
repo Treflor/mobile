@@ -21,6 +21,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resValue "string", "googleMapApiKey", googleMapApiKey
+        multiDexEnabled true
         resValue "string", "googleClientId", googleClientId
     }
     buildTypes {
@@ -131,7 +132,6 @@ dependencies {
 
     // map
     implementation name: 'maps-sdk-3.0.0-beta', ext: 'aar'
-    implementation name: 'places-maps-sdk-3.0.0-beta', ext: 'aar'
 
     // map utils - for custom markers
     implementation 'com.google.maps.android:android-maps-utils-sdk-v3-compat:0.1'
@@ -140,16 +140,15 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
-
     implementation 'com.google.android.gms:play-services-basement:17.1.1'
     implementation 'com.google.android.gms:play-services-base:17.1.0'
 
     // android permission check
     implementation 'com.karumi:dexter:6.0.0'
 
-    //places SDK
-    def places_version ="2.1.0"
-    implementation "com.google.android.libraries.places:places:$places_version"
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.google.android.libraries.places:places:2.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

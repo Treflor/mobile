@@ -27,9 +27,15 @@
                 android:id="@+id/et_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Title"/>
+                android:hint="Title" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <fragment
+            android:id="@+id/places_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.treflor
 
 import android.app.Application
+import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
 import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.db.datasources.UserDBDataSourceImpl
@@ -33,7 +34,7 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
-class TreflorApplication : Application(), KodeinAware {
+class TreflorApplication : MultiDexApplication(), KodeinAware {
 
     override val kodein: Kodein = Kodein.lazy {
         import(androidXModule(this@TreflorApplication))
