@@ -7,8 +7,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="30dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -18,26 +19,29 @@
             android:textSize="24dp"
             android:textStyle="bold" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <EditText
+            android:id="@+id/et_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent">
+            android:hint="Title" />
 
-            <EditText
-                android:id="@+id/et_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Title" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <fragment
-            android:id="@+id/places_fragment"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        <EditText
+            android:id="@+id/et_destination_places"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="Destination" />
+
+        <EditText
+            android:id="@+id/et_current_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="location" />
 
     </LinearLayout>
-
 
 </ScrollView>
