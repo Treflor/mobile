@@ -13,9 +13,10 @@ import java.util.concurrent.TimeUnit
 
 interface TreflorAuthApiService {
 
+    @FormUrlEncoded
     @POST("google")
     fun signupWithGoogle(
-        @Query("access_token") accessToken: String
+        @Field("id_token") idToken: String
     ): Deferred<AuthResponse>
 
 

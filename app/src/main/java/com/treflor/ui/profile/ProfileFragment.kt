@@ -23,7 +23,6 @@ import org.kodein.di.generic.instance
 class ProfileFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAware {
     override val kodein: Kodein by closestKodein()
     private val viewModelFactory: ProfileViewModelFactory by instance()
-
     private lateinit var navController: NavController
     private lateinit var viewModel: ProfileViewModel
     private lateinit var profileFragmentBinding: ProfileFragmentBinding

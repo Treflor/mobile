@@ -23,7 +23,15 @@
         android:id="@+id/journeyFragment"
         android:name="com.treflor.ui.journey.JourneyFragment"
         android:label="journey_fragment"
-        tools:layout="@layout/journey_fragment" />
+        tools:layout="@layout/journey_fragment">
+        <action
+            android:id="@+id/action_journeyFragment_to_startJourneyFragment"
+            app:destination="@id/startJourneyFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.treflor.ui.login.LoginFragment"
@@ -61,5 +69,14 @@
             app:exitAnim="@anim/fade_in"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/startJourneyFragment"
+        android:name="com.treflor.ui.journey.start.StartJourneyFragment"
+        android:label="start_journey_fragment"
+        tools:layout="@layout/start_journey_fragment">
+        <action
+            android:id="@+id/action_startJourneyFragment_to_journeyFragment"
+            app:destination="@id/journeyFragment" />
     </fragment>
 </navigation>

@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.treflor.R
 import com.treflor.data.repository.Repository
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.eventexcecutor.LiveMessageEvent
@@ -41,6 +42,7 @@ class LoginViewModel(
         .requestEmail()
         .requestProfile()
         .requestId()
+        .requestIdToken(context.resources.getString(R.string.googleClientId))
         .build()
     private val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
@@ -83,33 +85,19 @@ class LoginViewModel(
     private fun googleSignInComplete(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            account?.apply {
-                // access token according to the account
-                requestAccessToken(account.account)
+            account?.also {
+                if (it.idToken != null) {
+                    repository.signInWithGoogle(it.idToken!!)
+                    // now we can navigate to profile
+                    GlobalScope.launch(Dispatchers.Main) { liveMessageEvent.sendEvent { navigateUp() } }
+                } else {
+                    //TODO: something went wrong,show error!
+                    print("Error while getting idToken!")
+                }
             }
         } catch (e: ApiException) {
             println("exception? $e")
         }
-    }
-
-    private fun requestAccessToken(account: Account?) = GlobalScope.launch(Dispatchers.IO) {
-        val scope =
-            "oauth2:https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.profile"
-
-        val accessToken = try {
-            GoogleAuthUtil.getToken(context, account, scope)
-        } catch (e: IOException) {
-            //TODO: show the stupid user to no connection
-            // note send it through LiveMessage event to view
-            Log.e("Google access token", "no connection")
-            null
-        }
-        if (accessToken != null) {
-            repository.signInWithGoogle(accessToken)
-            // now we can navigate to profile
-            GlobalScope.launch(Dispatchers.Main) { liveMessageEvent.sendEvent { navigateUp() } }
-        }
         _signingIn.postValue(false)
     }
-
 }
