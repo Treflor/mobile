@@ -13,7 +13,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 
 import com.treflor.R
-import com.treflor.databinding.FragmentLoginBinding
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.kodein.di.Kodein
@@ -47,10 +46,6 @@ class LoginFragment : Fragment(), KodeinAware,
         viewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(LoginViewModel::class.java)
 
-        val loginFragmentBinding: FragmentLoginBinding =
-            FragmentLoginBinding.bind(view)
-        loginFragmentBinding.viewModel = viewModel
-
         viewModel.liveMessageEvent.setEventReceiver(this, this)
 
         bindUI()
@@ -65,6 +60,7 @@ class LoginFragment : Fragment(), KodeinAware,
         })
         btn_sign_up.setOnClickListener(this)
         btn_sign_in.setOnClickListener(this)
+        btn_google_sign_in.setOnClickListener(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -81,6 +77,9 @@ class LoginFragment : Fragment(), KodeinAware,
             }
             R.id.btn_sign_in -> {
                 viewModel.signIn(txt_email.text.toString(), txt_password.text.toString())
+            }
+            R.id.btn_google_sign_in -> {
+                viewModel.signInWithGoogle()
             }
         }
     }
