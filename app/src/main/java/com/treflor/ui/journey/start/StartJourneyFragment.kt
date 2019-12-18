@@ -53,7 +53,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
         Places.initialize(this.context!!, getString(R.string.google_api_key))
 
         et_current_place.setOnClickListener(this)
-        et_destination_places.setOnClickListener(this)
+        et_destination_place.setOnClickListener(this)
 
         setCurrentPlace()
     }
@@ -98,7 +98,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
                 getPlace(CURRENT_PLACE_AUTOCOMPLETE_REQUEST_CODE)
             }
 
-            R.id.et_destination_places -> {
+            R.id.et_destination_place -> {
                 getPlace(AUTOCOMPLETE_REQUEST_CODE)
             }
         }
@@ -137,7 +137,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     val place = Autocomplete.getPlaceFromIntent(data!!)
-                    et_destination_places.setText(place.name)
+                    et_destination_place.setText(place.name)
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
                     val status =

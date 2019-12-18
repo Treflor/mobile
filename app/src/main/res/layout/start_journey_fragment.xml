@@ -25,14 +25,14 @@
             android:layout_height="wrap_content"
             android:hint="Title" />
 
-
         <EditText
-            android:id="@+id/et_destination_places"
+            android:id="@+id/et_content"
+            android:lines="3"
+            android:inputType="textMultiLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="false"
-            android:hint="Destination" />
+            android:hint="Say what you feel!" />
+
 
         <EditText
             android:id="@+id/et_current_place"
@@ -41,6 +41,16 @@
             android:clickable="true"
             android:focusable="false"
             android:hint="location" />
+
+        <EditText
+            android:id="@+id/et_destination_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="Destination" />
+
+<!--        tag friends-->
 
     </LinearLayout>
 
