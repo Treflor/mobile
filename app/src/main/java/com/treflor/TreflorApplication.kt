@@ -23,6 +23,7 @@ import com.treflor.data.repository.Repository
 import com.treflor.data.repository.RepositoryImpl
 import com.treflor.ui.home.HomeViewModelFactory
 import com.treflor.ui.journey.JourneyViewModelFactory
+import com.treflor.ui.journey.start.StartJourneyViewModelFactory
 import com.treflor.ui.login.LoginViewModelFactory
 import com.treflor.ui.profile.ProfileViewModelFactory
 import com.treflor.ui.signup.SignUpViewModelFactory
@@ -92,6 +93,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from provider { ProfileViewModelFactory(instance()) }
         bind() from provider { SignUpViewModelFactory(instance()) }
         bind() from provider { JourneyViewModelFactory(instance()) }
+        bind() from provider { StartJourneyViewModelFactory(instance()) }
     }
 
 }
