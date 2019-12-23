@@ -4,16 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.treflor.data.db.dao.JourneyDao
 import com.treflor.data.db.dao.UserDao
+import com.treflor.models.Journey
 import com.treflor.models.User
 
 @Database(
-    entities = [User::class],
+    entities = [User::class, Journey::class],
     version = 1,
     exportSchema = false
 )
 abstract class TreflorDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun journeyDao(): JourneyDao
 
     companion object {
         @Volatile
