@@ -3,6 +3,8 @@ package com.treflor
 import android.app.Application
 import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
+import com.treflor.data.db.datasources.JourneyDBDataSource
+import com.treflor.data.db.datasources.JourneyDBDataSourceImpl
 import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.db.datasources.UserDBDataSourceImpl
 import com.treflor.data.provider.JWTProvider
@@ -43,6 +45,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         // database
         bind() from singleton { TreflorDatabase(instance()) }
         bind() from singleton { instance<TreflorDatabase>().userDao() }
+        bind() from singleton { instance<TreflorDatabase>().journeyDao() }
 
         // providers
         bind<JWTProvider>() with singleton { JWTProviderImpl(instance()) }
@@ -75,10 +78,12 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
 
         //data sources - database
         bind<UserDBDataSource>() with singleton { UserDBDataSourceImpl(instance()) }
+        bind<JourneyDBDataSource>() with singleton { JourneyDBDataSourceImpl(instance()) }
 
         //repository
         bind<Repository>() with singleton {
             RepositoryImpl(
+                instance(),
                 instance(),
                 instance(),
                 instance(),

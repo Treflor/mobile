@@ -13,7 +13,7 @@ interface JourneyDao {
     fun upsert(journey: Journey)
 
     @Query("SELECT * FROM journey WHERE pk = $CURRENT_JOURNEY_PK")
-    fun getUser(): Journey
+    fun getJourney(): Journey
 
     @Query("DELETE FROM journey WHERE pk = $CURRENT_JOURNEY_PK")
     fun delete()
