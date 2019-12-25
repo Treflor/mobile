@@ -9,6 +9,7 @@ const val CURRENT_JOURNEY_PK = 0
 
 @Entity(tableName = "journey")
 data class Journey(
+    val id: String,
     val title: String,
     val content: String,
     @Embedded(prefix = "start_location_")

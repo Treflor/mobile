@@ -13,6 +13,7 @@ import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.internal.AuthState
 import com.treflor.internal.LocationUpdateReciever
+import com.treflor.models.Journey
 import com.treflor.models.User
 import kotlinx.coroutines.*
 
@@ -82,6 +83,20 @@ class RepositoryImpl(
 
     override fun getLastKnownLocation(): LiveData<Location> =
         locationProvider.getLastKnownLocation()
+
+    override fun persistJourney(journey: Journey) {
+        journeyDBDataSource.upsert(journey)
+    }
+
+    override fun getJourney(): LiveData<Journey> = journeyDBDataSource.journey
+
+    override fun breakJourney() {
+        journeyDBDataSource.delete()
+    }
+
+    override fun finishJourney() {
+        // TODO: upload data to server and delete cache
+    }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
     private fun getJWT(): String? = jwtProvider.getJWT()
