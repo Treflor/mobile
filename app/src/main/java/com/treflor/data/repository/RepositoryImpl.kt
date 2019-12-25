@@ -4,6 +4,7 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.treflor.data.db.dao.UserDao
+import com.treflor.data.db.datasources.JourneyDBDataSource
 import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
@@ -20,9 +21,9 @@ class RepositoryImpl(
     private val authenticationNetworkDataSource: AuthenticationNetworkDataSource,
     private val userNetworkDataSource: UserNetworkDataSource,
     private val userDBDataSource: UserDBDataSource,
+    private val journeyDBDataSource: JourneyDBDataSource,
     private val locationProvider: LocationProvider
 ) : Repository {
-
 
     init {
 

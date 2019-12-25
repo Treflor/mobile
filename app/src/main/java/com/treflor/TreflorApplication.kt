@@ -3,6 +3,8 @@ package com.treflor
 import android.app.Application
 import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
+import com.treflor.data.db.datasources.JourneyDBDataSource
+import com.treflor.data.db.datasources.JourneyDBDataSourceImpl
 import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.db.datasources.UserDBDataSourceImpl
 import com.treflor.data.provider.JWTProvider
@@ -23,6 +25,7 @@ import com.treflor.data.repository.Repository
 import com.treflor.data.repository.RepositoryImpl
 import com.treflor.ui.home.HomeViewModelFactory
 import com.treflor.ui.journey.JourneyViewModelFactory
+import com.treflor.ui.journey.start.StartJourneyViewModelFactory
 import com.treflor.ui.login.LoginViewModelFactory
 import com.treflor.ui.profile.ProfileViewModelFactory
 import com.treflor.ui.signup.SignUpViewModelFactory
@@ -42,6 +45,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         // database
         bind() from singleton { TreflorDatabase(instance()) }
         bind() from singleton { instance<TreflorDatabase>().userDao() }
+        bind() from singleton { instance<TreflorDatabase>().journeyDao() }
 
         // providers
         bind<JWTProvider>() with singleton { JWTProviderImpl(instance()) }
@@ -74,10 +78,12 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
 
         //data sources - database
         bind<UserDBDataSource>() with singleton { UserDBDataSourceImpl(instance()) }
+        bind<JourneyDBDataSource>() with singleton { JourneyDBDataSourceImpl(instance()) }
 
         //repository
         bind<Repository>() with singleton {
             RepositoryImpl(
+                instance(),
                 instance(),
                 instance(),
                 instance(),
@@ -92,6 +98,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from provider { ProfileViewModelFactory(instance()) }
         bind() from provider { SignUpViewModelFactory(instance()) }
         bind() from provider { JourneyViewModelFactory(instance()) }
+        bind() from provider { StartJourneyViewModelFactory(instance()) }
     }
 
 }

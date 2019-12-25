@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.gms.common.api.ApiException
@@ -24,15 +25,21 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.treflor.R
 import kotlinx.android.synthetic.main.start_journey_fragment.*
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
 
 const val AUTOCOMPLETE_REQUEST_CODE = 321
 const val CURRENT_PLACE_AUTOCOMPLETE_REQUEST_CODE = 322
 
-class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionListener {
+class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionListener, KodeinAware {
 
+    override val kodein: Kodein by closestKodein()
     private lateinit var navController: NavController
     private lateinit var viewModel: StartJourneyViewModel
+    private val viewModelFactory: StartJourneyViewModelFactory by instance()
     private val fields =
         listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
 
@@ -46,6 +53,8 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+        viewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(StartJourneyViewModel::class.java)
         bindUI()
     }
 
@@ -53,7 +62,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
         Places.initialize(this.context!!, getString(R.string.google_api_key))
 
         et_current_place.setOnClickListener(this)
-        et_destination_places.setOnClickListener(this)
+        et_destination_place.setOnClickListener(this)
 
         setCurrentPlace()
     }
@@ -98,7 +107,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
                 getPlace(CURRENT_PLACE_AUTOCOMPLETE_REQUEST_CODE)
             }
 
-            R.id.et_destination_places -> {
+            R.id.et_destination_place -> {
                 getPlace(AUTOCOMPLETE_REQUEST_CODE)
             }
         }
@@ -137,7 +146,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     val place = Autocomplete.getPlaceFromIntent(data!!)
-                    et_destination_places.setText(place.name)
+                    et_destination_place.setText(place.name)
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
                     val status =
