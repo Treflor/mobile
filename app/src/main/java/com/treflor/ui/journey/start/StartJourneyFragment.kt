@@ -199,5 +199,4 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
-
 }

@@ -85,7 +85,9 @@ class RepositoryImpl(
         locationProvider.getLastKnownLocation()
 
     override fun persistJourney(journey: Journey) {
-        journeyDBDataSource.upsert(journey)
+        GlobalScope.launch(Dispatchers.IO) {
+            journeyDBDataSource.upsert(journey)
+        }
     }
 
     override fun getJourney(): LiveData<Journey> = journeyDBDataSource.journey

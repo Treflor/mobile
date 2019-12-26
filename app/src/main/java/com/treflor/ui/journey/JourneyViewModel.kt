@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.treflor.data.repository.Repository
 import com.treflor.internal.LocationUpdateReciever
+import com.treflor.internal.lazyDeferred
 import com.treflor.models.Journey
 
 class JourneyViewModel(
@@ -12,5 +13,5 @@ class JourneyViewModel(
 ) : ViewModel() {
 
     val location: LiveData<Location> get() = repository.requestLocationUpdate(LocationUpdateReciever.LOCATION_VIEW_MODEL)
-    val journey: LiveData<Journey> get() = repository.getJourney()
+    val journey by lazyDeferred { repository.getJourney() }
 }
