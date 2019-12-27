@@ -1,6 +1,9 @@
 package com.treflor
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
 import com.treflor.data.db.datasources.JourneyDBDataSource
@@ -37,7 +40,27 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
+const val CHANNEL_ID = "treflorServiceChannel"
+
 class TreflorApplication : MultiDexApplication(), KodeinAware {
+
+    override fun onCreate() {
+        super.onCreate()
+        createNotificationChannel()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceChannel = NotificationChannel(
+                CHANNEL_ID,
+                "Treflor Service Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+
+            val manager = getSystemService(NotificationManager::class.java)
+            manager?.createNotificationChannel(serviceChannel)
+        }
+    }
 
     override val kodein: Kodein = Kodein.lazy {
         import(androidXModule(this@TreflorApplication))

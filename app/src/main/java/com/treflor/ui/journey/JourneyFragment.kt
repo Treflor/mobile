@@ -116,9 +116,9 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
 
         viewModel.journey.await().observe(this@JourneyFragment, Observer {
             if (it == null) {
-                btn_start_journey.setImageResource(R.drawable.ic_home)
-            } else {
                 btn_start_journey.setImageResource(R.drawable.ic_hiking)
+            } else {
+                btn_start_journey.setImageResource(R.drawable.ic_home)
             }
         })
 
