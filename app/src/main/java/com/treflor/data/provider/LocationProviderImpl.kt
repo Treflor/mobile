@@ -56,8 +56,8 @@ class LocationProviderImpl(
         return location
     }
 
-    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever) {
+    locationUpdateReceiver.remove(updateReceiver)
     }
 
     override fun getLastKnownLocation(): LiveData<Location> {

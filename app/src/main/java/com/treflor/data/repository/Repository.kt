@@ -16,7 +16,7 @@ interface Repository {
     suspend fun getUser(): LiveData<User>
 
     fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location>
-    fun removeLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location>
+    fun removeLocationUpdate(updateReceiver: LocationUpdateReciever)
     fun getLastKnownLocation(): LiveData<Location>
 
     fun persistJourney(journey: Journey)

@@ -78,7 +78,7 @@ class RepositoryImpl(
     override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
         locationProvider.requestLocationUpdate(updateReceiver)
 
-    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
+    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever) =
         locationProvider.removeLocationUpdate(updateReceiver)
 
     override fun getLastKnownLocation(): LiveData<Location> =
