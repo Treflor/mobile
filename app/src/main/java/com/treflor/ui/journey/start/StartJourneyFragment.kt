@@ -143,6 +143,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
                         destination!!
                     )
                 )
+                navController.navigate(R.id.action_startJourneyFragment_to_journeyFragment)
             }
         }
     }

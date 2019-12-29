@@ -27,9 +27,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val serviceIntent = Intent(this,LocationTrackService::class.java)
-        startService(serviceIntent)
-
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         bottom_nav.setupWithNavController(navController)
 

@@ -26,8 +26,8 @@ class LocationProviderImpl(
     private val locationUpdateReceiver = mutableListOf<LocationUpdateReciever>()
 
     private val locationRequest = LocationRequest().apply {
-        interval = 700
-        fastestInterval = 500
+        interval = 3500
+        fastestInterval = 2000
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
     }

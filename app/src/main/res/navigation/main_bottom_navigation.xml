@@ -77,6 +77,10 @@
         tools:layout="@layout/start_journey_fragment">
         <action
             android:id="@+id/action_startJourneyFragment_to_journeyFragment"
-            app:destination="@id/journeyFragment" />
+            app:destination="@id/journeyFragment"
+            app:enterAnim="@anim/slide_out_down"
+            app:exitAnim="@anim/fade_in"
+            app:popUpTo="@id/journeyFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
