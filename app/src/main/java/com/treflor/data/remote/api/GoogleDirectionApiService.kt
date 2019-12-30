@@ -4,6 +4,8 @@ import android.content.Context
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.treflor.R
 import com.treflor.data.remote.intercepters.ConnectivityInterceptor
+import com.treflor.data.remote.response.DirectionApiResponse
+import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -19,7 +21,7 @@ interface GoogleDirectionApiService {
         @Query("origin") origin: String,
         @Query("destination") destination: String,
         @Query("mode") mode: String = "driving"
-    )
+    ): Deferred<DirectionApiResponse>
 
     companion object {
         operator fun invoke(
