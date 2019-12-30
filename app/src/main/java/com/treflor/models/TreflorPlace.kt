@@ -15,6 +15,7 @@ data class TreflorPlace(
         place?.address ?: "",
         place?.latLng?.latitude ?: 0.0,
         place?.latLng?.longitude ?: 0.0
-
     )
+
+    fun toStringLatLang(): String = "${latitude},${longitude}"
 }

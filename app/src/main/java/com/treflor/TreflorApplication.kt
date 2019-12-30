@@ -14,6 +14,7 @@ import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.JWTProviderImpl
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.provider.LocationProviderImpl
+import com.treflor.data.remote.api.GoogleDirectionApiService
 import com.treflor.data.remote.api.TreflorAuthApiService
 import com.treflor.data.remote.api.TreflorUserApiService
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
@@ -85,6 +86,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         // api services
         bind() from singleton { TreflorAuthApiService(instance()) }
         bind() from singleton { TreflorUserApiService(instance()) }
+        bind() from singleton { GoogleDirectionApiService(instance(),instance()) }
 
         //data sources - network
         bind<AuthenticationNetworkDataSource>() with singleton {
