@@ -8,9 +8,8 @@ import com.treflor.models.Journey
 class JourneyDBDataSourceImpl(
     private val journeyDao: JourneyDao
 ) : JourneyDBDataSource {
-    override val journey: LiveData<Journey>
-        get() = _journey
 
+    override val journey: LiveData<Journey> get() = _journey
     private val _journey by lazy {
         MutableLiveData<Journey>(journeyDao.getJourney())
     }

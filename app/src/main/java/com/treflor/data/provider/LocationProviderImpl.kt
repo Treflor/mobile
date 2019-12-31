@@ -26,8 +26,8 @@ class LocationProviderImpl(
     private val locationUpdateReceiver = mutableListOf<LocationUpdateReciever>()
 
     private val locationRequest = LocationRequest().apply {
-        interval = 700
-        fastestInterval = 500
+        interval = 3500
+        fastestInterval = 2000
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
     }
@@ -56,8 +56,8 @@ class LocationProviderImpl(
         return location
     }
 
-    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever) {
+    locationUpdateReceiver.remove(updateReceiver)
     }
 
     override fun getLastKnownLocation(): LiveData<Location> {

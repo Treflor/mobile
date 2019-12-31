@@ -1,6 +1,9 @@
 package com.treflor
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
 import com.treflor.data.db.datasources.JourneyDBDataSource
@@ -11,12 +14,10 @@ import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.JWTProviderImpl
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.provider.LocationProviderImpl
+import com.treflor.data.remote.api.GoogleDirectionApiService
 import com.treflor.data.remote.api.TreflorAuthApiService
 import com.treflor.data.remote.api.TreflorUserApiService
-import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
-import com.treflor.data.remote.datasources.AuthenticationNetworkDataSourceImpl
-import com.treflor.data.remote.datasources.UserNetworkDataSource
-import com.treflor.data.remote.datasources.UserNetworkDataSourceImpl
+import com.treflor.data.remote.datasources.*
 import com.treflor.data.remote.intercepters.ConnectivityInterceptor
 import com.treflor.data.remote.intercepters.ConnectivityInterceptorImpl
 import com.treflor.data.remote.intercepters.UnauthorizedInterceptor
@@ -37,7 +38,27 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
+const val CHANNEL_ID = "treflorServiceChannel"
+
 class TreflorApplication : MultiDexApplication(), KodeinAware {
+
+    override fun onCreate() {
+        super.onCreate()
+        createNotificationChannel()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceChannel = NotificationChannel(
+                CHANNEL_ID,
+                "Treflor Service Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+
+            val manager = getSystemService(NotificationManager::class.java)
+            manager?.createNotificationChannel(serviceChannel)
+        }
+    }
 
     override val kodein: Kodein = Kodein.lazy {
         import(androidXModule(this@TreflorApplication))
@@ -62,6 +83,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         // api services
         bind() from singleton { TreflorAuthApiService(instance()) }
         bind() from singleton { TreflorUserApiService(instance()) }
+        bind() from singleton { GoogleDirectionApiService(instance(), instance()) }
 
         //data sources - network
         bind<AuthenticationNetworkDataSource>() with singleton {
@@ -72,6 +94,11 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind<UserNetworkDataSource>() with singleton {
             UserNetworkDataSourceImpl(
                 instance(),
+                instance()
+            )
+        }
+        bind<GoogleDirectionNetworkDataSource>() with singleton {
+            GoogleDirectionNetworkDataSourceImpl(
                 instance()
             )
         }
@@ -88,6 +115,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
                 instance(),
                 instance(),
                 instance(),
+                instance(),
                 instance()
             )
         }
@@ -98,7 +126,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from provider { ProfileViewModelFactory(instance()) }
         bind() from provider { SignUpViewModelFactory(instance()) }
         bind() from provider { JourneyViewModelFactory(instance()) }
-        bind() from provider { StartJourneyViewModelFactory(instance()) }
+        bind() from provider { StartJourneyViewModelFactory(instance(), instance()) }
     }
 
 }

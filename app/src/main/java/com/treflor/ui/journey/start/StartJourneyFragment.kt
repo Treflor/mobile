@@ -24,6 +24,8 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.treflor.R
+import com.treflor.models.Journey
+import com.treflor.models.TreflorPlace
 import kotlinx.android.synthetic.main.start_journey_fragment.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -42,6 +44,8 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
     private val viewModelFactory: StartJourneyViewModelFactory by instance()
     private val fields =
         listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
+    private var startLocation: TreflorPlace? = null
+    private var destination: TreflorPlace? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +67,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
 
         et_current_place.setOnClickListener(this)
         et_destination_place.setOnClickListener(this)
+        fab_start_journey.setOnClickListener(this)
 
         setCurrentPlace()
     }
@@ -78,9 +83,9 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
             val placeResponse = Places.createClient(this.context!!).findCurrentPlace(request)
             placeResponse.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    et_current_place.setText(
-                        task.result?.placeLikelihoods?.first()?.place?.name ?: ""
-                    )
+                    val currentPlace = task.result?.placeLikelihoods?.first()?.place
+                    et_current_place.setText(currentPlace?.name ?: "")
+                    startLocation = TreflorPlace(currentPlace)
                 } else {
                     val exception = task.exception
                     if (exception is ApiException) {
@@ -110,6 +115,36 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
             R.id.et_destination_place -> {
                 getPlace(AUTOCOMPLETE_REQUEST_CODE)
             }
+            R.id.fab_start_journey -> {
+                val title = et_title.text.toString()
+                val content = et_content.text.toString()
+                if (title.isEmpty()) {
+                    //TODO: show error
+                    return
+                }
+                if (content.isEmpty()) {
+                    //TODO: show error
+                    return
+                }
+                if (startLocation == null) {
+                    //TODO: show error
+                    return
+                }
+                if (destination == null) {
+                    //TODO: show error
+                    return
+                }
+                viewModel.startJourney(
+                    Journey(
+                        "",                     //will issue by server
+                        et_title.text.toString(),
+                        et_content.text.toString(),
+                        startLocation!!,
+                        destination!!
+                    )
+                )
+                navController.navigate(R.id.action_startJourneyFragment_to_journeyFragment)
+            }
         }
     }
 
@@ -128,6 +163,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
                 Activity.RESULT_OK -> {
                     val place = Autocomplete.getPlaceFromIntent(data!!)
                     et_current_place.setText(place.name)
+                    startLocation = TreflorPlace(place)
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
                     val status =
@@ -147,6 +183,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
                 Activity.RESULT_OK -> {
                     val place = Autocomplete.getPlaceFromIntent(data!!)
                     et_destination_place.setText(place.name)
+                    destination = TreflorPlace(place)
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
                     val status =
@@ -163,5 +200,4 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
-
 }

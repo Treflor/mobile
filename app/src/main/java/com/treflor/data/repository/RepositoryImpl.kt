@@ -9,10 +9,13 @@ import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
+import com.treflor.data.remote.datasources.GoogleDirectionNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.SignUpRequest
+import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.internal.AuthState
 import com.treflor.internal.LocationUpdateReciever
+import com.treflor.models.Journey
 import com.treflor.models.User
 import kotlinx.coroutines.*
 
@@ -20,6 +23,7 @@ class RepositoryImpl(
     private val jwtProvider: JWTProvider,
     private val authenticationNetworkDataSource: AuthenticationNetworkDataSource,
     private val userNetworkDataSource: UserNetworkDataSource,
+    private val googleDirectionNetworkDataSource: GoogleDirectionNetworkDataSource,
     private val userDBDataSource: UserDBDataSource,
     private val journeyDBDataSource: JourneyDBDataSource,
     private val locationProvider: LocationProvider
@@ -77,11 +81,38 @@ class RepositoryImpl(
     override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
         locationProvider.requestLocationUpdate(updateReceiver)
 
-    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
+    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever) =
         locationProvider.removeLocationUpdate(updateReceiver)
 
     override fun getLastKnownLocation(): LiveData<Location> =
         locationProvider.getLastKnownLocation()
+
+    override fun persistJourney(journey: Journey) {
+        GlobalScope.launch(Dispatchers.IO) {
+            journeyDBDataSource.upsert(journey)
+        }
+    }
+
+    override fun getJourney(): LiveData<Journey> = journeyDBDataSource.journey
+
+    override fun breakJourney() {
+        journeyDBDataSource.delete()
+    }
+
+    override fun finishJourney() {
+        // TODO: upload data to server and delete cache
+    }
+
+    override suspend fun getDirection(
+        origin: String,
+        destination: String,
+        mode: String
+    ): LiveData<DirectionApiResponse> {
+        GlobalScope.launch(Dispatchers.IO) {
+            googleDirectionNetworkDataSource.fetchDirection(origin, destination, mode)
+        }
+        return MutableLiveData<DirectionApiResponse>()
+    }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
     private fun getJWT(): String? = jwtProvider.getJWT()

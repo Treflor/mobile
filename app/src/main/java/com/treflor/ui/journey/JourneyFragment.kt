@@ -25,14 +25,18 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.treflor.R
+import com.treflor.internal.ui.base.TreflorScopedFragment
 import kotlinx.android.synthetic.main.journey_fragment.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
 
-class JourneyFragment : Fragment(), OnMapReadyCallback, KodeinAware, View.OnClickListener {
+class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware,
+    View.OnClickListener {
 
     override val kodein: Kodein by closestKodein()
     private val viewModelFactory: JourneyViewModelFactory by instance()
@@ -91,10 +95,11 @@ class JourneyFragment : Fragment(), OnMapReadyCallback, KodeinAware, View.OnClic
             .check()
     }
 
-    private fun bindUI(savedInstanceState: Bundle?) {
+    private fun bindUI(savedInstanceState: Bundle?) = launch {
         journey_map.onCreate(savedInstanceState)
-        journey_map.getMapAsync(this)
-        viewModel.location.observe(this, Observer {
+        journey_map.getMapAsync(this@JourneyFragment)
+
+        viewModel.location.observe(this@JourneyFragment, Observer {
             myPositionMarker?.position = LatLng(it.latitude, it.longitude)
             if (!camPosUpdatedOnFirstLaunch) {
                 camPosUpdatedOnFirstLaunch = true
@@ -109,7 +114,15 @@ class JourneyFragment : Fragment(), OnMapReadyCallback, KodeinAware, View.OnClic
             }
         })
 
-        btn_start_journey.setOnClickListener(this)
+        viewModel.journey.await().observe(this@JourneyFragment, Observer {
+            if (it == null) {
+                btn_start_journey.setImageResource(R.drawable.ic_hiking)
+            } else {
+                btn_start_journey.setImageResource(R.drawable.ic_home)
+            }
+        })
+
+        btn_start_journey.setOnClickListener(this@JourneyFragment)
     }
 
     override fun onMapReady(map: GoogleMap?) {
