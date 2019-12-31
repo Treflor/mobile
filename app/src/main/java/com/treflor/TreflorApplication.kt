@@ -115,6 +115,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
                 instance(),
                 instance(),
                 instance(),
+                instance(),
                 instance()
             )
         }

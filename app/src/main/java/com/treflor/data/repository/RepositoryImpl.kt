@@ -9,8 +9,10 @@ import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
+import com.treflor.data.remote.datasources.GoogleDirectionNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.SignUpRequest
+import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.internal.AuthState
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
@@ -21,6 +23,7 @@ class RepositoryImpl(
     private val jwtProvider: JWTProvider,
     private val authenticationNetworkDataSource: AuthenticationNetworkDataSource,
     private val userNetworkDataSource: UserNetworkDataSource,
+    private val googleDirectionNetworkDataSource: GoogleDirectionNetworkDataSource,
     private val userDBDataSource: UserDBDataSource,
     private val journeyDBDataSource: JourneyDBDataSource,
     private val locationProvider: LocationProvider
@@ -98,6 +101,17 @@ class RepositoryImpl(
 
     override fun finishJourney() {
         // TODO: upload data to server and delete cache
+    }
+
+    override suspend fun getDirection(
+        origin: String,
+        destination: String,
+        mode: String
+    ): LiveData<DirectionApiResponse> {
+        GlobalScope.launch(Dispatchers.IO) {
+            googleDirectionNetworkDataSource.fetchDirection()
+        }
+//        return userDBDataSource.user
     }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()

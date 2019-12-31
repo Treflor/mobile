@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 interface GoogleDirectionApiService {
 
     @GET("direction/json")
-    fun getDirection(
+    fun fetchDirection(
         @Query("origin") origin: String,
         @Query("destination") destination: String,
         @Query("mode") mode: String = "driving"
