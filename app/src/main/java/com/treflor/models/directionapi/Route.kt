@@ -9,5 +9,7 @@ data class Route(
     @SerializedName("bounds")
     val bounds: Bounds,
     @SerializedName("overview_polyline")
-    val overviewPolyline: OverviewPolyline
+    val overviewPolyline: OverviewPolyline,
+    @SerializedName("legs")
+    val legs: List<Leg>
 )

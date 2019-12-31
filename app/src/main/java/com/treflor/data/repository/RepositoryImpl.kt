@@ -109,9 +109,9 @@ class RepositoryImpl(
         mode: String
     ): LiveData<DirectionApiResponse> {
         GlobalScope.launch(Dispatchers.IO) {
-            googleDirectionNetworkDataSource.fetchDirection()
+            googleDirectionNetworkDataSource.fetchDirection(origin, destination, mode)
         }
-//        return userDBDataSource.user
+        return MutableLiveData<DirectionApiResponse>()
     }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
