@@ -5,10 +5,7 @@ import android.app.NotificationManager
 import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
-import com.treflor.data.db.datasources.JourneyDBDataSource
-import com.treflor.data.db.datasources.JourneyDBDataSourceImpl
-import com.treflor.data.db.datasources.UserDBDataSource
-import com.treflor.data.db.datasources.UserDBDataSourceImpl
+import com.treflor.data.db.datasources.*
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.JWTProviderImpl
 import com.treflor.data.provider.LocationProvider
@@ -66,6 +63,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from singleton { TreflorDatabase(instance()) }
         bind() from singleton { instance<TreflorDatabase>().userDao() }
         bind() from singleton { instance<TreflorDatabase>().journeyDao() }
+        bind() from singleton { instance<TreflorDatabase>().directionDao() }
 
         // providers
         bind<JWTProvider>() with singleton { JWTProviderImpl(instance()) }
@@ -106,10 +104,12 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         //data sources - database
         bind<UserDBDataSource>() with singleton { UserDBDataSourceImpl(instance()) }
         bind<JourneyDBDataSource>() with singleton { JourneyDBDataSourceImpl(instance()) }
+        bind<DirectoionDBDataSource>() with singleton { DirectoionDBDataSourceImpl(instance()) }
 
         //repository
         bind<Repository>() with singleton {
             RepositoryImpl(
+                instance(),
                 instance(),
                 instance(),
                 instance(),

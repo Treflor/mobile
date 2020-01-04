@@ -30,4 +30,7 @@ interface Repository {
         destination: String,
         mode: String
     ): LiveData<DirectionApiResponse>
+
+    fun deleteDirection()
+
 }

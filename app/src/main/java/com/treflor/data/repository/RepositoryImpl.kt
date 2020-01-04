@@ -3,6 +3,7 @@ package com.treflor.data.repository
 import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.treflor.data.db.datasources.DirectoionDBDataSource
 import com.treflor.data.db.datasources.JourneyDBDataSource
 import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
@@ -24,6 +25,7 @@ class RepositoryImpl(
     private val treflorGoogleServicesNetworkDataSource: TreflorGoogleServicesNetworkDataSource,
     private val userDBDataSource: UserDBDataSource,
     private val journeyDBDataSource: JourneyDBDataSource,
+    private val directoionDBDataSource: DirectoionDBDataSource,
     private val locationProvider: LocationProvider
 ) : Repository {
 
@@ -39,6 +41,10 @@ class RepositoryImpl(
 
         userNetworkDataSource.apply {
             user.observeForever { user -> persistFetchedUser(user) }
+        }
+
+        treflorGoogleServicesNetworkDataSource.apply {
+            direction.observeForever { direction -> persistFetchedDirection(direction) }
         }
     }
 
@@ -103,8 +109,7 @@ class RepositoryImpl(
 
 
     //TODO update after persist
-    override fun getDirection(): LiveData<DirectionApiResponse> =
-        treflorGoogleServicesNetworkDataSource.direction
+    override fun getDirection(): LiveData<DirectionApiResponse> = directoionDBDataSource.direction
 
     override suspend fun fetchDirection(
         origin: String,
@@ -114,8 +119,10 @@ class RepositoryImpl(
         GlobalScope.launch(Dispatchers.IO) {
             treflorGoogleServicesNetworkDataSource.fetchDirection(origin, destination, mode)
         }
-        return treflorGoogleServicesNetworkDataSource.direction
+        return directoionDBDataSource.direction
     }
+
+    override fun deleteDirection() = persistFetchedDirection(null)
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
     private fun getJWT(): String? = jwtProvider.getJWT()
@@ -125,6 +132,13 @@ class RepositoryImpl(
         GlobalScope.launch(Dispatchers.IO) {
             if (user == null) return@launch userDBDataSource.delete()
             userDBDataSource.upsert(user)
+        }
+    }
+
+    private fun persistFetchedDirection(direction: DirectionApiResponse?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            if (direction == null) return@launch directoionDBDataSource.delete()
+            directoionDBDataSource.upsert(direction)
         }
     }
 }

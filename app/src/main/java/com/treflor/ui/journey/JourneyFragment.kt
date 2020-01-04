@@ -119,8 +119,10 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
             }
         })
 
-        viewModel.direction.observe(this@JourneyFragment, Observer {
-            googleMap?.addPolyline(PolylineOptions().addAll(it.decodedPoints()))
+        viewModel.direction.await().observe(this@JourneyFragment, Observer {
+            if (it != null) {
+                googleMap?.addPolyline(PolylineOptions().addAll(it.decodedPoints()))
+            }
         })
 
         btn_start_journey.setOnClickListener(this@JourneyFragment)
