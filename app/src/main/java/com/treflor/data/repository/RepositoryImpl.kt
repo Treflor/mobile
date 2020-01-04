@@ -3,17 +3,15 @@ package com.treflor.data.repository
 import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.treflor.data.db.dao.UserDao
 import com.treflor.data.db.datasources.JourneyDBDataSource
 import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
-import com.treflor.data.remote.datasources.GoogleDirectionNetworkDataSource
+import com.treflor.data.remote.datasources.TreflorGoogleServicesNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.DirectionApiResponse
-import com.treflor.internal.AuthState
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
 import com.treflor.models.User
@@ -23,7 +21,7 @@ class RepositoryImpl(
     private val jwtProvider: JWTProvider,
     private val authenticationNetworkDataSource: AuthenticationNetworkDataSource,
     private val userNetworkDataSource: UserNetworkDataSource,
-    private val googleDirectionNetworkDataSource: GoogleDirectionNetworkDataSource,
+    private val treflorGoogleServicesNetworkDataSource: TreflorGoogleServicesNetworkDataSource,
     private val userDBDataSource: UserDBDataSource,
     private val journeyDBDataSource: JourneyDBDataSource,
     private val locationProvider: LocationProvider
@@ -103,15 +101,20 @@ class RepositoryImpl(
         // TODO: upload data to server and delete cache
     }
 
-    override suspend fun getDirection(
+
+    //TODO update after persist
+    override fun getDirection(): LiveData<DirectionApiResponse> =
+        treflorGoogleServicesNetworkDataSource.direction
+
+    override suspend fun fetchDirection(
         origin: String,
         destination: String,
         mode: String
     ): LiveData<DirectionApiResponse> {
         GlobalScope.launch(Dispatchers.IO) {
-            googleDirectionNetworkDataSource.fetchDirection(origin, destination, mode)
+            treflorGoogleServicesNetworkDataSource.fetchDirection(origin, destination, mode)
         }
-        return MutableLiveData<DirectionApiResponse>()
+        return treflorGoogleServicesNetworkDataSource.direction
     }
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()

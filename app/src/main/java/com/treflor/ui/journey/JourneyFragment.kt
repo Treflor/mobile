@@ -15,10 +15,7 @@ import androidx.navigation.Navigation
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.model.BitmapDescriptorFactory
-import com.google.android.libraries.maps.model.LatLng
-import com.google.android.libraries.maps.model.Marker
-import com.google.android.libraries.maps.model.MarkerOptions
+import com.google.android.libraries.maps.model.*
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -120,6 +117,10 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
             } else {
                 btn_start_journey.setImageResource(R.drawable.ic_home)
             }
+        })
+
+        viewModel.direction.observe(this@JourneyFragment, Observer {
+            googleMap?.addPolyline(PolylineOptions().addAll(it.decodedPoints()))
         })
 
         btn_start_journey.setOnClickListener(this@JourneyFragment)

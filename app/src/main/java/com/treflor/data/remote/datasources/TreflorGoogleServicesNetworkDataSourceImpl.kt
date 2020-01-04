@@ -3,13 +3,15 @@ package com.treflor.data.remote.datasources
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.treflor.data.remote.api.GoogleDirectionApiService
+import com.treflor.data.provider.JWTProvider
+import com.treflor.data.remote.api.TreflorGoogleApiService
 import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.internal.NoConnectivityException
 
-class GoogleDirectionNetworkDataSourceImpl(
-    private val googleDirectionApiService: GoogleDirectionApiService
-) : GoogleDirectionNetworkDataSource {
+class TreflorGoogleServicesNetworkDataSourceImpl(
+    private val treflorGoogleApiService: TreflorGoogleApiService,
+    private val jwtProvider: JWTProvider
+) : TreflorGoogleServicesNetworkDataSource {
 
 
     override val direction: LiveData<DirectionApiResponse> get() = _direction
@@ -23,7 +25,8 @@ class GoogleDirectionNetworkDataSourceImpl(
     ) {
         try {
             _direction.postValue(
-                googleDirectionApiService.fetchDirection(
+                treflorGoogleApiService.fetchDirection(
+                    jwtProvider.getJWT()!!,
                     origin,
                     destination,
                     mode

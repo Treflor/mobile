@@ -12,8 +12,8 @@ data class Journey(
     val id: String,
     val title: String,
     val content: String,
-    @Embedded(prefix = "start_location_")
-    val startLocation: TreflorPlace,
+    @Embedded(prefix = "origin_")
+    val origin: TreflorPlace,
     @Embedded(prefix = "destination_")
     val destination: TreflorPlace
 ) {
