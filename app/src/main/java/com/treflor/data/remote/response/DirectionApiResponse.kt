@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.android.libraries.maps.model.LatLng
+import com.google.android.libraries.maps.model.LatLngBounds
 import com.google.gson.annotations.SerializedName
 import com.google.maps.android.PolyUtil
 import com.treflor.models.directionapi.*
@@ -41,4 +42,9 @@ data class DirectionApiResponse(
     var pk: Int = CURRENT_DIRECTION_PK
 
     fun decodedPoints(): List<LatLng> = PolyUtil.decode(points)
+    fun getLatLngBounds(): LatLngBounds = LatLngBounds.builder()
+        .include(LatLng(bounds.northeast.lat, bounds.northeast.lng))
+        .include(
+            LatLng(bounds.southwest.lat, bounds.southwest.lng)
+        ).build()
 }

@@ -42,6 +42,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
     private var myPositionMarker: Marker? = null
     private var googleMap: GoogleMap? = null
     private var camPosUpdatedOnFirstLaunch = false
+    private var polyline: Polyline? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -120,8 +121,10 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         })
 
         viewModel.direction.await().observe(this@JourneyFragment, Observer {
+            polyline?.remove()
             if (it != null) {
-                googleMap?.addPolyline(PolylineOptions().addAll(it.decodedPoints()))
+                polyline = googleMap?.addPolyline(PolylineOptions().addAll(it.decodedPoints()))
+                googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(it.getLatLngBounds(),30))
             }
         })
 
