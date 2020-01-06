@@ -6,6 +6,7 @@ import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
+import com.treflor.models.TrackedLocation
 import com.treflor.models.User
 
 interface Repository {
@@ -32,5 +33,9 @@ interface Repository {
     ): LiveData<DirectionApiResponse>
 
     fun deleteDirection()
+
+    fun getTrackedLocations(): LiveData<List<TrackedLocation>>
+    fun insertTackedLocations(trackedLocation: TrackedLocation)
+    fun clearTrackedLocations()
 
 }

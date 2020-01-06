@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
@@ -25,7 +24,6 @@ import com.treflor.R
 import com.treflor.internal.ui.base.TreflorScopedFragment
 import kotlinx.android.synthetic.main.journey_fragment.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -124,7 +122,12 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
             polyline?.remove()
             if (it != null) {
                 polyline = googleMap?.addPolyline(PolylineOptions().addAll(it.decodedPoints()))
-                googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(it.getLatLngBounds(),30))
+                googleMap?.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        it.getLatLngBounds(),
+                        30
+                    )
+                )
             }
         })
 

@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.treflor.data.db.dao.DirectionDao
 import com.treflor.data.db.dao.JourneyDao
+import com.treflor.data.db.dao.TrackedLocationsDao
 import com.treflor.data.db.dao.UserDao
 import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.models.Journey
 import com.treflor.models.User
 
 @Database(
-    entities = [User::class, Journey::class,DirectionApiResponse::class],
+    entities = [User::class, Journey::class, DirectionApiResponse::class],
     version = 1,
     exportSchema = false
 )
@@ -20,6 +21,7 @@ abstract class TreflorDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun journeyDao(): JourneyDao
     abstract fun directionDao(): DirectionDao
+    abstract fun trackedLocationsDao(): TrackedLocationsDao
 
     companion object {
         @Volatile

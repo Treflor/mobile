@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import com.treflor.data.db.dao.DirectionDao
 import com.treflor.data.remote.response.DirectionApiResponse
 
-class DirectoionDBDataSourceImpl(
+class DirectionDBDataSourceImpl(
     private val directionDao: DirectionDao
-) : DirectoionDBDataSource {
+) : DirectionDBDataSource {
     override val direction: LiveData<DirectionApiResponse> get() = _direction
 
     private val _direction by lazy {
