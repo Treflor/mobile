@@ -2,6 +2,7 @@ package com.treflor.data.remote.api
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.treflor.data.remote.intercepters.ConnectivityInterceptor
+import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.AuthResponse
 import com.treflor.data.remote.response.DirectionApiResponse
@@ -44,6 +45,9 @@ interface TreflorApiService {
         @Query("destination") destination: String,
         @Query("mode") mode: String = "driving"
     ): Deferred<DirectionApiResponse>
+
+    @POST("user/journey/insert")
+    fun uploadJourney(@Body request: JourneyRequest)
 
     companion object {
         operator fun invoke(
