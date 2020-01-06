@@ -47,7 +47,9 @@ interface TreflorApiService {
     ): Deferred<DirectionApiResponse>
 
     @POST("user/journey/insert")
-    fun uploadJourney(@Body request: JourneyRequest)
+    fun uploadJourney(
+        @Header("authorization") jwt: String, @Body request: JourneyRequest
+    )
 
     companion object {
         operator fun invoke(
