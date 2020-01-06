@@ -1,7 +1,10 @@
 package com.treflor.data.repository
 
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.LiveData
+import com.google.android.libraries.maps.model.LatLng
+import com.google.maps.android.PolyUtil
 import com.treflor.data.db.datasources.DirectionDBDataSource
 import com.treflor.data.db.datasources.JourneyDBDataSource
 import com.treflor.data.db.datasources.TrackedLocationsDBDataSource
@@ -11,6 +14,7 @@ import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
 import com.treflor.data.remote.datasources.TreflorGoogleServicesNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
+import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.internal.LocationUpdateReciever
@@ -103,12 +107,23 @@ class RepositoryImpl(
     override fun breakJourney() {
         journeyDBDataSource.delete()
         clearTrackedLocations()
+        clearDirection()
     }
 
     override fun finishJourney() {
         // TODO: upload data to server and delete cache
-    }
+        GlobalScope.launch(Dispatchers.IO) {
+            val journey = getJourney().value
+            val direction = getDirection().value
+            val trackedLocations =
+                PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
+            val user = getUser().value
+            val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
+            // send to the server
+            breakJourney()
+        }
 
+    }
 
     override fun getDirection(): LiveData<DirectionApiResponse> = directionDBDataSource.direction
 

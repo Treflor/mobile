@@ -23,6 +23,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.treflor.R
 import com.treflor.internal.ui.base.TreflorScopedFragment
+import com.treflor.models.Journey
 import kotlinx.android.synthetic.main.journey_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -43,7 +44,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
     private var camPosUpdatedOnFirstLaunch = false
     private var routePolyline: Polyline? = null
     private var trackedPolyline: Polyline? = null
-    private var inJourney = false
+    private var journey: Journey? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -114,7 +115,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         })
 
         viewModel.journey.await().observe(this@JourneyFragment, Observer {
-            inJourney = it != null
+            journey = it
             if (it == null) {
                 btn_start_journey.setImageResource(R.drawable.ic_hiking)
             } else {
@@ -181,11 +182,26 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.removeLocationUpdates()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.removeLocationUpdates()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.requestLocationUpdates()
+    }
+
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.btn_start_journey -> {
-                if (inJourney) {
-                    vi
+                if (journey != null) {
+                    viewModel.finishJourney()
                 } else {
                     navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment)
                 }

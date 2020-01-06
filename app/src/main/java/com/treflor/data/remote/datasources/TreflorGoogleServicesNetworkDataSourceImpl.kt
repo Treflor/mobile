@@ -4,12 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.treflor.data.provider.JWTProvider
-import com.treflor.data.remote.api.TreflorGoogleApiService
+import com.treflor.data.remote.api.TreflorApiService
 import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.internal.NoConnectivityException
 
 class TreflorGoogleServicesNetworkDataSourceImpl(
-    private val treflorGoogleApiService: TreflorGoogleApiService,
+    private val treflorApiService: TreflorApiService,
     private val jwtProvider: JWTProvider
 ) : TreflorGoogleServicesNetworkDataSource {
 
@@ -25,7 +25,7 @@ class TreflorGoogleServicesNetworkDataSourceImpl(
     ) {
         try {
             _direction.postValue(
-                treflorGoogleApiService.fetchDirection(
+                treflorApiService.fetchDirection(
                     jwtProvider.getJWT()!!,
                     origin,
                     destination,

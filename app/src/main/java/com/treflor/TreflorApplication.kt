@@ -10,9 +10,7 @@ import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.JWTProviderImpl
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.provider.LocationProviderImpl
-import com.treflor.data.remote.api.TreflorGoogleApiService
-import com.treflor.data.remote.api.TreflorAuthApiService
-import com.treflor.data.remote.api.TreflorUserApiService
+import com.treflor.data.remote.api.TreflorApiService
 import com.treflor.data.remote.datasources.*
 import com.treflor.data.remote.intercepters.ConnectivityInterceptor
 import com.treflor.data.remote.intercepters.ConnectivityInterceptorImpl
@@ -79,9 +77,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind<UnauthorizedInterceptor>() with singleton { UnauthorizedInterceptorImpl() }
 
         // api services
-        bind() from singleton { TreflorAuthApiService(instance()) }
-        bind() from singleton { TreflorUserApiService(instance()) }
-        bind() from singleton { TreflorGoogleApiService(instance()) }
+        bind() from singleton { TreflorApiService(instance()) }
 
         //data sources - network
         bind<AuthenticationNetworkDataSource>() with singleton {
@@ -106,7 +102,11 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind<UserDBDataSource>() with singleton { UserDBDataSourceImpl(instance()) }
         bind<JourneyDBDataSource>() with singleton { JourneyDBDataSourceImpl(instance()) }
         bind<DirectionDBDataSource>() with singleton { DirectionDBDataSourceImpl(instance()) }
-        bind<TrackedLocationsDBDataSource>() with singleton { TrackedLocationsDBDataSourceImpl(instance()) }
+        bind<TrackedLocationsDBDataSource>() with singleton {
+            TrackedLocationsDBDataSourceImpl(
+                instance()
+            )
+        }
 
         //repository
         bind<Repository>() with singleton {

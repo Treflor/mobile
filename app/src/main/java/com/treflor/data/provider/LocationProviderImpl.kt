@@ -16,7 +16,7 @@ const val PREF_LATITUDE = "pref_latitude"
 const val PREF_LONGITUDE = "pref_longitude"
 
 class LocationProviderImpl(
-    private val context: Context
+    context: Context
 ) : PreferenceProvider(context),
     LocationProvider {
     override val location: LiveData<Location> get() = _location
@@ -57,7 +57,10 @@ class LocationProviderImpl(
     }
 
     override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever) {
-    locationUpdateReceiver.remove(updateReceiver)
+        locationUpdateReceiver.remove(updateReceiver)
+        if (locationUpdateReceiver.isEmpty()) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        }
     }
 
     override fun getLastKnownLocation(): LiveData<Location> {

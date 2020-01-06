@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.treflor.data.repository.Repository
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.internal.lazyDeferred
+import com.treflor.models.Journey
 
 class JourneyViewModel(
     private val repository: Repository
@@ -16,13 +17,13 @@ class JourneyViewModel(
     val direction by lazyDeferred { repository.getDirection() }
     val trackedLocations by lazyDeferred { repository.getTrackedLocations() }
 
-    fun stopJourney() {
-        repository.breakJourney()
-        repository.clearTrackedLocations()
-        repository.clearDirection()
-    }
+    fun stopJourney() = repository.breakJourney()
 
-    fun finishJourney() {
+    fun removeLocationUpdates() =
+        repository.removeLocationUpdate(LocationUpdateReciever.LOCATION_VIEW_MODEL)
 
-    }
+    fun requestLocationUpdates() =
+        repository.requestLocationUpdate(LocationUpdateReciever.LOCATION_VIEW_MODEL)
+
+    fun finishJourney() = repository.finishJourney()
 }
