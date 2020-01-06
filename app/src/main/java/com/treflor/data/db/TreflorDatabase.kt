@@ -10,10 +10,11 @@ import com.treflor.data.db.dao.TrackedLocationsDao
 import com.treflor.data.db.dao.UserDao
 import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.models.Journey
+import com.treflor.models.TrackedLocation
 import com.treflor.models.User
 
 @Database(
-    entities = [User::class, Journey::class, DirectionApiResponse::class],
+    entities = [User::class, Journey::class, DirectionApiResponse::class, TrackedLocation::class],
     version = 1,
     exportSchema = false
 )

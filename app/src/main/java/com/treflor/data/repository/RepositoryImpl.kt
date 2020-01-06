@@ -110,7 +110,6 @@ class RepositoryImpl(
     }
 
 
-    //TODO update after persist
     override fun getDirection(): LiveData<DirectionApiResponse> = directionDBDataSource.direction
 
     override suspend fun fetchDirection(
@@ -124,7 +123,7 @@ class RepositoryImpl(
         return directionDBDataSource.direction
     }
 
-    override fun deleteDirection() = persistFetchedDirection(null)
+    override fun clearDirection() = persistFetchedDirection(null)
 
     override fun getTrackedLocations(): LiveData<List<TrackedLocation>> =
         trackedLocationsDBDataSource.trackedLocations

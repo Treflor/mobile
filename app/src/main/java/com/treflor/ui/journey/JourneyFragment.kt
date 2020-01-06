@@ -3,6 +3,7 @@ package com.treflor.ui.journey
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +41,9 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
     private var myPositionMarker: Marker? = null
     private var googleMap: GoogleMap? = null
     private var camPosUpdatedOnFirstLaunch = false
-    private var polyline: Polyline? = null
+    private var routePolyline: Polyline? = null
+    private var trackedPolyline: Polyline? = null
+    private var inJourney = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -111,6 +114,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         })
 
         viewModel.journey.await().observe(this@JourneyFragment, Observer {
+            inJourney = it != null
             if (it == null) {
                 btn_start_journey.setImageResource(R.drawable.ic_hiking)
             } else {
@@ -119,9 +123,9 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         })
 
         viewModel.direction.await().observe(this@JourneyFragment, Observer {
-            polyline?.remove()
+            routePolyline?.remove()
             if (it != null) {
-                polyline = googleMap?.addPolyline(PolylineOptions().addAll(it.decodedPoints()))
+                routePolyline = googleMap?.addPolyline(PolylineOptions().addAll(it.decodedPoints()))
                 googleMap?.animateCamera(
                     CameraUpdateFactory.newLatLngBounds(
                         it.getLatLngBounds(),
@@ -131,6 +135,17 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
             }
         })
 
+        viewModel.trackedLocations.await().observe(this@JourneyFragment, Observer {
+            trackedPolyline?.remove()
+            if (it != null) {
+                trackedPolyline = googleMap?.addPolyline(
+                    PolylineOptions()
+                        .addAll(it.map { tl -> LatLng(tl.lat, tl.lng) }.toList())
+                        .color(Color.GREEN)
+                        .zIndex(2f)
+                )
+            }
+        })
         btn_start_journey.setOnClickListener(this@JourneyFragment)
     }
 
@@ -169,9 +184,12 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.btn_start_journey -> {
-                navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment)
+                if (inJourney) {
+                    vi
+                } else {
+                    navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment)
+                }
             }
         }
     }
-
 }

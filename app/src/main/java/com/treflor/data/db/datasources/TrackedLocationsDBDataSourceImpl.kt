@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import com.treflor.data.db.dao.TrackedLocationsDao
 import com.treflor.internal.notifyObservers
 import com.treflor.models.TrackedLocation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class TrackedLocationsDBDataSourceImpl(
     private val trackedLocationsDao: TrackedLocationsDao
@@ -19,9 +22,11 @@ class TrackedLocationsDBDataSourceImpl(
     private val _trackedLocationsList: MutableList<TrackedLocation> = mutableListOf()
 
     override fun insert(trackedLocation: TrackedLocation) {
-        trackedLocationsDao.insert(trackedLocation)
-        _trackedLocationsList.add(trackedLocation)
-        _trackedLocations.value = _trackedLocationsList
+        GlobalScope.launch(Dispatchers.IO) {
+            trackedLocationsDao.insert(trackedLocation)
+            _trackedLocationsList.add(trackedLocation)
+            GlobalScope.launch(Dispatchers.Main) { _trackedLocations.value = _trackedLocationsList }
+        }
     }
 
     override fun deleteTable() {

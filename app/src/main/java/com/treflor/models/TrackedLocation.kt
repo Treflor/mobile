@@ -10,7 +10,7 @@ data class TrackedLocation(
     val lng: Double
 ) {
     @PrimaryKey(autoGenerate = true)
-    val pk: Int = 0
+    var pk: Int = 0
 
     fun toLatLng(): LatLng = LatLng(lat, lng)
 }
