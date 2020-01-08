@@ -5,6 +5,9 @@ import com.treflor.data.provider.JWTProvider
 import com.treflor.data.remote.api.TreflorApiService
 import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.internal.NoConnectivityException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class JourneyNetworkDataSourceImpl(
     private val treflorApiService: TreflorApiService,
@@ -12,7 +15,10 @@ class JourneyNetworkDataSourceImpl(
 ) : JourneyNetworkDataSource {
     override fun uploadJourney(journeyRequest: JourneyRequest) {
         try {
-            treflorApiService.uploadJourney(jwtProvider.getJWT()!!, journeyRequest)
+            GlobalScope.launch(Dispatchers.IO) {
+                treflorApiService.uploadJourney(jwtProvider.getJWT()!!, journeyRequest).await()
+            }
+            Log.e("journey", journeyRequest.toString())
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)
 

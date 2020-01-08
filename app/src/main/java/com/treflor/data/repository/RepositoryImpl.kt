@@ -4,6 +4,7 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
+import com.google.gson.Gson
 import com.google.maps.android.PolyUtil
 import com.treflor.data.db.datasources.DirectionDBDataSource
 import com.treflor.data.db.datasources.JourneyDBDataSource
@@ -12,6 +13,7 @@ import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
+import com.treflor.data.remote.datasources.JourneyNetworkDataSource
 import com.treflor.data.remote.datasources.TreflorGoogleServicesNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.JourneyRequest
@@ -28,6 +30,7 @@ class RepositoryImpl(
     private val authenticationNetworkDataSource: AuthenticationNetworkDataSource,
     private val userNetworkDataSource: UserNetworkDataSource,
     private val treflorGoogleServicesNetworkDataSource: TreflorGoogleServicesNetworkDataSource,
+    private val journeyNetworkDataSource: JourneyNetworkDataSource,
     private val userDBDataSource: UserDBDataSource,
     private val journeyDBDataSource: JourneyDBDataSource,
     private val directionDBDataSource: DirectionDBDataSource,
@@ -59,6 +62,7 @@ class RepositoryImpl(
             authenticationNetworkDataSource.signInWithGoogle(idToken)
         }
         if (jwt != null) {
+            Log.e("jwt", jwt)
             setJWT(jwt)
         }
     }
@@ -119,7 +123,8 @@ class RepositoryImpl(
                 PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
             val user = getUser().value
             val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
-            // send to the server
+            Log.e("json", Gson().toJson(journeyRequest))
+            journeyNetworkDataSource.uploadJourney(journeyRequest)
             breakJourney()
         }
 
