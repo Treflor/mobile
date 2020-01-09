@@ -8,6 +8,7 @@ import com.treflor.internal.NoConnectivityException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class JourneyNetworkDataSourceImpl(
     private val treflorApiService: TreflorApiService,
@@ -16,9 +17,10 @@ class JourneyNetworkDataSourceImpl(
     override fun uploadJourney(journeyRequest: JourneyRequest) {
         try {
             GlobalScope.launch(Dispatchers.IO) {
-                treflorApiService.uploadJourney(jwtProvider.getJWT()!!, journeyRequest).await()
+                val response =
+                    treflorApiService.uploadJourney(jwtProvider.getJWT()!!, journeyRequest).await()
+                Log.e("gg", response.toString())
             }
-            Log.e("journey", journeyRequest.toString())
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)
 

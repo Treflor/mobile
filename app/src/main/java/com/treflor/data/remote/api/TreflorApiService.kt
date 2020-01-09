@@ -6,6 +6,7 @@ import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.AuthResponse
 import com.treflor.data.remote.response.DirectionApiResponse
+import com.treflor.data.remote.response.IDResponse
 import com.treflor.models.User
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
@@ -50,7 +51,7 @@ interface TreflorApiService {
     @POST("user/journey/insert")
     fun uploadJourney(
         @Header("authorization") jwt: String, @Body request: JourneyRequest
-    ): Deferred<String>
+    ): Deferred<IDResponse>
 
     companion object {
         operator fun invoke(
