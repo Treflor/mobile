@@ -1,21 +1,25 @@
 package com.treflor.data.repository
 
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.treflor.data.db.dao.UserDao
+import com.google.android.libraries.maps.model.LatLng
+import com.google.maps.android.PolyUtil
+import com.treflor.data.db.datasources.DirectionDBDataSource
 import com.treflor.data.db.datasources.JourneyDBDataSource
+import com.treflor.data.db.datasources.TrackedLocationsDBDataSource
 import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
-import com.treflor.data.remote.datasources.GoogleDirectionNetworkDataSource
+import com.treflor.data.remote.datasources.TreflorGoogleServicesNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
+import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.DirectionApiResponse
-import com.treflor.internal.AuthState
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
+import com.treflor.models.TrackedLocation
 import com.treflor.models.User
 import kotlinx.coroutines.*
 
@@ -23,9 +27,11 @@ class RepositoryImpl(
     private val jwtProvider: JWTProvider,
     private val authenticationNetworkDataSource: AuthenticationNetworkDataSource,
     private val userNetworkDataSource: UserNetworkDataSource,
-    private val googleDirectionNetworkDataSource: GoogleDirectionNetworkDataSource,
+    private val treflorGoogleServicesNetworkDataSource: TreflorGoogleServicesNetworkDataSource,
     private val userDBDataSource: UserDBDataSource,
     private val journeyDBDataSource: JourneyDBDataSource,
+    private val directionDBDataSource: DirectionDBDataSource,
+    private val trackedLocationsDBDataSource: TrackedLocationsDBDataSource,
     private val locationProvider: LocationProvider
 ) : Repository {
 
@@ -41,6 +47,10 @@ class RepositoryImpl(
 
         userNetworkDataSource.apply {
             user.observeForever { user -> persistFetchedUser(user) }
+        }
+
+        treflorGoogleServicesNetworkDataSource.apply {
+            direction.observeForever { direction -> persistFetchedDirection(direction) }
         }
     }
 
@@ -94,25 +104,49 @@ class RepositoryImpl(
     }
 
     override fun getJourney(): LiveData<Journey> = journeyDBDataSource.journey
-
     override fun breakJourney() {
         journeyDBDataSource.delete()
+        clearTrackedLocations()
+        clearDirection()
     }
 
     override fun finishJourney() {
         // TODO: upload data to server and delete cache
+        GlobalScope.launch(Dispatchers.IO) {
+            val journey = getJourney().value
+            val direction = getDirection().value
+            val trackedLocations =
+                PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
+            val user = getUser().value
+            val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
+            // send to the server
+            breakJourney()
+        }
+
     }
 
-    override suspend fun getDirection(
+    override fun getDirection(): LiveData<DirectionApiResponse> = directionDBDataSource.direction
+
+    override suspend fun fetchDirection(
         origin: String,
         destination: String,
         mode: String
     ): LiveData<DirectionApiResponse> {
         GlobalScope.launch(Dispatchers.IO) {
-            googleDirectionNetworkDataSource.fetchDirection(origin, destination, mode)
+            treflorGoogleServicesNetworkDataSource.fetchDirection(origin, destination, mode)
         }
-        return MutableLiveData<DirectionApiResponse>()
+        return directionDBDataSource.direction
     }
+
+    override fun clearDirection() = persistFetchedDirection(null)
+
+    override fun getTrackedLocations(): LiveData<List<TrackedLocation>> =
+        trackedLocationsDBDataSource.trackedLocations
+
+    override fun insertTackedLocations(trackedLocation: TrackedLocation) =
+        trackedLocationsDBDataSource.insert(trackedLocation)
+
+    override fun clearTrackedLocations() = trackedLocationsDBDataSource.deleteTable()
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
     private fun getJWT(): String? = jwtProvider.getJWT()
@@ -122,6 +156,13 @@ class RepositoryImpl(
         GlobalScope.launch(Dispatchers.IO) {
             if (user == null) return@launch userDBDataSource.delete()
             userDBDataSource.upsert(user)
+        }
+    }
+
+    private fun persistFetchedDirection(direction: DirectionApiResponse?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            if (direction == null) return@launch directionDBDataSource.delete()
+            directionDBDataSource.upsert(direction)
         }
     }
 }

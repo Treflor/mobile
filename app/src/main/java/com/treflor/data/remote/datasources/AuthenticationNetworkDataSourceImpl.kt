@@ -1,17 +1,17 @@
 package com.treflor.data.remote.datasources
 
 import android.util.Log
-import com.treflor.data.remote.api.TreflorAuthApiService
+import com.treflor.data.remote.api.TreflorApiService
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.internal.NoConnectivityException
 import retrofit2.HttpException
 
 class AuthenticationNetworkDataSourceImpl(
-    private val treflorAuthApiService: TreflorAuthApiService
+    private val treflorApiService: TreflorApiService
 ) : AuthenticationNetworkDataSource {
     override suspend fun signInWithGoogle(idToken: String): String? {
         return try {
-            val authResponse = treflorAuthApiService.signupWithGoogle(idToken).await()
+            val authResponse = treflorApiService.signupWithGoogle(idToken).await()
             authResponse.token
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)
@@ -21,7 +21,7 @@ class AuthenticationNetworkDataSourceImpl(
 
     override suspend fun signIn(email: String, password: String): String? {
         return try {
-            val authResponse = treflorAuthApiService.signIn(email, password).await()
+            val authResponse = treflorApiService.signIn(email, password).await()
             authResponse.token
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)
@@ -34,7 +34,7 @@ class AuthenticationNetworkDataSourceImpl(
 
     override suspend fun signUp(signUpRequest: SignUpRequest): String? {
         return try {
-            val authResponse = treflorAuthApiService.signUp(signUpRequest).await()
+            val authResponse = treflorApiService.signUp(signUpRequest).await()
             authResponse.token
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)

@@ -1,22 +1,16 @@
 package com.treflor
 
-import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
-import com.treflor.data.db.datasources.JourneyDBDataSource
-import com.treflor.data.db.datasources.JourneyDBDataSourceImpl
-import com.treflor.data.db.datasources.UserDBDataSource
-import com.treflor.data.db.datasources.UserDBDataSourceImpl
+import com.treflor.data.db.datasources.*
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.JWTProviderImpl
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.provider.LocationProviderImpl
-import com.treflor.data.remote.api.GoogleDirectionApiService
-import com.treflor.data.remote.api.TreflorAuthApiService
-import com.treflor.data.remote.api.TreflorUserApiService
+import com.treflor.data.remote.api.TreflorApiService
 import com.treflor.data.remote.datasources.*
 import com.treflor.data.remote.intercepters.ConnectivityInterceptor
 import com.treflor.data.remote.intercepters.ConnectivityInterceptorImpl
@@ -67,6 +61,8 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from singleton { TreflorDatabase(instance()) }
         bind() from singleton { instance<TreflorDatabase>().userDao() }
         bind() from singleton { instance<TreflorDatabase>().journeyDao() }
+        bind() from singleton { instance<TreflorDatabase>().directionDao() }
+        bind() from singleton { instance<TreflorDatabase>().trackedLocationsDao() }
 
         // providers
         bind<JWTProvider>() with singleton { JWTProviderImpl(instance()) }
@@ -81,9 +77,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind<UnauthorizedInterceptor>() with singleton { UnauthorizedInterceptorImpl() }
 
         // api services
-        bind() from singleton { TreflorAuthApiService(instance()) }
-        bind() from singleton { TreflorUserApiService(instance()) }
-        bind() from singleton { GoogleDirectionApiService(instance(), instance()) }
+        bind() from singleton { TreflorApiService(instance()) }
 
         //data sources - network
         bind<AuthenticationNetworkDataSource>() with singleton {
@@ -97,8 +91,15 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
                 instance()
             )
         }
-        bind<GoogleDirectionNetworkDataSource>() with singleton {
-            GoogleDirectionNetworkDataSourceImpl(
+        bind<TreflorGoogleServicesNetworkDataSource>() with singleton {
+            TreflorGoogleServicesNetworkDataSourceImpl(
+                instance(),
+                instance()
+            )
+        }
+        bind<JourneyNetworkDataSource>() with singleton {
+            JourneyNetworkDataSourceImpl(
+                instance(),
                 instance()
             )
         }
@@ -106,10 +107,18 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         //data sources - database
         bind<UserDBDataSource>() with singleton { UserDBDataSourceImpl(instance()) }
         bind<JourneyDBDataSource>() with singleton { JourneyDBDataSourceImpl(instance()) }
+        bind<DirectionDBDataSource>() with singleton { DirectionDBDataSourceImpl(instance()) }
+        bind<TrackedLocationsDBDataSource>() with singleton {
+            TrackedLocationsDBDataSourceImpl(
+                instance()
+            )
+        }
 
         //repository
         bind<Repository>() with singleton {
             RepositoryImpl(
+                instance(),
+                instance(),
                 instance(),
                 instance(),
                 instance(),

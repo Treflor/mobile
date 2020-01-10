@@ -1,11 +1,14 @@
 package com.treflor.models.directionapi
 
 
+import androidx.room.Embedded
 import com.google.gson.annotations.SerializedName
 
 data class Bounds(
     @SerializedName("northeast")
-    val northeast: Northeast,
+    @Embedded(prefix = "northeast_")
+    val northeast: Location,
     @SerializedName("southwest")
-    val southwest: Southwest
+    @Embedded(prefix = "southeast_")
+    val southwest: Location
 )

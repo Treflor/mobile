@@ -3,11 +3,11 @@ package com.treflor.ui.journey
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
@@ -15,10 +15,7 @@ import androidx.navigation.Navigation
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
-import com.google.android.libraries.maps.model.BitmapDescriptorFactory
-import com.google.android.libraries.maps.model.LatLng
-import com.google.android.libraries.maps.model.Marker
-import com.google.android.libraries.maps.model.MarkerOptions
+import com.google.android.libraries.maps.model.*
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -26,9 +23,9 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.treflor.R
 import com.treflor.internal.ui.base.TreflorScopedFragment
+import com.treflor.models.Journey
 import kotlinx.android.synthetic.main.journey_fragment.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -45,6 +42,9 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
     private var myPositionMarker: Marker? = null
     private var googleMap: GoogleMap? = null
     private var camPosUpdatedOnFirstLaunch = false
+    private var routePolyline: Polyline? = null
+    private var trackedPolyline: Polyline? = null
+    private var journey: Journey? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -115,6 +115,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         })
 
         viewModel.journey.await().observe(this@JourneyFragment, Observer {
+            journey = it
             if (it == null) {
                 btn_start_journey.setImageResource(R.drawable.ic_hiking)
             } else {
@@ -122,6 +123,30 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
             }
         })
 
+        viewModel.direction.await().observe(this@JourneyFragment, Observer {
+            routePolyline?.remove()
+            if (it != null) {
+                routePolyline = googleMap?.addPolyline(PolylineOptions().addAll(it.decodedPoints()))
+                googleMap?.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        it.getLatLngBounds(),
+                        30
+                    )
+                )
+            }
+        })
+
+        viewModel.trackedLocations.await().observe(this@JourneyFragment, Observer {
+            trackedPolyline?.remove()
+            if (it != null) {
+                trackedPolyline = googleMap?.addPolyline(
+                    PolylineOptions()
+                        .addAll(it.map { tl -> LatLng(tl.lat, tl.lng) }.toList())
+                        .color(Color.GREEN)
+                        .zIndex(2f)
+                )
+            }
+        })
         btn_start_journey.setOnClickListener(this@JourneyFragment)
     }
 
@@ -157,12 +182,30 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.removeLocationUpdates()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.removeLocationUpdates()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.requestLocationUpdates()
+    }
+
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.btn_start_journey -> {
-                navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment)
+                if (journey != null) {
+                    viewModel.finishJourney()
+                } else {
+                    navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment)
+                }
             }
         }
     }
-
 }

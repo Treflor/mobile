@@ -14,4 +14,16 @@ class JourneyViewModel(
 
     val location: LiveData<Location> get() = repository.requestLocationUpdate(LocationUpdateReciever.LOCATION_VIEW_MODEL)
     val journey by lazyDeferred { repository.getJourney() }
+    val direction by lazyDeferred { repository.getDirection() }
+    val trackedLocations by lazyDeferred { repository.getTrackedLocations() }
+
+    fun stopJourney() = repository.breakJourney()
+
+    fun removeLocationUpdates() =
+        repository.removeLocationUpdate(LocationUpdateReciever.LOCATION_VIEW_MODEL)
+
+    fun requestLocationUpdates() =
+        repository.requestLocationUpdate(LocationUpdateReciever.LOCATION_VIEW_MODEL)
+
+    fun finishJourney() = repository.finishJourney()
 }
