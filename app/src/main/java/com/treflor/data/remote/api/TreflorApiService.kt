@@ -48,7 +48,7 @@ interface TreflorApiService {
         @Query("mode") mode: String = "driving"
     ): Deferred<DirectionApiResponse>
 
-    @POST("user/journey/insert")
+    @POST("user/journey")
     fun uploadJourney(
         @Header("authorization") jwt: String, @Body request: JourneyRequest
     ): Deferred<IDResponse>

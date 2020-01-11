@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
 
 import com.treflor.R
 import com.treflor.internal.eventexcecutor.ActivityNavigation
@@ -82,5 +83,9 @@ class LoginFragment : Fragment(), KodeinAware,
                 viewModel.signInWithGoogle()
             }
         }
+    }
+
+    override fun showSnackBar(s: String) {
+        if (view != null) Snackbar.make(view!!, s, Snackbar.LENGTH_SHORT).show()
     }
 }

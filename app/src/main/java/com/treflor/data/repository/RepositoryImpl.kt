@@ -114,21 +114,20 @@ class RepositoryImpl(
         clearDirection()
     }
 
-    override fun finishJourney() {
+    override suspend fun finishJourney() = withContext(Dispatchers.IO) {
         // TODO: upload data to server and delete cache
-        GlobalScope.launch(Dispatchers.IO) {
-            val journey = getJourney().value
-            val direction = getDirection().value
-            val trackedLocations =
-                PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
-            val user = getUser().value
-            val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
-            Log.e("json", Gson().toJson(journeyRequest))
-            journeyNetworkDataSource.uploadJourney(journeyRequest)
-            breakJourney()
-        }
+        val journey = getJourney().value
+        val direction = getDirection().value
+        val trackedLocations =
+            PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
+        val user = getUser().value
 
+        val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
+
+        breakJourney()
+        return@withContext journeyNetworkDataSource.uploadJourney(journeyRequest)
     }
+
 
     override fun getDirection(): LiveData<DirectionApiResponse> = directionDBDataSource.direction
 
