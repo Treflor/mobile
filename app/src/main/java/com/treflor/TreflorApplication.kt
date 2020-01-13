@@ -125,6 +125,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
                 instance(),
                 instance(),
                 instance(),
+                instance(),
                 instance()
             )
         }
@@ -134,7 +135,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from provider { HomeViewModelFactory(instance()) }
         bind() from provider { ProfileViewModelFactory(instance()) }
         bind() from provider { SignUpViewModelFactory(instance()) }
-        bind() from provider { JourneyViewModelFactory(instance()) }
+        bind() from provider { JourneyViewModelFactory(instance(),instance()) }
         bind() from provider { StartJourneyViewModelFactory(instance(), instance()) }
     }
 

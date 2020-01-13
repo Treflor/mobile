@@ -4,6 +4,7 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
+import com.google.gson.Gson
 import com.google.maps.android.PolyUtil
 import com.treflor.data.db.datasources.DirectionDBDataSource
 import com.treflor.data.db.datasources.JourneyDBDataSource
@@ -12,6 +13,7 @@ import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
+import com.treflor.data.remote.datasources.JourneyNetworkDataSource
 import com.treflor.data.remote.datasources.TreflorGoogleServicesNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.JourneyRequest
@@ -28,6 +30,7 @@ class RepositoryImpl(
     private val authenticationNetworkDataSource: AuthenticationNetworkDataSource,
     private val userNetworkDataSource: UserNetworkDataSource,
     private val treflorGoogleServicesNetworkDataSource: TreflorGoogleServicesNetworkDataSource,
+    private val journeyNetworkDataSource: JourneyNetworkDataSource,
     private val userDBDataSource: UserDBDataSource,
     private val journeyDBDataSource: JourneyDBDataSource,
     private val directionDBDataSource: DirectionDBDataSource,
@@ -59,6 +62,7 @@ class RepositoryImpl(
             authenticationNetworkDataSource.signInWithGoogle(idToken)
         }
         if (jwt != null) {
+            Log.e("jwt", jwt)
             setJWT(jwt)
         }
     }
@@ -110,20 +114,19 @@ class RepositoryImpl(
         clearDirection()
     }
 
-    override fun finishJourney() {
+    override suspend fun finishJourney() = withContext(Dispatchers.IO) {
         // TODO: upload data to server and delete cache
-        GlobalScope.launch(Dispatchers.IO) {
-            val journey = getJourney().value
-            val direction = getDirection().value
-            val trackedLocations =
-                PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
-            val user = getUser().value
-            val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
-            // send to the server
-            breakJourney()
-        }
+        val journey = getJourney().value
+        val direction = getDirection().value
+        val trackedLocations =
+            PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
+        val user = getUser().value
 
+        val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
+        breakJourney()
+        return@withContext journeyNetworkDataSource.uploadJourney(journeyRequest)
     }
+
 
     override fun getDirection(): LiveData<DirectionApiResponse> = directionDBDataSource.direction
 
@@ -155,6 +158,7 @@ class RepositoryImpl(
     private fun persistFetchedUser(user: User?) {
         GlobalScope.launch(Dispatchers.IO) {
             if (user == null) return@launch userDBDataSource.delete()
+            Log.e("user", user.toString())
             userDBDataSource.upsert(user)
         }
     }

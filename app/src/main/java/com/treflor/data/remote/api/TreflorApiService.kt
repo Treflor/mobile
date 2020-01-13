@@ -6,9 +6,11 @@ import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.AuthResponse
 import com.treflor.data.remote.response.DirectionApiResponse
+import com.treflor.data.remote.response.IDResponse
 import com.treflor.models.User
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -46,10 +48,10 @@ interface TreflorApiService {
         @Query("mode") mode: String = "driving"
     ): Deferred<DirectionApiResponse>
 
-    @POST("user/journey/insert")
+    @POST("user/journey")
     fun uploadJourney(
         @Header("authorization") jwt: String, @Body request: JourneyRequest
-    )
+    ): Deferred<IDResponse>
 
     companion object {
         operator fun invoke(

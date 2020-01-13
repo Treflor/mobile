@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode
+import com.google.android.material.snackbar.Snackbar
 import com.treflor.R
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.internal.drawableToBase64
@@ -56,7 +57,6 @@ class SignUpFragment : Fragment(), View.OnClickListener, KodeinAware, ActivityNa
 
     private fun bindUI() {
         viewModel.signingIn.observe(this, Observer { signingIn ->
-            print("oberving $signingIn")
             progress_bar.visibility = if (signingIn) View.VISIBLE else View.INVISIBLE
             btn_sign_in.isEnabled = !signingIn
             btn_sign_up.isEnabled = !signingIn
@@ -126,6 +126,10 @@ class SignUpFragment : Fragment(), View.OnClickListener, KodeinAware, ActivityNa
     override fun navigateUp(): Boolean {
         navController.navigate(R.id.action_signUpFragment_to_profileFragment)
         return true
+    }
+
+    override fun showSnackBar(s: String) {
+        if (view != null) Snackbar.make(view!!, s, Snackbar.LENGTH_SHORT).show()
     }
 
 }

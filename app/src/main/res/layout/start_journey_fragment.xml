@@ -63,6 +63,32 @@
                 android:hint="Destination"
                 android:inputType="text" />
 
+            <Spinner
+                android:id="@+id/spinner_difficulty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Labels" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_labels"
+                android:layout_width="match_parent"
+                app:chipSpacingHorizontal="3dp"
+                app:chipSpacingVertical="3dp"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="false" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_labels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
             <!--        tag friends-->
 
         </LinearLayout>
