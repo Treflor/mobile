@@ -123,7 +123,6 @@ class RepositoryImpl(
         val user = getUser().value
 
         val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
-
         breakJourney()
         return@withContext journeyNetworkDataSource.uploadJourney(journeyRequest)
     }

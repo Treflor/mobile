@@ -15,7 +15,9 @@ data class Journey(
     @Embedded(prefix = "origin_")
     val origin: TreflorPlace,
     @Embedded(prefix = "destination_")
-    val destination: TreflorPlace
+    val destination: TreflorPlace,
+    val level: String,
+    val labels: List<String>
 ) {
     @PrimaryKey(autoGenerate = false)
     var pk: Int = CURRENT_JOURNEY_PK

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -27,7 +28,9 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import com.treflor.R
+import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.models.Journey
 import com.treflor.models.TreflorPlace
 import kotlinx.android.synthetic.main.start_journey_fragment.*
@@ -40,7 +43,8 @@ import org.kodein.di.generic.instance
 const val AUTOCOMPLETE_REQUEST_CODE = 321
 const val CURRENT_PLACE_AUTOCOMPLETE_REQUEST_CODE = 322
 
-class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionListener, KodeinAware {
+class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionListener, KodeinAware,
+    ActivityNavigation {
 
     override val kodein: Kodein by closestKodein()
     private lateinit var navController: NavController
@@ -56,7 +60,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
         android.R.color.holo_green_light,
         android.R.color.holo_orange_light,
         android.R.color.holo_purple
-        )
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -159,20 +163,32 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
             R.id.fab_start_journey -> {
                 val title = et_title.text.toString()
                 val content = et_content.text.toString()
+                val level = spinner_difficulty.selectedItem.toString()
+                val labels =
+                    chip_group_labels.children.map { view -> (view as Chip).text.toString() }
+                        .toList()
                 if (title.isEmpty()) {
-                    //TODO: show error
+                    showSnackBar("Please enter a title!")
                     return
                 }
                 if (content.isEmpty()) {
-                    //TODO: show error
+                    showSnackBar("Please enter a content!")
                     return
                 }
                 if (startLocation == null) {
-                    //TODO: show error
+                    showSnackBar("Please select a starting location!")
                     return
                 }
                 if (destination == null) {
-                    //TODO: show error
+                    showSnackBar("Please select a ending location!")
+                    return
+                }
+                if (level == "Level") {
+                    showSnackBar("Please select a difficulty Level!")
+                    return
+                }
+                if (labels.isEmpty()) {
+                    showSnackBar("Please enter one or more labels!")
                     return
                 }
                 viewModel.startJourney(
@@ -181,7 +197,9 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
                         et_title.text.toString(),
                         et_content.text.toString(),
                         startLocation!!,
-                        destination!!
+                        destination!!,
+                        level,
+                        labels
                     )
                 )
                 navController.navigate(R.id.action_startJourneyFragment_to_journeyFragment)
@@ -240,5 +258,11 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
 
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun navigateUp(): Boolean = navController.navigateUp()
+
+    override fun showSnackBar(s: String) {
+        if (view != null) Snackbar.make(view!!, s, Snackbar.LENGTH_SHORT).show()
     }
 }
