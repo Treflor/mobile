@@ -89,7 +89,10 @@ class LoginViewModel(
                 if (it.idToken != null) {
                     repository.signInWithGoogle(it.idToken!!)
                     // now we can navigate to profile
-                    GlobalScope.launch(Dispatchers.Main) { liveMessageEvent.sendEvent { navigateUp() } }
+                    GlobalScope.launch(Dispatchers.Main) {
+                        liveMessageEvent.sendEvent { showSnackBar("Logged in as: ${it.displayName}") }
+                        liveMessageEvent.sendEvent { navigateUp() }
+                    }
                 } else {
                     //TODO: something went wrong,show error!
                     print("Error while getting idToken!")

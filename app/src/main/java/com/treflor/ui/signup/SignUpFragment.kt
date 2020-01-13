@@ -57,7 +57,6 @@ class SignUpFragment : Fragment(), View.OnClickListener, KodeinAware, ActivityNa
 
     private fun bindUI() {
         viewModel.signingIn.observe(this, Observer { signingIn ->
-            print("oberving $signingIn")
             progress_bar.visibility = if (signingIn) View.VISIBLE else View.INVISIBLE
             btn_sign_in.isEnabled = !signingIn
             btn_sign_up.isEnabled = !signingIn

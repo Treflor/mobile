@@ -27,7 +27,10 @@ class SignUpViewModel(
         _signingIn.postValue(true)
         repository.signUp(request)
         // now we can navigate to profile
-        GlobalScope.launch(Dispatchers.Main) { liveMessageEvent.sendEvent { navigateUp() } }
+        GlobalScope.launch(Dispatchers.Main) {
+            liveMessageEvent.sendEvent { showSnackBar("Signed up as: ${request.firstName} ${request.lastName}") }
+            liveMessageEvent.sendEvent { navigateUp() }
+        }
         _signingIn.postValue(false)
     }
 }

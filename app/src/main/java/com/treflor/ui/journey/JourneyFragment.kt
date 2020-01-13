@@ -104,17 +104,19 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         journey_map.getMapAsync(this@JourneyFragment)
 
         viewModel.location.observe(this@JourneyFragment, Observer {
-            myPositionMarker?.position = LatLng(it.latitude, it.longitude)
-            if (!camPosUpdatedOnFirstLaunch) {
-                camPosUpdatedOnFirstLaunch = true
-                googleMap?.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(
-                            it.latitude,
-                            it.longitude
-                        ), 15f
+            if (it != null) {
+                myPositionMarker?.position = LatLng(it.latitude, it.longitude)
+                if (!camPosUpdatedOnFirstLaunch) {
+                    camPosUpdatedOnFirstLaunch = true
+                    googleMap?.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                it.latitude,
+                                it.longitude
+                            ), 15f
+                        )
                     )
-                )
+                }
             }
         })
 

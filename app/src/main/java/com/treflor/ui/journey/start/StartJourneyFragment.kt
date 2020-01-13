@@ -9,7 +9,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
@@ -23,6 +26,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.android.material.chip.Chip
 import com.treflor.R
 import com.treflor.models.Journey
 import com.treflor.models.TreflorPlace
@@ -46,6 +50,13 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
         listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
     private var startLocation: TreflorPlace? = null
     private var destination: TreflorPlace? = null
+    private var colors = listOf(
+        android.R.color.holo_red_light,
+        android.R.color.holo_blue_light,
+        android.R.color.holo_green_light,
+        android.R.color.holo_orange_light,
+        android.R.color.holo_purple
+        )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,11 +76,41 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
     private fun bindUI() {
         Places.initialize(this.context!!, getString(R.string.google_api_key))
 
+        spinner_difficulty.adapter = object : ArrayAdapter<String>(
+            this.context!!, android.R.layout.simple_spinner_dropdown_item,
+            listOf("Easy", "Medium", "Hard", "Level")
+        ) {
+            override fun getCount(): Int = 3
+        }
+        spinner_difficulty.setSelection(3)
+        et_labels.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val labelText = v.text.toString()
+                if (!labelText.isNullOrEmpty()) {
+                    addChipToTags(labelText)
+                    et_labels.setText("")
+                }
+                return@setOnEditorActionListener true
+            }
+            false
+        }
+
         et_current_place.setOnClickListener(this)
         et_destination_place.setOnClickListener(this)
         fab_start_journey.setOnClickListener(this)
 
         setCurrentPlace()
+    }
+
+    private fun addChipToTags(labelText: String) {
+        val chip = Chip(this.context)
+        chip.text = labelText
+        chip.isCloseIconVisible = true
+        chip.isClickable = false
+        chip.isCheckable = false
+        chip.setChipBackgroundColorResource(colors.random())
+        chip_group_labels.addView(chip as View)
+        chip.setOnCloseIconClickListener { chip_group_labels.removeView(chip as View) }
     }
 
     private fun setCurrentPlace() {

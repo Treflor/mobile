@@ -159,6 +159,7 @@ class RepositoryImpl(
     private fun persistFetchedUser(user: User?) {
         GlobalScope.launch(Dispatchers.IO) {
             if (user == null) return@launch userDBDataSource.delete()
+            Log.e("user", user.toString())
             userDBDataSource.upsert(user)
         }
     }
