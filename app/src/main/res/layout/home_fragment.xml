@@ -25,11 +25,38 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <TextView
-            android:id="@+id/test_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Home" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="675dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="116dp"
+                    android:layout_margin="@dimen/ef_margin_small"
+                    android:background="@drawable/sample3"
+                    android:fadingEdge="horizontal|vertical"
+                    android:fadingEdgeLength="@dimen/ef_margin_small"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="bottom"
+                    android:paddingStart="@dimen/ef_padding_medium"
+                    android:paddingBottom="@dimen/ef_margin_small"
+                    android:shadowColor="@color/common_google_signin_btn_text_light_pressed"
+                    android:shadowRadius="@dimen/ef_padding_medium"
+                    android:text="TextView"
+                    android:textColor="@color/design_default_color_background"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:drawableTint="#00FFFFFF"
+                    app:drawableTintMode="src_over"
+                    tools:text="Trip 1" />
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 </layout>

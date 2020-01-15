@@ -22,7 +22,9 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
+                android:layout_marginTop="@dimen/ef_margin_small"
+                android:layout_marginBottom="@dimen/ef_margin_small"
                 android:gravity="center"
                 android:text="Let's start the journey"
                 android:textSize="24dp"
@@ -32,6 +34,8 @@
                 android:id="@+id/et_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ef_margin_small"
+                android:layout_marginBottom="@dimen/ef_margin_small"
                 android:hint="Title"
                 android:inputType="text" />
 
@@ -39,8 +43,10 @@
                 android:id="@+id/et_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Say what you feel!"
+                android:layout_marginTop="@dimen/ef_margin_small"
 
+                android:layout_marginBottom="@dimen/ef_margin_small"
+                android:hint="Say what you feel!"
                 android:inputType="textMultiLine"
                 android:lines="3" />
 
@@ -49,6 +55,8 @@
                 android:id="@+id/et_current_place"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ef_margin_small"
+                android:layout_marginBottom="@dimen/ef_margin_small"
                 android:clickable="true"
                 android:focusable="false"
                 android:hint="location"
@@ -58,6 +66,8 @@
                 android:id="@+id/et_destination_place"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ef_margin_small"
+                android:layout_marginBottom="@dimen/ef_margin_small"
                 android:clickable="true"
                 android:focusable="false"
                 android:hint="Destination"
@@ -66,11 +76,15 @@
             <Spinner
                 android:id="@+id/spinner_difficulty"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="36dp"
+                android:layout_marginTop="@dimen/ef_margin_small"
+                android:layout_marginBottom="@dimen/ef_margin_small" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ef_margin_small"
+                android:paddingLeft="@dimen/ef_padding_small"
                 android:text="Labels" />
 
             <com.google.android.material.chip.ChipGroup
@@ -85,6 +99,7 @@
                 android:id="@+id/et_labels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ef_margin_small"
                 android:imeOptions="actionDone"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -101,7 +116,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="Start"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        app:backgroundTint="@color/quantum_indigo900"
         app:icon="@drawable/ic_hiking"
+        app:iconTint="@color/common_google_signin_btn_text_dark_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

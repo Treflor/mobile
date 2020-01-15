@@ -22,46 +22,67 @@
         android:orientation="vertical"
         android:padding="40dp">
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="20dp"
-            android:src="@drawable/ic_person" />
-
         <EditText
             android:id="@+id/txt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="email" />
+            android:layout_marginTop="@dimen/ef_margin_small"
+            android:layout_marginBottom="@dimen/ef_margin_small"
+            android:fontFamily="@font/roboto"
+            android:hint="Email"
+            android:textColor="@color/TextClr"
+            android:textSize="15sp" />
 
         <EditText
             android:id="@+id/txt_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="password"
-            android:inputType="textPassword" />
+            android:layout_marginTop="@dimen/ef_margin_small"
+            android:layout_marginBottom="@dimen/ef_margin_small"
+            android:fontFamily="@font/roboto"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textColor="@color/TextClr"
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/btn_sign_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Sign in" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/ef_margin_large"
+            android:background="@drawable/btn1"
+            android:fontFamily="@font/roboto_medium"
+            android:text="SIGN IN" />
 
         <Button
-            android:id="@+id/btn_sign_up"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
-            android:text="Sign up" />
-
-        <com.google.android.gms.common.SignInButton
             android:id="@+id/btn_google_sign_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_marginTop="@dimen/ef_margin_small"
+            android:background="@drawable/btn2"
+            android:drawableLeft="@drawable/googleg_standard_color_18"
+            android:fontFamily="@font/roboto_medium"
+            android:text="SIGN IN WITH GOOGLE"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            app:backgroundTint="@color/BtnGrey" />
+
+        <TextView
+            android:id="@+id/btn_sign_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ef_margin_medium"
+            android:fontFamily="@font/roboto_medium"
+            android:linksClickable="true"
+            android:text="Or create and account"
+            android:textAlignment="center"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textSize="12sp" />
+
+
+        <!--        TODO remove sign up button and add create account-->
+
 
     </LinearLayout>
 </RelativeLayout>
