@@ -19,8 +19,8 @@ data class User(
     val gender: String,
     @SerializedName("given_name")
     val givenName: String,
-    @SerializedName("id")
-    val id: String?,
+    @SerializedName("googleId")
+    val googleId: String?,
     @SerializedName("photo")
     val photo: String
 ) {
