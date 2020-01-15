@@ -32,11 +32,10 @@ class JourneyNetworkDataSourceImpl(
 
     override suspend fun fetchAllJourneys(): LiveData<List<JourneyResponse>> {
         return try {
+            Log.e("journeys", "fetching journeys")
             val journeysV = mutableListOf<JourneyResponse>()
-            if (_journeys.value != null)
-                journeysV.addAll(_journeys.value!!)
             journeysV.addAll(treflorApiService.allowedJourneys(jwtProvider.getJWT()!!).await())
-            _journeys.value = journeysV
+            _journeys.postValue(journeysV)
             _journeys
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)

@@ -1,5 +1,6 @@
 package com.treflor.data.db.datasources
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.treflor.data.db.dao.JourneyDao
@@ -13,11 +14,11 @@ class JourneyDBDataSourceImpl(
 ) : JourneyDBDataSource {
 
     override val journey: LiveData<Journey> get() = _journey
-    override val JourneyResponses: LiveData<List<JourneyResponse>>
-        get() = _journeyResponses
     private val _journey by lazy {
         MutableLiveData<Journey>(journeyDao.getJourney())
     }
+
+    override val JourneyResponses: LiveData<List<JourneyResponse>> get() = _journeyResponses
     private val _journeyResponses by lazy { MutableLiveData<List<JourneyResponse>>() }
 
     override fun upsert(journey: Journey) {
@@ -31,6 +32,7 @@ class JourneyDBDataSourceImpl(
     }
 
     override fun upsertAllJourneyResponses(journeys: List<JourneyResponse>) {
+        Log.e("size", journeys.size.toString())
         journeyResponseDao.upsertAll(journeys)
         _journeyResponses.postValue(journeys)
     }
