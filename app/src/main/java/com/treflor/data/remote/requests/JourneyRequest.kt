@@ -6,8 +6,6 @@ import com.treflor.models.Journey
 import com.treflor.models.User
 
 data class JourneyRequest(
-    @SerializedName("user")
-    val user: User?,
     @SerializedName("direction")
     val direction: DirectionApiResponse?,
     @SerializedName("journey")

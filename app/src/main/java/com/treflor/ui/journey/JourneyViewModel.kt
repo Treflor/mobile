@@ -43,9 +43,7 @@ class JourneyViewModel(
 
     fun finishJourney() = runBlocking {
         stopService()
-        val response = withContext(Dispatchers.IO) {
-            return@withContext repository.finishJourney()
-        }
+        val response = repository.finishJourney()
 
         if (response.success) {
             GlobalScope.launch(Dispatchers.Main) { liveMessageEvent.sendEvent { showSnackBar("Journey Uploaded successfully") } }

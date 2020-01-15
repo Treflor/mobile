@@ -36,6 +36,11 @@ android {
     dataBinding {
         enabled = true
     }
+
+    androidExtensions {
+        experimental = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -142,6 +147,11 @@ dependencies {
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
     implementation 'com.google.android.gms:play-services-basement:17.1.1'
     implementation 'com.google.android.gms:play-services-base:17.1.0'
+
+    // Groupie RecyclerView
+    def groupie_version = "2.7.0"
+    implementation "com.xwray:groupie:$groupie_version"
+    implementation "com.xwray:groupie-kotlin-android-extensions:$groupie_version"
 
     // android permission check
     implementation 'com.karumi:dexter:6.0.0'

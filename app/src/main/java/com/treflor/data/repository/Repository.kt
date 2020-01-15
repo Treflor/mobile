@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.data.remote.response.IDResponse
+import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
 import com.treflor.models.TrackedLocation
@@ -31,6 +32,7 @@ interface Repository {
     fun getJourney(): LiveData<Journey>
     fun breakJourney()
     suspend fun finishJourney(): IDResponse
+    suspend fun getAllJourneys(): LiveData<List<JourneyResponse>>
 
     // direction
     fun getDirection(): LiveData<DirectionApiResponse>

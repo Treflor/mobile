@@ -63,6 +63,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from singleton { instance<TreflorDatabase>().journeyDao() }
         bind() from singleton { instance<TreflorDatabase>().directionDao() }
         bind() from singleton { instance<TreflorDatabase>().trackedLocationsDao() }
+        bind() from singleton { instance<TreflorDatabase>().journeyResponseDao() }
 
         // providers
         bind<JWTProvider>() with singleton { JWTProviderImpl(instance()) }
@@ -106,7 +107,12 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
 
         //data sources - database
         bind<UserDBDataSource>() with singleton { UserDBDataSourceImpl(instance()) }
-        bind<JourneyDBDataSource>() with singleton { JourneyDBDataSourceImpl(instance()) }
+        bind<JourneyDBDataSource>() with singleton {
+            JourneyDBDataSourceImpl(
+                instance(),
+                instance()
+            )
+        }
         bind<DirectionDBDataSource>() with singleton { DirectionDBDataSourceImpl(instance()) }
         bind<TrackedLocationsDBDataSource>() with singleton {
             TrackedLocationsDBDataSourceImpl(
@@ -135,7 +141,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from provider { HomeViewModelFactory(instance()) }
         bind() from provider { ProfileViewModelFactory(instance()) }
         bind() from provider { SignUpViewModelFactory(instance()) }
-        bind() from provider { JourneyViewModelFactory(instance(),instance()) }
+        bind() from provider { JourneyViewModelFactory(instance(), instance()) }
         bind() from provider { StartJourneyViewModelFactory(instance(), instance()) }
     }
 

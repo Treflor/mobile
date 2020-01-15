@@ -19,6 +19,7 @@ import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.DirectionApiResponse
+import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
 import com.treflor.models.TrackedLocation
@@ -54,6 +55,10 @@ class RepositoryImpl(
 
         treflorGoogleServicesNetworkDataSource.apply {
             direction.observeForever { direction -> persistFetchedDirection(direction) }
+        }
+
+        journeyNetworkDataSource.apply {
+            journeys.observeForever { journeys -> persistJourneyResponses(journeys) }
         }
     }
 
@@ -122,11 +127,17 @@ class RepositoryImpl(
             PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
         val user = getUser().value
 
-        val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
+        val journeyRequest = JourneyRequest(direction, journey, trackedLocations)
         breakJourney()
         return@withContext journeyNetworkDataSource.uploadJourney(journeyRequest)
     }
 
+    override suspend fun getAllJourneys(): LiveData<List<JourneyResponse>> {
+        GlobalScope.launch(Dispatchers.IO) {
+            journeyNetworkDataSource.fetchAllJourneys()
+        }
+        return journeyDBDataSource.JourneyResponses
+    }
 
     override fun getDirection(): LiveData<DirectionApiResponse> = directionDBDataSource.direction
 
@@ -167,6 +178,13 @@ class RepositoryImpl(
         GlobalScope.launch(Dispatchers.IO) {
             if (direction == null) return@launch directionDBDataSource.delete()
             directionDBDataSource.upsert(direction)
+        }
+    }
+
+    private fun persistJourneyResponses(journeys: List<JourneyResponse>?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            if (journeys == null) return@launch journeyDBDataSource.delete()
+            journeyDBDataSource.upsertAllJourneyResponses(journeys)
         }
     }
 }
