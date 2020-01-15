@@ -32,7 +32,6 @@ class JourneyDBDataSourceImpl(
     }
 
     override fun upsertAllJourneyResponses(journeys: List<JourneyResponse>) {
-        Log.e("size", journeys.size.toString())
         journeyResponseDao.upsertAll(journeys)
         _journeyResponses.postValue(journeys)
     }

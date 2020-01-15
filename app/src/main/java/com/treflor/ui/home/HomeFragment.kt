@@ -47,7 +47,6 @@ class HomeFragment : TreflorScopedFragment(), KodeinAware {
     private fun bindUI() = launch {
         viewModel.journeys.await().observe(this@HomeFragment, Observer {
             if (it == null) return@Observer
-            Log.e("etdf", it.toString())
             initRecyclerView(it.toJourneyItems())
         })
 
