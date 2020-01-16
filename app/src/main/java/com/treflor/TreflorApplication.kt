@@ -19,6 +19,7 @@ import com.treflor.data.remote.intercepters.UnauthorizedInterceptorImpl
 import com.treflor.data.repository.Repository
 import com.treflor.data.repository.RepositoryImpl
 import com.treflor.ui.home.HomeViewModelFactory
+import com.treflor.ui.home.journey.JourneyDetailsViewModelFactory
 import com.treflor.ui.journey.JourneyViewModelFactory
 import com.treflor.ui.journey.start.StartJourneyViewModelFactory
 import com.treflor.ui.login.LoginViewModelFactory
@@ -143,6 +144,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from provider { SignUpViewModelFactory(instance()) }
         bind() from provider { JourneyViewModelFactory(instance(), instance()) }
         bind() from provider { StartJourneyViewModelFactory(instance(), instance()) }
+        bind() from provider { JourneyDetailsViewModelFactory(instance()) }
     }
 
 }
