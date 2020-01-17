@@ -29,13 +29,18 @@ interface Repository {
     // journey
     fun persistJourney(journey: Journey)
 
-    fun getJourney(): LiveData<Journey>
+    suspend fun getJourney(): LiveData<Journey>
     fun breakJourney()
-    suspend fun finishJourney(): IDResponse
+    suspend fun finishJourney(
+        journey: Journey,
+        direction: DirectionApiResponse,
+        trackedLocations: List<TrackedLocation>
+    ): IDResponse
+
     suspend fun getAllJourneys(): LiveData<List<JourneyResponse>>
 
     // direction
-    fun getDirection(): LiveData<DirectionApiResponse>
+    suspend fun getDirection(): LiveData<DirectionApiResponse>
 
     suspend fun fetchDirection(
         origin: String,
@@ -46,7 +51,7 @@ interface Repository {
     fun clearDirection()
 
     // location tracking
-    fun getTrackedLocations(): LiveData<List<TrackedLocation>>
+    suspend fun getTrackedLocations(): LiveData<List<TrackedLocation>>
 
     fun insertTackedLocations(trackedLocation: TrackedLocation)
     fun clearTrackedLocations()

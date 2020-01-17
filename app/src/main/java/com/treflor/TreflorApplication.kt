@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
-import com.treflor.data.db.datasources.*
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.JWTProviderImpl
 import com.treflor.data.provider.LocationProvider
@@ -69,7 +68,6 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         // providers
         bind<JWTProvider>() with singleton { JWTProviderImpl(instance()) }
         bind<LocationProvider>() with singleton { LocationProviderImpl(instance()) }
-
         // interceptors
         bind<ConnectivityInterceptor>() with singleton {
             ConnectivityInterceptorImpl(
@@ -102,13 +100,6 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind<JourneyNetworkDataSource>() with singleton {
             JourneyNetworkDataSourceImpl(
                 instance(),
-                instance()
-            )
-        }
-
-        //data sources - database
-        bind<TrackedLocationsDBDataSource>() with singleton {
-            TrackedLocationsDBDataSourceImpl(
                 instance()
             )
         }

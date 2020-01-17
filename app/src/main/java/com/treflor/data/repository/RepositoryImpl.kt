@@ -5,11 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
 import com.google.maps.android.PolyUtil
-import com.treflor.data.db.dao.DirectionDao
-import com.treflor.data.db.dao.JourneyDao
-import com.treflor.data.db.dao.JourneyResponseDao
-import com.treflor.data.db.dao.UserDao
-import com.treflor.data.db.datasources.TrackedLocationsDBDataSource
+import com.treflor.data.db.dao.*
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
@@ -19,12 +15,14 @@ import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.DirectionApiResponse
+import com.treflor.data.remote.response.IDResponse
 import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
 import com.treflor.models.TrackedLocation
 import com.treflor.models.User
 import kotlinx.coroutines.*
+import kotlin.math.log
 
 class RepositoryImpl(
     private val jwtProvider: JWTProvider,
@@ -36,7 +34,7 @@ class RepositoryImpl(
     private val journeyDao: JourneyDao,
     private val journeyResponseDao: JourneyResponseDao,
     private val directionDao: DirectionDao,
-    private val trackedLocationsDBDataSource: TrackedLocationsDBDataSource,
+    private val trackedLocationsDao: TrackedLocationsDao,
     private val locationProvider: LocationProvider
 ) : Repository {
 
@@ -113,24 +111,27 @@ class RepositoryImpl(
         }
     }
 
-    override fun getJourney(): LiveData<Journey> = journeyDao.getJourney()
+    override suspend fun getJourney(): LiveData<Journey> = journeyDao.getJourney()
     override fun breakJourney() {
         journeyDao.delete()
         clearTrackedLocations()
         clearDirection()
     }
 
-    override suspend fun finishJourney() = withContext(Dispatchers.IO) {
-        // TODO: upload data to server and delete cache
-        val journey = getJourney().value
-        val direction = getDirection().value
-        val trackedLocations =
-            PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
-//        val user = getUser().value
-
-        val journeyRequest = JourneyRequest(direction, journey, trackedLocations)
-        breakJourney()
-        return@withContext journeyNetworkDataSource.uploadJourney(journeyRequest)
+    override suspend fun finishJourney(
+        journey: Journey,
+        direction: DirectionApiResponse,
+        trackedLocations: List<TrackedLocation>
+    ): IDResponse {
+        val trackedLocationsString =
+            PolyUtil.encode(trackedLocations.map { tl -> LatLng(tl.lat, tl.lng) })
+        val journeyRequest = JourneyRequest(direction, journey, trackedLocationsString)
+        GlobalScope.launch(Dispatchers.IO) { breakJourney() }
+        return withContext(Dispatchers.IO) {
+            return@withContext journeyNetworkDataSource.uploadJourney(
+                journeyRequest
+            )
+        }
     }
 
     override suspend fun getAllJourneys(): LiveData<List<JourneyResponse>> {
@@ -140,7 +141,8 @@ class RepositoryImpl(
         }
     }
 
-    override fun getDirection(): LiveData<DirectionApiResponse> = directionDao.getDirection()
+    override suspend fun getDirection(): LiveData<DirectionApiResponse> =
+        directionDao.getDirection()
 
     override suspend fun fetchDirection(
         origin: String,
@@ -155,13 +157,13 @@ class RepositoryImpl(
 
     override fun clearDirection() = persistFetchedDirection(null)
 
-    override fun getTrackedLocations(): LiveData<List<TrackedLocation>> =
-        trackedLocationsDBDataSource.trackedLocations
+    override suspend fun getTrackedLocations(): LiveData<List<TrackedLocation>> =
+        trackedLocationsDao.getLocations()
 
     override fun insertTackedLocations(trackedLocation: TrackedLocation) =
-        trackedLocationsDBDataSource.insert(trackedLocation)
+        trackedLocationsDao.insert(trackedLocation)
 
-    override fun clearTrackedLocations() = trackedLocationsDBDataSource.deleteTable()
+    override fun clearTrackedLocations() = trackedLocationsDao.deleteTable()
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
     private fun getJWT(): String? = jwtProvider.getJWT()
