@@ -47,7 +47,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
     private var camPosUpdatedOnFirstLaunch = false
     private var routePolyline: Polyline? = null
     private var trackedPolyline: Polyline? = null
-    private var journey: Journey? = null
+    private var journey: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,7 +121,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         })
 
         viewModel.journey.await().observe(this@JourneyFragment, Observer {
-            journey = it
+            journey = it != null
             if (it == null) {
                 btn_start_journey.setImageResource(R.drawable.ic_hiking)
             } else {
@@ -206,7 +206,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.btn_start_journey -> {
-                if (journey != null) {
+                if (journey) {
                     viewModel.finishJourney()
                 } else {
                     navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment)

@@ -1,5 +1,6 @@
 package com.treflor.data.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -13,7 +14,7 @@ interface JourneyDao {
     fun upsert(journey: Journey)
 
     @Query("SELECT * FROM journey WHERE pk = $CURRENT_JOURNEY_PK")
-    fun getJourney(): Journey
+    fun getJourney(): LiveData<Journey>
 
     @Query("DELETE FROM journey WHERE pk = $CURRENT_JOURNEY_PK")
     fun delete()

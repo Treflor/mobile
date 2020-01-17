@@ -1,5 +1,6 @@
 package com.treflor.data.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -12,7 +13,7 @@ interface JourneyResponseDao {
     fun upsert(journey: JourneyResponse)
 
     @Query("SELECT * FROM journey_responses")
-    fun getAllJourneys(): List<JourneyResponse>
+    fun getAllJourneys(): LiveData<List<JourneyResponse>>
 
     @Query("DELETE FROM journey_responses")
     fun deleteAll()

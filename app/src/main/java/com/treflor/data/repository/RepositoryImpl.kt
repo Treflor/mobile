@@ -5,9 +5,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
 import com.google.maps.android.PolyUtil
+import com.treflor.data.db.dao.JourneyDao
+import com.treflor.data.db.dao.JourneyResponseDao
 import com.treflor.data.db.dao.UserDao
 import com.treflor.data.db.datasources.DirectionDBDataSource
-import com.treflor.data.db.datasources.JourneyDBDataSource
 import com.treflor.data.db.datasources.TrackedLocationsDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
@@ -32,7 +33,8 @@ class RepositoryImpl(
     private val treflorGoogleServicesNetworkDataSource: TreflorGoogleServicesNetworkDataSource,
     private val journeyNetworkDataSource: JourneyNetworkDataSource,
     private val userDao: UserDao,
-    private val journeyDBDataSource: JourneyDBDataSource,
+    private val journeyDao: JourneyDao,
+    private val journeyResponseDao: JourneyResponseDao,
     private val directionDBDataSource: DirectionDBDataSource,
     private val trackedLocationsDBDataSource: TrackedLocationsDBDataSource,
     private val locationProvider: LocationProvider
@@ -107,13 +109,13 @@ class RepositoryImpl(
 
     override fun persistJourney(journey: Journey) {
         GlobalScope.launch(Dispatchers.IO) {
-            journeyDBDataSource.upsert(journey)
+            journeyDao.upsert(journey)
         }
     }
 
-    override fun getJourney(): LiveData<Journey> = journeyDBDataSource.journey
+    override fun getJourney(): LiveData<Journey> = journeyDao.getJourney()
     override fun breakJourney() {
-        journeyDBDataSource.delete()
+        journeyDao.delete()
         clearTrackedLocations()
         clearDirection()
     }
@@ -132,10 +134,10 @@ class RepositoryImpl(
     }
 
     override suspend fun getAllJourneys(): LiveData<List<JourneyResponse>> {
-        GlobalScope.launch(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             journeyNetworkDataSource.fetchAllJourneys()
+            return@withContext journeyResponseDao.getAllJourneys()
         }
-        return journeyDBDataSource.JourneyResponses
     }
 
     override fun getDirection(): LiveData<DirectionApiResponse> = directionDBDataSource.direction
@@ -181,8 +183,8 @@ class RepositoryImpl(
 
     private fun persistJourneyResponses(journeys: List<JourneyResponse>?) {
         GlobalScope.launch(Dispatchers.IO) {
-            if (journeys == null) return@launch journeyDBDataSource.delete()
-            journeyDBDataSource.upsertAllJourneyResponses(journeys)
+            if (journeys == null) return@launch journeyResponseDao.deleteAll()
+            journeyResponseDao.upsertAll(journeys)
         }
     }
 }
