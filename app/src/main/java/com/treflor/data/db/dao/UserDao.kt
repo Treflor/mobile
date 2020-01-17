@@ -1,5 +1,6 @@
 package com.treflor.data.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -13,7 +14,7 @@ interface UserDao {
     fun upsert(user: User)
 
     @Query("SELECT * FROM user WHERE pk = $CURRENT_USER_PK")
-    fun getUser(): User
+    fun getUser(): LiveData<User>
 
     @Query("DELETE FROM user WHERE pk = $CURRENT_USER_PK")
     fun delete()

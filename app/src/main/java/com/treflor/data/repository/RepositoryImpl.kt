@@ -4,12 +4,11 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
-import com.google.gson.Gson
 import com.google.maps.android.PolyUtil
+import com.treflor.data.db.dao.UserDao
 import com.treflor.data.db.datasources.DirectionDBDataSource
 import com.treflor.data.db.datasources.JourneyDBDataSource
 import com.treflor.data.db.datasources.TrackedLocationsDBDataSource
-import com.treflor.data.db.datasources.UserDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
@@ -32,7 +31,7 @@ class RepositoryImpl(
     private val userNetworkDataSource: UserNetworkDataSource,
     private val treflorGoogleServicesNetworkDataSource: TreflorGoogleServicesNetworkDataSource,
     private val journeyNetworkDataSource: JourneyNetworkDataSource,
-    private val userDBDataSource: UserDBDataSource,
+    private val userDao: UserDao,
     private val journeyDBDataSource: JourneyDBDataSource,
     private val directionDBDataSource: DirectionDBDataSource,
     private val trackedLocationsDBDataSource: TrackedLocationsDBDataSource,
@@ -91,10 +90,10 @@ class RepositoryImpl(
     }
 
     override suspend fun getUser(): LiveData<User> {
-        GlobalScope.launch(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             userNetworkDataSource.fetchUser()
+            return@withContext userDao.getUser()
         }
-        return userDBDataSource.user
     }
 
     override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
@@ -125,7 +124,7 @@ class RepositoryImpl(
         val direction = getDirection().value
         val trackedLocations =
             PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
-        val user = getUser().value
+//        val user = getUser().value
 
         val journeyRequest = JourneyRequest(direction, journey, trackedLocations)
         breakJourney()
@@ -168,9 +167,8 @@ class RepositoryImpl(
 
     private fun persistFetchedUser(user: User?) {
         GlobalScope.launch(Dispatchers.IO) {
-            if (user == null) return@launch userDBDataSource.delete()
-            Log.e("user", user.toString())
-            userDBDataSource.upsert(user)
+            if (user == null) return@launch userDao.delete()
+            userDao.upsert(user)
         }
     }
 

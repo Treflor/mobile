@@ -107,7 +107,6 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         }
 
         //data sources - database
-        bind<UserDBDataSource>() with singleton { UserDBDataSourceImpl(instance()) }
         bind<JourneyDBDataSource>() with singleton {
             JourneyDBDataSourceImpl(
                 instance(),
