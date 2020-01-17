@@ -107,7 +107,6 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         }
 
         //data sources - database
-        bind<DirectionDBDataSource>() with singleton { DirectionDBDataSourceImpl(instance()) }
         bind<TrackedLocationsDBDataSource>() with singleton {
             TrackedLocationsDBDataSourceImpl(
                 instance()

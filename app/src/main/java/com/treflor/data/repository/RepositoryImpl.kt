@@ -5,10 +5,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
 import com.google.maps.android.PolyUtil
+import com.treflor.data.db.dao.DirectionDao
 import com.treflor.data.db.dao.JourneyDao
 import com.treflor.data.db.dao.JourneyResponseDao
 import com.treflor.data.db.dao.UserDao
-import com.treflor.data.db.datasources.DirectionDBDataSource
 import com.treflor.data.db.datasources.TrackedLocationsDBDataSource
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
@@ -35,7 +35,7 @@ class RepositoryImpl(
     private val userDao: UserDao,
     private val journeyDao: JourneyDao,
     private val journeyResponseDao: JourneyResponseDao,
-    private val directionDBDataSource: DirectionDBDataSource,
+    private val directionDao: DirectionDao,
     private val trackedLocationsDBDataSource: TrackedLocationsDBDataSource,
     private val locationProvider: LocationProvider
 ) : Repository {
@@ -140,17 +140,17 @@ class RepositoryImpl(
         }
     }
 
-    override fun getDirection(): LiveData<DirectionApiResponse> = directionDBDataSource.direction
+    override fun getDirection(): LiveData<DirectionApiResponse> = directionDao.getDirection()
 
     override suspend fun fetchDirection(
         origin: String,
         destination: String,
         mode: String
     ): LiveData<DirectionApiResponse> {
-        GlobalScope.launch(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             treflorGoogleServicesNetworkDataSource.fetchDirection(origin, destination, mode)
+            return@withContext directionDao.getDirection()
         }
-        return directionDBDataSource.direction
     }
 
     override fun clearDirection() = persistFetchedDirection(null)
@@ -176,8 +176,8 @@ class RepositoryImpl(
 
     private fun persistFetchedDirection(direction: DirectionApiResponse?) {
         GlobalScope.launch(Dispatchers.IO) {
-            if (direction == null) return@launch directionDBDataSource.delete()
-            directionDBDataSource.upsert(direction)
+            if (direction == null) return@launch directionDao.delete()
+            directionDao.upsert(direction)
         }
     }
 
