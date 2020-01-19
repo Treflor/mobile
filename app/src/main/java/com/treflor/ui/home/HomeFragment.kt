@@ -61,6 +61,9 @@ class HomeFragment : TreflorScopedFragment(), KodeinAware {
     private fun initRecyclerView(items: List<JourneyItem>) {
         val groupAdapter = GroupAdapter<GroupieViewHolder>().apply {
             addAll(items)
+            setOnItemClickListener { item, view ->
+                navController.navigate(R.id.action_homeFragment_to_journeyDetailsFragment)
+            }
         }
         rv_journey_rows.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context)
