@@ -29,7 +29,7 @@
             android:layout_marginTop="@dimen/ef_margin_small"
             android:layout_marginBottom="@dimen/ef_margin_small"
             android:fontFamily="@font/roboto"
-            android:hint="Email"
+            android:hint="email"
             android:textColor="@color/TextClr"
             android:textSize="15sp" />
 
@@ -73,6 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ef_margin_medium"
+            android:layout_gravity="center"
             android:fontFamily="@font/roboto_medium"
             android:linksClickable="true"
             android:text="Or create and account"

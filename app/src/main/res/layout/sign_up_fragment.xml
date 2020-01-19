@@ -61,15 +61,15 @@
                         android:layout_marginBottom="@dimen/ef_margin_medium"
                         android:alpha="0.9"
                         android:clickable="false"
-                        android:src="@drawable/ic_edit_white_24dp"
+                        android:src="@drawable/ic_camera_alt_black_24dp"
                         app:backgroundTint="@color/colorPrimary"
                         app:elevation="6dp"
                         app:tint="@color/cardview_light_background"
-                        app:fabCustomSize="30dp"
+                        app:fabCustomSize="35dp"
                         app:fabSize="mini"
                         app:maxImageSize="20dp" />
 
-                </RelativeLayout>>
+                </RelativeLayout>
 
                 <EditText
                     android:id="@+id/txt_email"
