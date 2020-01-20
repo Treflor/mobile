@@ -61,7 +61,7 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/roboto_medium"
             android:gravity="center"
-            android:text="Prabhani Nanayakkara"
+            android:text="@{user.toString()}"
             android:textColor="#000"
             android:textSize="26dp"
             android:textStyle="bold" />
