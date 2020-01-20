@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.treflor.data.db.dao.*
+import com.treflor.data.db.entities.journey.JourneyListEntity
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
@@ -134,10 +135,10 @@ class RepositoryImpl(
         }
     }
 
-    override suspend fun getAllJourneys(): LiveData<List<JourneyResponse>> {
+    override suspend fun getAllJourneys(): LiveData<List<JourneyListEntity>> {
         return withContext(Dispatchers.IO) {
             journeyNetworkDataSource.fetchAllJourneys()
-            return@withContext journeyResponseDao.getAllJourneys()
+            return@withContext journeyResponseDao.getAllListJourneys()
         }
     }
 

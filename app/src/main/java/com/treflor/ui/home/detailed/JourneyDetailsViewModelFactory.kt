@@ -1,4 +1,4 @@
-package com.treflor.ui.home.journey
+package com.treflor.ui.home.detailed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

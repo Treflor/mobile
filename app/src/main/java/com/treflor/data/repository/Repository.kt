@@ -2,6 +2,7 @@ package com.treflor.data.repository
 
 import android.location.Location
 import androidx.lifecycle.LiveData
+import com.treflor.data.db.entities.journey.JourneyListEntity
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.data.remote.response.IDResponse
@@ -37,7 +38,7 @@ interface Repository {
         trackedLocations: List<TrackedLocation>
     ): IDResponse
 
-    suspend fun getAllJourneys(): LiveData<List<JourneyResponse>>
+    suspend fun getAllJourneys(): LiveData<List<JourneyListEntity>>
 
     // direction
     suspend fun getDirection(): LiveData<DirectionApiResponse>

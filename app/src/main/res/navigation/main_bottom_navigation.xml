@@ -89,7 +89,7 @@
     </fragment>
     <fragment
         android:id="@+id/journeyDetailsFragment"
-        android:name="com.treflor.ui.home.journey.JourneyDetailsFragment"
+        android:name="com.treflor.ui.home.detailed.JourneyDetailsFragment"
         android:label="journey_details_fragment_motion_start"
         tools:layout="@layout/journey_details_fragment_motion_start" />
 </navigation>
