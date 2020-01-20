@@ -2,8 +2,6 @@ package com.treflor.ui.home.list
 
 import com.treflor.R
 import com.treflor.data.db.entities.journey.JourneyListEntity
-import com.treflor.data.remote.response.JourneyResponse
-import com.treflor.models.Journey
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.journey_row.*

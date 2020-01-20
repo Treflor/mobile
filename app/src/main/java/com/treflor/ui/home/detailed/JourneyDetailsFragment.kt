@@ -13,12 +13,13 @@ import kotlinx.android.synthetic.main.journey_details_fragment.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.factory
 import org.kodein.di.generic.instance
 
 class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware {
 
     override val kodein: Kodein by closestKodein()
-    private val viewModelFactory: JourneyDetailsViewModelFactory by instance()
+    private val viewModelFactory: ((String) -> JourneyDetailsViewModelFactory) by factory()
 
     private lateinit var viewModel: JourneyDetailsViewModel
 
@@ -31,8 +32,12 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(JourneyDetailsViewModel::class.java)
+
+//        val safeArgs = arguments?.let { JourneyDetailsFragmentArgs.fromBundle(it)}
+
+//        viewModel =
+//            ViewModelProviders.of(this, viewModelFactory(id))
+//                .get(JourneyDetailsViewModel::class.java)
 
         bindUI()
     }

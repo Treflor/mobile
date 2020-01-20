@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.treflor.data.db.dao.*
+import com.treflor.data.db.entities.journey.JourneyDetailEntity
 import com.treflor.data.db.entities.journey.JourneyListEntity
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.provider.LocationProvider
@@ -23,7 +24,6 @@ import com.treflor.models.Journey
 import com.treflor.models.TrackedLocation
 import com.treflor.models.User
 import kotlinx.coroutines.*
-import kotlin.math.log
 
 class RepositoryImpl(
     private val jwtProvider: JWTProvider,
@@ -139,6 +139,12 @@ class RepositoryImpl(
         return withContext(Dispatchers.IO) {
             journeyNetworkDataSource.fetchAllJourneys()
             return@withContext journeyResponseDao.getAllListJourneys()
+        }
+    }
+
+    override suspend fun getJourneyById(id: String): LiveData<JourneyDetailEntity> {
+        return withContext(Dispatchers.IO) {
+            return@withContext journeyResponseDao.getDetailedJourneyById(id)
         }
     }
 

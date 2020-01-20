@@ -91,5 +91,9 @@
         android:id="@+id/journeyDetailsFragment"
         android:name="com.treflor.ui.home.detailed.JourneyDetailsFragment"
         android:label="journey_details_fragment_motion_start"
-        tools:layout="@layout/journey_details_fragment_motion_start" />
+        tools:layout="@layout/journey_details_fragment" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
 </navigation>

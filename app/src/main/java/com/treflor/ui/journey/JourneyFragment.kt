@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.treflor.R
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.ui.base.TreflorScopedFragment
-import com.treflor.models.Journey
 import kotlinx.android.synthetic.main.journey_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein

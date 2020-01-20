@@ -27,10 +27,7 @@ import com.treflor.ui.signup.SignUpViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.instance
-import org.kodein.di.generic.provider
-import org.kodein.di.generic.singleton
+import org.kodein.di.generic.*
 
 const val CHANNEL_ID = "treflorServiceChannel"
 
@@ -128,7 +125,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from provider { SignUpViewModelFactory(instance()) }
         bind() from provider { JourneyViewModelFactory(instance(), instance()) }
         bind() from provider { StartJourneyViewModelFactory(instance(), instance()) }
-        bind() from provider { JourneyDetailsViewModelFactory(instance()) }
+        bind() from factory { id: String -> JourneyDetailsViewModelFactory(instance(), id) }
     }
 
 }

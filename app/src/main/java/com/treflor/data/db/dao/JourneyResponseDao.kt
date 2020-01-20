@@ -14,12 +14,12 @@ interface JourneyResponseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsert(journey: JourneyResponse)
 
-    @Query("SELECT * FROM journey_responses")
+    @Query("SELECT * FROM journey_responses;")
     fun getAllListJourneys(): LiveData<List<JourneyListEntity>>
 
 
-    @Query("SELECT * FROM journey_responses WHERE id = :id")
-    fun getDetailedJourney(id: String): LiveData<JourneyDetailEntity>
+    @Query("SELECT * FROM journey_responses WHERE id = :id;")
+    fun getDetailedJourneyById(id: String): LiveData<JourneyDetailEntity>
 
     @Query("DELETE FROM journey_responses")
     fun deleteAll()

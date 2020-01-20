@@ -48,7 +48,7 @@ class HomeFragment : TreflorScopedFragment(), KodeinAware {
     private fun bindUI() = launch {
         viewModel.journeys.await().observe(this@HomeFragment, Observer {
             if (it == null) return@Observer
-            initRecyclerView(   it.toJourneyItems())
+            initRecyclerView(it.toJourneyItems())
             progress_circular.visibility = View.GONE
         })
 
@@ -63,7 +63,7 @@ class HomeFragment : TreflorScopedFragment(), KodeinAware {
     private fun initRecyclerView(items: List<JourneyItem>) {
         val groupAdapter = GroupAdapter<GroupieViewHolder>().apply {
             addAll(items)
-            setOnItemClickListener { item, view ->
+            setOnItemClickListener { _, _ ->
                 navController.navigate(R.id.action_homeFragment_to_journeyDetailsFragment)
             }
         }

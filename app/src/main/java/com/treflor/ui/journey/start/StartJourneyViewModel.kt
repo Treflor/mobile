@@ -2,11 +2,8 @@ package com.treflor.ui.journey.start
 
 import android.content.Context
 import android.content.Intent
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.treflor.data.repository.Repository
-import com.treflor.internal.lazyDeferred
-import com.treflor.models.Journey
 import com.treflor.services.LocationTrackService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

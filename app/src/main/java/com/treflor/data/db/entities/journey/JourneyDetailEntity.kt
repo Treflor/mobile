@@ -11,7 +11,7 @@ class JourneyDetailEntity(
     @PrimaryKey
     @SerializedName("_id")
     val id: String,
-    @Embedded(prefix = "_user_")
+    @Embedded(prefix = "user_")
     @SerializedName("user")
     val user: User,
     @Embedded(prefix = "direction_")

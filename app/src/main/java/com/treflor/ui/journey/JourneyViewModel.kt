@@ -3,16 +3,13 @@ package com.treflor.ui.journey
 import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.material.snackbar.Snackbar
 import com.treflor.data.repository.Repository
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.eventexcecutor.LiveMessageEvent
 import com.treflor.internal.lazyDeferred
-import com.treflor.models.Journey
 import com.treflor.services.LocationTrackService
 import kotlinx.coroutines.*
 
