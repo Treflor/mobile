@@ -6,7 +6,7 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.journey_row.*
 
-class JourneyItem(private val journeyResponse: JourneyResponse) : Item() {
+class JourneyItem(val journeyResponse: JourneyResponse) : Item() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.apply {
             tv_title.text = journeyResponse.journey?.title

@@ -4,6 +4,7 @@ package com.treflor.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.RawValue
 
 data class User(
     @SerializedName("_id")

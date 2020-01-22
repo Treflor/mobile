@@ -1,11 +1,13 @@
 package com.treflor.data.remote.response
 
+import android.os.Parcelable
 import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.treflor.models.Journey
 import com.treflor.models.User
 import com.treflor.models.directionapi.DirectionApiResponse
+import java.io.Serializable
 
 @Entity(tableName = "Journey_responses")
 data class JourneyResponse(
