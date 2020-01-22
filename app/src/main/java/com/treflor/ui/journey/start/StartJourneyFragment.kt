@@ -30,6 +30,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.treflor.R
 import com.treflor.internal.eventexcecutor.ActivityNavigation
+import com.treflor.models.Journey
 import com.treflor.models.TreflorPlace
 import kotlinx.android.synthetic.main.start_journey_fragment.*
 import org.kodein.di.Kodein

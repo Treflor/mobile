@@ -5,13 +5,12 @@ import com.treflor.data.remote.intercepters.ConnectivityInterceptor
 import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.remote.response.AuthResponse
-import com.treflor.data.remote.response.DirectionApiResponse
+import com.treflor.models.directionapi.DirectionApiResponse
 import com.treflor.data.remote.response.IDResponse
 import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.models.User
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*

@@ -1,6 +1,8 @@
 package com.treflor.data.provider
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.treflor.models.Journey
 import com.treflor.models.TreflorPlace
@@ -14,6 +16,10 @@ const val JOURNEY_LABELS = "journey_labels"
 
 class CurrentJourneyProviderImpl(context: Context) : PreferenceProvider(context),
     CurrentJourneyProvider {
+    override val currentJourney: LiveData<Journey>
+        get() = _currentJourney
+    private val _currentJourney by lazy { MutableLiveData<Journey>(getCurrentJourney()) }
+
     override fun getCurrentJourney(): Journey? {
         val title = preferences.getString(JOURNEY_TITLE, "")
         val content = preferences.getString(JOURNEY_CONTENT, "")
@@ -25,7 +31,15 @@ class CurrentJourneyProviderImpl(context: Context) : PreferenceProvider(context)
         )
         val level = preferences.getString(JOURNEY_LEVEL, "")
         val labels = preferences.getStringSet(JOURNEY_LABELS, setOf())
-        return if(!title.isNullOrEmpty())Journey("",title,content!!,origin,destination,level!!,labels!!.toList()) else null
+        return if (!title.isNullOrEmpty()) Journey(
+            "",
+            title,
+            content!!,
+            origin,
+            destination,
+            level!!,
+            labels!!.toList()
+        ) else null
     }
 
     override fun persistCurrentJourney(journey: Journey) {
@@ -37,6 +51,7 @@ class CurrentJourneyProviderImpl(context: Context) : PreferenceProvider(context)
         editor.putString(JOURNEY_LEVEL, journey.level)
         editor.putStringSet(JOURNEY_LABELS, journey.labels.toSet())
         editor.apply()
+        _currentJourney.postValue(journey)
     }
 
     override fun deleteJourney() {
@@ -48,5 +63,6 @@ class CurrentJourneyProviderImpl(context: Context) : PreferenceProvider(context)
         editor.remove(JOURNEY_LEVEL)
         editor.remove(JOURNEY_LABELS)
         editor.apply()
+        _currentJourney.postValue(null)
     }
 }

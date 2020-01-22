@@ -6,17 +6,14 @@ import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.treflor.data.db.dao.*
-import com.treflor.data.db.entities.journey.JourneyDetailEntity
-import com.treflor.data.db.entities.journey.JourneyListEntity
-import com.treflor.data.provider.JWTProvider
-import com.treflor.data.provider.LocationProvider
+import com.treflor.data.provider.*
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
 import com.treflor.data.remote.datasources.JourneyNetworkDataSource
 import com.treflor.data.remote.datasources.TreflorGoogleServicesNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
-import com.treflor.data.remote.response.DirectionApiResponse
+import com.treflor.models.directionapi.DirectionApiResponse
 import com.treflor.data.remote.response.IDResponse
 import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.LocationUpdateReciever
@@ -32,11 +29,12 @@ class RepositoryImpl(
     private val treflorGoogleServicesNetworkDataSource: TreflorGoogleServicesNetworkDataSource,
     private val journeyNetworkDataSource: JourneyNetworkDataSource,
     private val userDao: UserDao,
-    private val journeyDao: JourneyDao,
     private val journeyResponseDao: JourneyResponseDao,
-    private val directionDao: DirectionDao,
     private val trackedLocationsDao: TrackedLocationsDao,
-    private val locationProvider: LocationProvider
+    private val locationProvider: LocationProvider,
+    private val currentDirectionProvider: CurrentDirectionProvider,
+    private val currentUserProvider: CurrentUserProvider,
+    private val currentJourneyProvider: CurrentJourneyProvider
 ) : Repository {
 
     init {
@@ -93,7 +91,7 @@ class RepositoryImpl(
     override suspend fun getUser(): LiveData<User> {
         return withContext(Dispatchers.IO) {
             userNetworkDataSource.fetchUser()
-            return@withContext userDao.getUser()
+            return@withContext currentUserProvider.currentUser
         }
     }
 
@@ -106,15 +104,12 @@ class RepositoryImpl(
     override fun getLastKnownLocation(): LiveData<Location> =
         locationProvider.getLastKnownLocation()
 
-    override fun persistJourney(journey: Journey) {
-        GlobalScope.launch(Dispatchers.IO) {
-            journeyDao.upsert(journey)
-        }
-    }
+    override fun persistJourney(journey: Journey) =
+        currentJourneyProvider.persistCurrentJourney(journey)
 
-    override suspend fun getJourney(): LiveData<Journey> = journeyDao.getJourney()
+    override suspend fun getJourney(): LiveData<Journey> = currentJourneyProvider.currentJourney
     override fun breakJourney() {
-        journeyDao.delete()
+        currentJourneyProvider.deleteJourney()
         clearTrackedLocations()
         clearDirection()
     }
@@ -135,21 +130,21 @@ class RepositoryImpl(
         }
     }
 
-    override suspend fun getAllJourneys(): LiveData<List<JourneyListEntity>> {
+    override suspend fun getAllJourneys(): LiveData<List<JourneyResponse>> {
         return withContext(Dispatchers.IO) {
             journeyNetworkDataSource.fetchAllJourneys()
             return@withContext journeyResponseDao.getAllListJourneys()
         }
     }
 
-    override suspend fun getJourneyById(id: String): LiveData<JourneyDetailEntity> {
+    override suspend fun getJourneyById(id: String): LiveData<JourneyResponse> {
         return withContext(Dispatchers.IO) {
             return@withContext journeyResponseDao.getDetailedJourneyById(id)
         }
     }
 
     override suspend fun getDirection(): LiveData<DirectionApiResponse> =
-        directionDao.getDirection()
+        currentDirectionProvider.currentDirection
 
     override suspend fun fetchDirection(
         origin: String,
@@ -158,11 +153,11 @@ class RepositoryImpl(
     ): LiveData<DirectionApiResponse> {
         return withContext(Dispatchers.IO) {
             treflorGoogleServicesNetworkDataSource.fetchDirection(origin, destination, mode)
-            return@withContext directionDao.getDirection()
+            return@withContext currentDirectionProvider.currentDirection
         }
     }
 
-    override fun clearDirection() = persistFetchedDirection(null)
+    override fun clearDirection() = currentDirectionProvider.deleteDirection()
 
     override suspend fun getTrackedLocations(): LiveData<List<TrackedLocation>> =
         trackedLocationsDao.getLocations()
@@ -178,16 +173,14 @@ class RepositoryImpl(
 
     private fun persistFetchedUser(user: User?) {
         GlobalScope.launch(Dispatchers.IO) {
-            if (user == null) return@launch userDao.delete()
-            userDao.upsert(user)
+            if (user == null) return@launch currentUserProvider.deleteCurrentUser()
+            currentUserProvider.persistCurrentUser(user)
         }
     }
 
     private fun persistFetchedDirection(direction: DirectionApiResponse?) {
-        GlobalScope.launch(Dispatchers.IO) {
-            if (direction == null) return@launch directionDao.delete()
-            directionDao.upsert(direction)
-        }
+        if (direction == null) return currentDirectionProvider.deleteDirection()
+        currentDirectionProvider.persistCurrentDirection(direction)
     }
 
     private fun persistJourneyResponses(journeys: List<JourneyResponse>?) {

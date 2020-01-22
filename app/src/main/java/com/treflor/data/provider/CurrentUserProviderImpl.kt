@@ -1,6 +1,8 @@
 package com.treflor.data.provider
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.treflor.models.User
 
 const val USER_ID = "user_id"
@@ -13,6 +15,10 @@ const val USER_GOOGLE_ID = "user_google_id"
 const val USER_PHOTO = "user_photo"
 
 class CurrentUserProviderImpl(context: Context) : PreferenceProvider(context), CurrentUserProvider {
+    override val currentUser: LiveData<User>
+        get() = _currentUser
+    private val _currentUser by lazy { MutableLiveData<User>(getCurrentUser()) }
+
     override fun getCurrentUser(): User? {
         val id = preferences.getString(USER_ID, "")
         val birthday = preferences.getLong(USER_BIRTHDAY, 0)
@@ -45,6 +51,7 @@ class CurrentUserProviderImpl(context: Context) : PreferenceProvider(context), C
         editor.putString(USER_GOOGLE_ID, user.googleId)
         editor.putString(USER_PHOTO, user.photo)
         editor.apply()
+        _currentUser.postValue(user)
     }
 
     override fun deleteCurrentUser() {
@@ -58,8 +65,6 @@ class CurrentUserProviderImpl(context: Context) : PreferenceProvider(context), C
         editor.remove(USER_GOOGLE_ID)
         editor.remove(USER_PHOTO)
         editor.apply()
+        _currentUser.postValue(null)
     }
 }
-//filter low pass high pass
-//transister
-//logic gate

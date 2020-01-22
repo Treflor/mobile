@@ -5,11 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-const val CURRENT_USER_PK = "pk_0"
-
-@Entity(tableName = "user")
 data class User(
-    @PrimaryKey
     @SerializedName("_id")
     val id: String,
     @SerializedName("birthday")

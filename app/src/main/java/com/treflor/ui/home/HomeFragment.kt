@@ -11,7 +11,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.treflor.R
-import com.treflor.data.db.entities.journey.JourneyListEntity
 import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.ui.base.TreflorScopedFragment
 import com.treflor.ui.home.list.JourneyItem
@@ -54,7 +53,7 @@ class HomeFragment : TreflorScopedFragment(), KodeinAware {
 
     }
 
-    private fun List<JourneyListEntity>.toJourneyItems(): List<JourneyItem> {
+    private fun List<JourneyResponse>.toJourneyItems(): List<JourneyItem> {
         return this.map {
             JourneyItem(it)
         }

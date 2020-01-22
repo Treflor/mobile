@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.treflor.data.provider.JWTProvider
 import com.treflor.data.remote.api.TreflorApiService
-import com.treflor.data.remote.response.DirectionApiResponse
+import com.treflor.models.directionapi.DirectionApiResponse
 import com.treflor.internal.NoConnectivityException
 
 class TreflorGoogleServicesNetworkDataSourceImpl(

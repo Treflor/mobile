@@ -5,10 +5,7 @@ import android.app.NotificationManager
 import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
-import com.treflor.data.provider.JWTProvider
-import com.treflor.data.provider.JWTProviderImpl
-import com.treflor.data.provider.LocationProvider
-import com.treflor.data.provider.LocationProviderImpl
+import com.treflor.data.provider.*
 import com.treflor.data.remote.api.TreflorApiService
 import com.treflor.data.remote.datasources.*
 import com.treflor.data.remote.intercepters.ConnectivityInterceptor
@@ -57,13 +54,15 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         // database
         bind() from singleton { TreflorDatabase(instance()) }
         bind() from singleton { instance<TreflorDatabase>().userDao() }
-        bind() from singleton { instance<TreflorDatabase>().journeyDao() }
         bind() from singleton { instance<TreflorDatabase>().directionDao() }
         bind() from singleton { instance<TreflorDatabase>().trackedLocationsDao() }
         bind() from singleton { instance<TreflorDatabase>().journeyResponseDao() }
 
         // providers
         bind<JWTProvider>() with singleton { JWTProviderImpl(instance()) }
+        bind<CurrentJourneyProvider>() with singleton { CurrentJourneyProviderImpl(instance()) }
+        bind<CurrentUserProvider>() with singleton { CurrentUserProviderImpl(instance()) }
+        bind<CurrentDirectionProvider>() with singleton { CurrentDirectionProviderImpl(instance()) }
         bind<LocationProvider>() with singleton { LocationProviderImpl(instance()) }
         // interceptors
         bind<ConnectivityInterceptor>() with singleton {
@@ -104,6 +103,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         //repository
         bind<Repository>() with singleton {
             RepositoryImpl(
+                instance(),
                 instance(),
                 instance(),
                 instance(),
