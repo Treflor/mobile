@@ -9,7 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
 import com.treflor.CHANNEL_ID
-import com.treflor.data.db.datasources.TrackedLocationsDBDataSource
+import com.treflor.data.db.dao.TrackedLocationsDao
 import com.treflor.data.provider.LocationProvider
 import com.treflor.data.repository.Repository
 import com.treflor.internal.LocationUpdateReciever
@@ -27,7 +27,7 @@ class LocationTrackService : LifecycleService(), KodeinAware {
 
     override val kodein: Kodein by closestKodein()
     private val locationProvider: LocationProvider by instance()
-    private val trackedLocationsDBDataSource: TrackedLocationsDBDataSource by instance()
+    private val trackedLocationsDao: TrackedLocationsDao by instance()
 
     private val TAG = "LocationTrackService"
 
@@ -53,9 +53,15 @@ class LocationTrackService : LifecycleService(), KodeinAware {
             .observe(this@LocationTrackService,
                 Observer {
                     Log.d("location", "location: ${it.latitude} ${it.longitude}")
-                    trackedLocationsDBDataSource.insert(TrackedLocation(it.latitude, it.longitude))
+                    GlobalScope.launch(Dispatchers.IO) {
+                        trackedLocationsDao.insert(
+                            TrackedLocation(
+                                it.latitude,
+                                it.longitude
+                            )
+                        )
+                    }
                 })
-
 
         return super.onStartCommand(intent, flags, startId);
     }

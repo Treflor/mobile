@@ -4,21 +4,18 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.android.libraries.maps.model.LatLng
-import com.google.gson.Gson
 import com.google.maps.android.PolyUtil
-import com.treflor.data.db.datasources.DirectionDBDataSource
-import com.treflor.data.db.datasources.JourneyDBDataSource
-import com.treflor.data.db.datasources.TrackedLocationsDBDataSource
-import com.treflor.data.db.datasources.UserDBDataSource
-import com.treflor.data.provider.JWTProvider
-import com.treflor.data.provider.LocationProvider
+import com.treflor.data.db.dao.*
+import com.treflor.data.provider.*
 import com.treflor.data.remote.datasources.AuthenticationNetworkDataSource
 import com.treflor.data.remote.datasources.JourneyNetworkDataSource
 import com.treflor.data.remote.datasources.TreflorGoogleServicesNetworkDataSource
 import com.treflor.data.remote.datasources.UserNetworkDataSource
 import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.requests.SignUpRequest
-import com.treflor.data.remote.response.DirectionApiResponse
+import com.treflor.models.directionapi.DirectionApiResponse
+import com.treflor.data.remote.response.IDResponse
+import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
 import com.treflor.models.TrackedLocation
@@ -31,11 +28,13 @@ class RepositoryImpl(
     private val userNetworkDataSource: UserNetworkDataSource,
     private val treflorGoogleServicesNetworkDataSource: TreflorGoogleServicesNetworkDataSource,
     private val journeyNetworkDataSource: JourneyNetworkDataSource,
-    private val userDBDataSource: UserDBDataSource,
-    private val journeyDBDataSource: JourneyDBDataSource,
-    private val directionDBDataSource: DirectionDBDataSource,
-    private val trackedLocationsDBDataSource: TrackedLocationsDBDataSource,
-    private val locationProvider: LocationProvider
+    private val userDao: UserDao,
+    private val journeyResponseDao: JourneyResponseDao,
+    private val trackedLocationsDao: TrackedLocationsDao,
+    private val locationProvider: LocationProvider,
+    private val currentDirectionProvider: CurrentDirectionProvider,
+    private val currentUserProvider: CurrentUserProvider,
+    private val currentJourneyProvider: CurrentJourneyProvider
 ) : Repository {
 
     init {
@@ -54,6 +53,10 @@ class RepositoryImpl(
 
         treflorGoogleServicesNetworkDataSource.apply {
             direction.observeForever { direction -> persistFetchedDirection(direction) }
+        }
+
+        journeyNetworkDataSource.apply {
+            journeys.observeForever { journeys -> persistJourneyResponses(journeys) }
         }
     }
 
@@ -86,10 +89,10 @@ class RepositoryImpl(
     }
 
     override suspend fun getUser(): LiveData<User> {
-        GlobalScope.launch(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             userNetworkDataSource.fetchUser()
+            return@withContext currentUserProvider.currentUser
         }
-        return userDBDataSource.user
     }
 
     override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
@@ -101,55 +104,68 @@ class RepositoryImpl(
     override fun getLastKnownLocation(): LiveData<Location> =
         locationProvider.getLastKnownLocation()
 
-    override fun persistJourney(journey: Journey) {
-        GlobalScope.launch(Dispatchers.IO) {
-            journeyDBDataSource.upsert(journey)
-        }
-    }
+    override fun persistJourney(journey: Journey) =
+        currentJourneyProvider.persistCurrentJourney(journey)
 
-    override fun getJourney(): LiveData<Journey> = journeyDBDataSource.journey
+    override suspend fun getJourney(): LiveData<Journey> = currentJourneyProvider.currentJourney
     override fun breakJourney() {
-        journeyDBDataSource.delete()
+        currentJourneyProvider.deleteJourney()
         clearTrackedLocations()
         clearDirection()
     }
 
-    override suspend fun finishJourney() = withContext(Dispatchers.IO) {
-        // TODO: upload data to server and delete cache
-        val journey = getJourney().value
-        val direction = getDirection().value
-        val trackedLocations =
-            PolyUtil.encode(getTrackedLocations().value!!.map { tl -> LatLng(tl.lat, tl.lng) })
-        val user = getUser().value
-
-        val journeyRequest = JourneyRequest(user, direction, journey, trackedLocations)
-        breakJourney()
-        return@withContext journeyNetworkDataSource.uploadJourney(journeyRequest)
+    override suspend fun finishJourney(
+        journey: Journey,
+        direction: DirectionApiResponse,
+        trackedLocations: List<TrackedLocation>
+    ): IDResponse {
+        val trackedLocationsString =
+            PolyUtil.encode(trackedLocations.map { tl -> LatLng(tl.lat, tl.lng) })
+        val journeyRequest = JourneyRequest(direction, journey, trackedLocationsString)
+        GlobalScope.launch(Dispatchers.IO) { breakJourney() }
+        return withContext(Dispatchers.IO) {
+            return@withContext journeyNetworkDataSource.uploadJourney(
+                journeyRequest
+            )
+        }
     }
 
+    override suspend fun getAllJourneys(): LiveData<List<JourneyResponse>> {
+        return withContext(Dispatchers.IO) {
+            journeyNetworkDataSource.fetchAllJourneys()
+            return@withContext journeyResponseDao.getAllListJourneys()
+        }
+    }
 
-    override fun getDirection(): LiveData<DirectionApiResponse> = directionDBDataSource.direction
+    override suspend fun getJourneyById(id: String): LiveData<JourneyResponse> {
+        return withContext(Dispatchers.IO) {
+            return@withContext journeyResponseDao.getDetailedJourneyById(id)
+        }
+    }
+
+    override suspend fun getDirection(): LiveData<DirectionApiResponse> =
+        currentDirectionProvider.currentDirection
 
     override suspend fun fetchDirection(
         origin: String,
         destination: String,
         mode: String
     ): LiveData<DirectionApiResponse> {
-        GlobalScope.launch(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             treflorGoogleServicesNetworkDataSource.fetchDirection(origin, destination, mode)
+            return@withContext currentDirectionProvider.currentDirection
         }
-        return directionDBDataSource.direction
     }
 
-    override fun clearDirection() = persistFetchedDirection(null)
+    override fun clearDirection() = currentDirectionProvider.deleteDirection()
 
-    override fun getTrackedLocations(): LiveData<List<TrackedLocation>> =
-        trackedLocationsDBDataSource.trackedLocations
+    override suspend fun getTrackedLocations(): LiveData<List<TrackedLocation>> =
+        trackedLocationsDao.getLocations()
 
     override fun insertTackedLocations(trackedLocation: TrackedLocation) =
-        trackedLocationsDBDataSource.insert(trackedLocation)
+        trackedLocationsDao.insert(trackedLocation)
 
-    override fun clearTrackedLocations() = trackedLocationsDBDataSource.deleteTable()
+    override fun clearTrackedLocations() = trackedLocationsDao.deleteTable()
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
     private fun getJWT(): String? = jwtProvider.getJWT()
@@ -157,16 +173,20 @@ class RepositoryImpl(
 
     private fun persistFetchedUser(user: User?) {
         GlobalScope.launch(Dispatchers.IO) {
-            if (user == null) return@launch userDBDataSource.delete()
-            Log.e("user", user.toString())
-            userDBDataSource.upsert(user)
+            if (user == null) return@launch currentUserProvider.deleteCurrentUser()
+            currentUserProvider.persistCurrentUser(user)
         }
     }
 
     private fun persistFetchedDirection(direction: DirectionApiResponse?) {
+        if (direction == null) return currentDirectionProvider.deleteDirection()
+        currentDirectionProvider.persistCurrentDirection(direction)
+    }
+
+    private fun persistJourneyResponses(journeys: List<JourneyResponse>?) {
         GlobalScope.launch(Dispatchers.IO) {
-            if (direction == null) return@launch directionDBDataSource.delete()
-            directionDBDataSource.upsert(direction)
+            if (journeys == null) return@launch journeyResponseDao.deleteAll()
+            journeyResponseDao.upsertAll(journeys)
         }
     }
 }

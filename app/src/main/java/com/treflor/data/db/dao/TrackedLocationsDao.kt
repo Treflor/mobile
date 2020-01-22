@@ -1,5 +1,6 @@
 package com.treflor.data.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -12,9 +13,9 @@ interface TrackedLocationsDao {
     fun insert(trackedLocation: TrackedLocation)
 
     @Query("SELECT * FROM tracked_locations")
-    fun getLocations(): List<TrackedLocation>
+    fun getLocations(): LiveData<List<TrackedLocation>>
 
     @Query("DELETE FROM tracked_locations")
-    fun deleteTabel()
+    fun deleteTable()
 
 }

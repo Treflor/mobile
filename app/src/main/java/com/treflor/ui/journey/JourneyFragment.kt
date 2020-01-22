@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.treflor.R
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.ui.base.TreflorScopedFragment
-import com.treflor.models.Journey
 import kotlinx.android.synthetic.main.journey_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -47,7 +45,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
     private var camPosUpdatedOnFirstLaunch = false
     private var routePolyline: Polyline? = null
     private var trackedPolyline: Polyline? = null
-    private var journey: Journey? = null
+    private var journey: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,7 +119,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
         })
 
         viewModel.journey.await().observe(this@JourneyFragment, Observer {
-            journey = it
+            journey = it != null
             if (it == null) {
                 btn_start_journey.setImageResource(R.drawable.ic_hiking)
             } else {
@@ -206,7 +204,7 @@ class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.btn_start_journey -> {
-                if (journey != null) {
+                if (journey) {
                     viewModel.finishJourney()
                 } else {
                     navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment)
