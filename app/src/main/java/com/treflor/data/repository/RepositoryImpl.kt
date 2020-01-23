@@ -38,7 +38,6 @@ class RepositoryImpl(
 ) : Repository {
 
     init {
-
         jwtProvider.apply {
             authState.observeForever {
                 GlobalScope.launch(Dispatchers.IO) {
@@ -57,6 +56,7 @@ class RepositoryImpl(
 
         journeyNetworkDataSource.apply {
             journeys.observeForever { journeys -> persistJourneyResponses(journeys) }
+            journey.observeForever { journey -> persistJourneyResponse(journey) }
         }
     }
 
@@ -94,6 +94,8 @@ class RepositoryImpl(
             return@withContext currentUserProvider.currentUser
         }
     }
+
+    override fun getCurrentUserId(): String? = currentUserProvider.getCurrentUserId()
 
     override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
         locationProvider.requestLocationUpdate(updateReceiver)
@@ -143,6 +145,22 @@ class RepositoryImpl(
         }
     }
 
+    override suspend fun addJourneyFavorite(journeyId: String): IDResponse {
+        return withContext(Dispatchers.IO) {
+            var res = journeyNetworkDataSource.addJourneyFavorite(journeyId)
+            journeyNetworkDataSource.fetchJourneyById(journeyId)
+            return@withContext res
+        }
+    }
+
+    override suspend fun removeJourneyFavorite(journeyId: String): IDResponse {
+        return withContext(Dispatchers.IO) {
+            var res = journeyNetworkDataSource.removeJourneyFavorite(journeyId)
+            journeyNetworkDataSource.fetchJourneyById(journeyId)
+            return@withContext res
+        }
+    }
+
     override suspend fun getDirection(): LiveData<DirectionApiResponse> =
         currentDirectionProvider.currentDirection
 
@@ -185,8 +203,15 @@ class RepositoryImpl(
 
     private fun persistJourneyResponses(journeys: List<JourneyResponse>?) {
         GlobalScope.launch(Dispatchers.IO) {
-            if (journeys == null) return@launch journeyResponseDao.deleteAll()
-            journeyResponseDao.upsertAll(journeys)
+            if (journeys != null)
+                journeyResponseDao.upsertAll(journeys)
+        }
+    }
+
+    private fun persistJourneyResponse(journey: JourneyResponse?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            if (journey != null)
+                journeyResponseDao.upsert(journey)
         }
     }
 }

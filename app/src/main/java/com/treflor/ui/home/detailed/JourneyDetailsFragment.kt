@@ -8,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
 
 import com.treflor.R
+import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.ui.base.TreflorScopedFragment
 import kotlinx.android.synthetic.main.journey_details_fragment.*
 import kotlinx.coroutines.launch
@@ -18,7 +20,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.factory
 
-class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware {
+class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware , ActivityNavigation {
 
     override val kodein: Kodein by closestKodein()
     private val viewModelFactory: ((String) -> JourneyDetailsViewModelFactory) by factory()
@@ -39,6 +41,7 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware {
         viewModel =
             ViewModelProviders.of(this, viewModelFactory(safeArgs!!.id))
                 .get(JourneyDetailsViewModel::class.java)
+        viewModel.liveMessageEvent.setEventReceiver(this, this)
         bindUI()
     }
 
@@ -48,6 +51,7 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware {
     }
 
     private fun bindUI() = launch {
+        Log.e("userId", "${viewModel.userId.toString()} gg")
         this@JourneyDetailsFragment.setHasOptionsMenu(true)
         (activity as AppCompatActivity).apply {
             setSupportActionBar(toolbar)
@@ -55,7 +59,7 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware {
         }
         viewModel.journey.await().observe(this@JourneyDetailsFragment, Observer { journey ->
             if (journey == null) return@Observer
-            Log.e("wtf",journey.journey.toString())
+            progress_bar.visibility = View.GONE
             col_toolbar.title = journey.journey?.title
             tv_difficulty.text = journey.journey?.level
             tv_destination.text = journey.journey?.destination?.name
@@ -63,6 +67,28 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware {
             tv_content.text = journey.journey?.content ?: ""
             tv_distance.text = journey.direction?.distance?.text
             tv_duration.text = journey.direction?.duration?.text
+            if (viewModel.userId.isNullOrEmpty()) {
+                img_btn_favorite.setOnClickListener {
+                    //TODO: set navigation to login
+                }
+            } else {
+                journey.favorites?.let {
+                    if (it.contains(viewModel.userId!!)) {
+                        img_btn_favorite.setImageResource(R.drawable.ic_favorite)
+                        img_btn_favorite.setOnClickListener {
+                            img_btn_favorite.setBackgroundResource(R.drawable.ic_favorite_border)
+                            viewModel.removeFromFavorite()
+                        }
+
+                    } else {
+                        img_btn_favorite.setImageResource(R.drawable.ic_favorite_border)
+                        img_btn_favorite.setOnClickListener {
+                            img_btn_favorite.setBackgroundResource(R.drawable.ic_favorite)
+                            viewModel.addToFavorite()
+                        }
+                    }
+                }
+            }
         })
     }
 
@@ -70,11 +96,19 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware {
         when (item.itemId) {
             android.R.id.home -> {
                 navController.navigateUp()
-                Log.e("wtf", "am i calling?")
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun navigateUp(): Boolean {
+        navController.navigate(R.id.action_signUpFragment_to_profileFragment)
+        return true
+    }
+
+    override fun showSnackBar(s: String) {
+        if (view != null) Snackbar.make(view!!, s, Snackbar.LENGTH_SHORT).show()
     }
 
 }
