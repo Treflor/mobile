@@ -15,14 +15,15 @@
         android:id="@+id/btn_start_journey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="#fff"
-        android:src="@drawable/ic_hiking"
-        app:fabSize="mini"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:src="@drawable/ic_add_white_24dp"
+        app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="#fff" />
+        app:rippleColor="#fff"
+        app:tint="@color/cardview_light_background" />
 
     <TextView
         android:id="@+id/txt_permission"
