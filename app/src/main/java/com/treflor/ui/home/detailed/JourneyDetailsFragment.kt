@@ -20,7 +20,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.factory
 
-class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware , ActivityNavigation {
+class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware, ActivityNavigation {
 
     override val kodein: Kodein by closestKodein()
     private val viewModelFactory: ((String) -> JourneyDetailsViewModelFactory) by factory()
@@ -51,7 +51,6 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware , ActivityNa
     }
 
     private fun bindUI() = launch {
-        Log.e("userId", "${viewModel.userId.toString()} gg")
         this@JourneyDetailsFragment.setHasOptionsMenu(true)
         (activity as AppCompatActivity).apply {
             setSupportActionBar(toolbar)
@@ -69,7 +68,7 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware , ActivityNa
             tv_duration.text = journey.direction?.duration?.text
             if (viewModel.userId.isNullOrEmpty()) {
                 img_btn_favorite.setOnClickListener {
-                    //TODO: set navigation to login
+                    navController.navigate(R.id.action_homeFragment_to_loginFragment)
                 }
             } else {
                 journey.favorites?.let {
@@ -79,13 +78,19 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware , ActivityNa
                             img_btn_favorite.setBackgroundResource(R.drawable.ic_favorite_border)
                             viewModel.removeFromFavorite()
                         }
-
                     } else {
                         img_btn_favorite.setImageResource(R.drawable.ic_favorite_border)
                         img_btn_favorite.setOnClickListener {
                             img_btn_favorite.setBackgroundResource(R.drawable.ic_favorite)
                             viewModel.addToFavorite()
                         }
+                    }
+                }
+                if (journey.favorites == null) {
+                    img_btn_favorite.setImageResource(R.drawable.ic_favorite_border)
+                    img_btn_favorite.setOnClickListener {
+                        img_btn_favorite.setBackgroundResource(R.drawable.ic_favorite)
+                        viewModel.addToFavorite()
                     }
                 }
             }
