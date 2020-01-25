@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#cecece">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -13,7 +12,11 @@
         android:background="@color/colorWhite"
         app:title="Home"
         app:titleMarginStart="20dp"
-        app:titleTextColor="@color/colorPrimary"/>
+        app:titleTextColor="@color/colorPrimary"
+        app:layout_constraintStart_toStartOf="" _toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
   
     <ProgressBar
         android:id="@+id/progress_circular"
