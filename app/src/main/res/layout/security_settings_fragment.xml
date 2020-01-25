@@ -9,13 +9,13 @@
         android:id="@+id/toolbar5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/colorWhite"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:logo="@drawable/ic_arrow_back_black"
         app:title="Change Password"
         app:titleMarginStart="40dp"
-        app:titleTextColor="#FF081E6F" />
+        app:titleTextColor="@color/colorPrimary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:hint="Current Password"
             android:inputType="textPassword"
             android:password="true"
-            android:textColor="@color/TextClr"
+            android:textColor="@color/colorBlack"
             android:textSize="14sp" />
 
         <EditText
@@ -45,7 +45,7 @@
             android:hint="New Password"
             android:inputType="textPassword"
             android:password="true"
-            android:textColor="@color/TextClr"
+            android:textColor="@color/colorBlack"
             android:textSize="14sp" />
 
         <EditText
@@ -57,7 +57,7 @@
             android:hint="Confirm Password"
             android:inputType="textPassword"
             android:password="true"
-            android:textColor="@color/TextClr"
+            android:textColor="@color/colorBlack"
             android:textSize="14sp" />
 
         <Button

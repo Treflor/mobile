@@ -12,13 +12,13 @@
             android:id="@+id/toolbar3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/ef_white"
+            android:background="@color/colorWhite"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:logo="@drawable/ic_arrow_back_black"
             app:title="Edit profile details"
             app:titleMarginStart="40dp"
-            app:titleTextColor="#FF081E6F" />
+            app:titleTextColor="@color/colorPrimary" />
 
         <RelativeLayout
             android:layout_width="150dp"
@@ -51,7 +51,7 @@
                 app:fabCustomSize="35dp"
                 app:fabSize="mini"
                 app:maxImageSize="20dp"
-                app:tint="@color/ef_white" />
+                app:tint="@color/colorWhite" />
 
         </RelativeLayout>
 
@@ -66,8 +66,8 @@
             android:fontFamily="@font/roboto"
             android:hint="User Name"
             android:inputType="text"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorBlack"
             android:textSize="16sp" />
 
         <EditText
@@ -81,8 +81,8 @@
             android:fontFamily="@font/roboto"
             android:hint="Email"
             android:inputType="text"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorBlack"
             android:textSize="16sp" />
 
         <EditText
@@ -96,8 +96,8 @@
             android:fontFamily="@font/roboto"
             android:hint="Phone number"
             android:inputType="text"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorBlack"
             android:textSize="16sp" />
 
         <Button

@@ -15,12 +15,12 @@
             android:id="@+id/toolbar2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
+            android:background="@color/colorWhite"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:title="Settings"
             app:titleMarginStart="20dp"
-            app:titleTextColor="#FF081E6F" />
+            app:titleTextColor="@color/colorPrimary" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="General"
-                    android:textColor="#FF081E6F"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 
             <TextView
@@ -50,7 +50,7 @@
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:text="Edit profile details"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textColor="@color/colorBlack"
                 android:textSize="16sp" />
 
                 <View
@@ -68,7 +68,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Security"
-                    android:textColor="#FF081E6F"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 
                 <TextView
@@ -79,7 +79,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Change password"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp" />
 
                 <View
@@ -97,7 +97,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Privacy"
-                    android:textColor="#FF081E6F"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 
                 <TextView
@@ -108,7 +108,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Privacy Policy"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp" />
 
                 <View
@@ -126,7 +126,7 @@
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:text="Help"
-                android:textColor="#FF081E6F"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
 
                 <TextView
@@ -137,7 +137,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="FAQs"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp" />
 
                 <TextView
@@ -148,7 +148,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Provide Feedback"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp" />
 
                 <TextView
@@ -159,7 +159,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Rate on the Google Play Store"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp" />
 
                 <View
@@ -177,7 +177,7 @@
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:text="About"
-                android:textColor="#FF081E6F"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
 
                 <TextView
@@ -188,7 +188,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="About Treflor"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp" />
 
                 <TextView
@@ -199,7 +199,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Terms of Service"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp" />
 
                 <TextView
@@ -210,7 +210,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Version: "
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp" />
 
                 <View
@@ -229,7 +229,7 @@
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:text="Sign Out"
-                android:textColor="#FF081E6F"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
 
             </LinearLayout>

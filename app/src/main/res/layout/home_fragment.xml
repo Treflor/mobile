@@ -20,10 +20,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#FFFFFF"
+            android:background="@color/colorWhite"
             app:title="Home"
             app:titleMarginStart="20dp"
-            app:titleTextColor="#FF081E6F">
+            app:titleTextColor="@color/colorPrimary">
 
 
         </androidx.appcompat.widget.Toolbar>

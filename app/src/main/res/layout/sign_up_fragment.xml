@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Sign up with Treflor"
-                    android:textColor="#000"
+                    android:textColor="@color/colorBlack"
                     android:textSize="26dp"
                     android:textStyle="bold" />
 
@@ -64,7 +64,7 @@
                         android:src="@drawable/ic_camera_alt_black_24dp"
                         app:backgroundTint="@color/colorPrimary"
                         app:elevation="6dp"
-                        app:tint="@color/cardview_light_background"
+                        app:tint="@color/colorWhite"
                         app:fabCustomSize="35dp"
                         app:fabSize="mini"
                         app:maxImageSize="20dp" />
@@ -80,7 +80,7 @@
                     android:background="@android:drawable/editbox_background_normal"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
-                    android:textColor="@color/TextClr"
+                    android:textColor="@color/colorBlack"
                     android:textSize="14sp" />
 
                 <EditText
@@ -91,7 +91,7 @@
                     android:background="@android:drawable/editbox_background_normal"
                     android:hint="Password"
                     android:inputType="textPassword"
-                    android:textColor="@color/TextClr"
+                    android:textColor="@color/colorBlack"
                     android:textSize="14sp"/>
 
                 <EditText
@@ -102,7 +102,7 @@
                     android:background="@android:drawable/editbox_background_normal"
                     android:hint="Confirm Password"
                     android:inputType="textPassword"
-                    android:textColor="@color/TextClr"
+                    android:textColor="@color/colorBlack"
                     android:textSize="14sp"/>
 
                 <EditText
@@ -113,7 +113,7 @@
                     android:background="@android:drawable/editbox_background_normal"
                     android:hint="First name"
                     android:inputType="text"
-                    android:textColor="@color/TextClr"
+                    android:textColor="@color/colorBlack"
                     android:textSize="14sp"/>
 
 
@@ -125,7 +125,7 @@
                     android:background="@android:drawable/editbox_background_normal"
                     android:hint="Last name"
                     android:inputType="text"
-                    android:textColor="@color/TextClr"
+                    android:textColor="@color/colorBlack"
                     android:textSize="14sp"/>
 
                 <Spinner
@@ -133,7 +133,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/ef_margin_small"
-                    android:textColor="@color/TextClr"
+                    android:textColor="@color/colorBlack"
                     android:textSize="14sp"/>
 
                 <DatePicker
@@ -164,7 +164,7 @@
                     android:linksClickable="true"
                     android:text="Already have an account?"
                     android:textAlignment="center"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="@color/colorBlack"
                     android:textSize="12sp" />
 
             </LinearLayout>
