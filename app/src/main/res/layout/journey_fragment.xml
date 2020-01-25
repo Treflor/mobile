@@ -22,8 +22,8 @@
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="#fff"
-        app:tint="@color/cardview_light_background" />
+        app:rippleColor="@color/colorWhite"
+        app:tint="@color/colorWhite" />
 
     <TextView
         android:id="@+id/txt_permission"

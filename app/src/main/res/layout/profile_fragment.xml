@@ -20,7 +20,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorWhite"
+            app:navigationIcon="@drawable/ic_arrow_back_black"
+            app:title="Profile"
+            app:titleTextColor="@color/colorPrimary">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
@@ -37,7 +40,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="10sp"
                 android:text="@string/fa_user_circle"
-                android:textColor="#fff"
+                android:textColor="@color/colorBlack"
                 android:textSize="30sp"
                 android:visibility="visible"
                 app:solid_icon="true" />
@@ -61,8 +64,8 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/roboto_medium"
             android:gravity="center"
-            android:text="Prabhani Nanayakkara"
-            android:textColor="#000"
+            android:text="@{user.toString()}"
+            android:textColor="@color/colorBlack"
             android:textSize="26dp"
             android:textStyle="bold" />
 

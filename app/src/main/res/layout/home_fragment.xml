@@ -10,10 +10,11 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:background="@color/colorWhite"
+        app:title="Home"
+        app:titleMarginStart="20dp"
+        app:titleTextColor="@color/colorPrimary"/>
+  
     <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
