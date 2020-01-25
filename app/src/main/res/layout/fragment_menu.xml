@@ -20,7 +20,7 @@
             android:theme="?attr/actionBarTheme"
             app:title="Settings"
             app:titleMarginStart="20dp"
-            app:titleTextColor="#000000" />
+            app:titleTextColor="#FF081E6F" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -31,16 +31,16 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:text="General"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:text="General"
+                    android:textColor="#FF081E6F"
+                    android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textView"
@@ -68,7 +68,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Security"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="#FF081E6F"
                     android:textSize="16sp" />
 
                 <TextView
@@ -97,7 +97,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Privacy"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textColor="#FF081E6F"
                     android:textSize="16sp" />
 
                 <TextView
@@ -126,7 +126,7 @@
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:text="Help"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textColor="#FF081E6F"
                 android:textSize="16sp" />
 
                 <TextView
@@ -177,7 +177,7 @@
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:text="About"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textColor="#FF081E6F"
                 android:textSize="16sp" />
 
                 <TextView
@@ -229,7 +229,7 @@
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:text="Sign Out"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textColor="#FF081E6F"
                 android:textSize="16sp" />
 
             </LinearLayout>

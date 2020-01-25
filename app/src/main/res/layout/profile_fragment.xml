@@ -20,7 +20,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary">
+            android:background="#FFFFFF"
+            app:navigationIcon="@drawable/ic_arrow_back_black"
+            app:title="Profile"
+            app:titleTextColor="#FF081E6F">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
@@ -37,7 +40,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="10sp"
                 android:text="@string/fa_user_circle"
-                android:textColor="#fff"
+                android:textColor="#000000"
                 android:textSize="30sp"
                 android:visibility="visible"
                 app:solid_icon="true" />
