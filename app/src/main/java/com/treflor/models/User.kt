@@ -4,11 +4,11 @@ package com.treflor.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.RawValue
 
-const val CURRENT_USER_PK = 0
-
-@Entity(tableName = "user")
 data class User(
+    @SerializedName("_id")
+    val id: String,
     @SerializedName("birthday")
     val birthday: Long,
     @SerializedName("email")
@@ -19,11 +19,8 @@ data class User(
     val gender: String,
     @SerializedName("given_name")
     val givenName: String,
-    @SerializedName("id")
-    val id: String?,
+    @SerializedName("googleId")
+    val googleId: String?,
     @SerializedName("photo")
     val photo: String
-) {
-    @PrimaryKey(autoGenerate = false)
-    var pk: Int = CURRENT_USER_PK
-}
+)

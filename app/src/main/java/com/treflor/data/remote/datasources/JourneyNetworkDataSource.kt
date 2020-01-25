@@ -3,12 +3,13 @@ package com.treflor.data.remote.datasources
 import androidx.lifecycle.LiveData
 import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.response.IDResponse
+import com.treflor.data.remote.response.JourneyResponse
 
 interface JourneyNetworkDataSource {
-    val journeys: LiveData<List<JourneyRequest>>
-    val journey: LiveData<JourneyRequest>
+    val journeys: LiveData<List<JourneyResponse>>
+    val journey: LiveData<JourneyResponse>
 
     suspend fun uploadJourney(journeyRequest: JourneyRequest): IDResponse
-    fun fetchAllJourneys(): LiveData<List<JourneyRequest>>
-    fun fetchJourney(): LiveData<JourneyRequest>
+    suspend fun fetchAllJourneys(): LiveData<List<JourneyResponse>>
+    fun fetchJourney(): LiveData<JourneyResponse>
 }

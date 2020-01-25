@@ -3,8 +3,9 @@ package com.treflor.data.repository
 import android.location.Location
 import androidx.lifecycle.LiveData
 import com.treflor.data.remote.requests.SignUpRequest
-import com.treflor.data.remote.response.DirectionApiResponse
+import com.treflor.models.directionapi.DirectionApiResponse
 import com.treflor.data.remote.response.IDResponse
+import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
 import com.treflor.models.TrackedLocation
@@ -28,12 +29,19 @@ interface Repository {
     // journey
     fun persistJourney(journey: Journey)
 
-    fun getJourney(): LiveData<Journey>
+    suspend fun getJourney(): LiveData<Journey>
     fun breakJourney()
-    suspend fun finishJourney(): IDResponse
+    suspend fun finishJourney(
+        journey: Journey,
+        direction: DirectionApiResponse,
+        trackedLocations: List<TrackedLocation>
+    ): IDResponse
+
+    suspend fun getAllJourneys(): LiveData<List<JourneyResponse>>
+    suspend fun getJourneyById(id:String): LiveData<JourneyResponse>
 
     // direction
-    fun getDirection(): LiveData<DirectionApiResponse>
+    suspend fun getDirection(): LiveData<DirectionApiResponse>
 
     suspend fun fetchDirection(
         origin: String,
@@ -44,7 +52,7 @@ interface Repository {
     fun clearDirection()
 
     // location tracking
-    fun getTrackedLocations(): LiveData<List<TrackedLocation>>
+    suspend fun getTrackedLocations(): LiveData<List<TrackedLocation>>
 
     fun insertTackedLocations(trackedLocation: TrackedLocation)
     fun clearTrackedLocations()

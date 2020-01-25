@@ -1,13 +1,10 @@
 package com.treflor.data.remote.requests
 
 import com.google.gson.annotations.SerializedName
-import com.treflor.data.remote.response.DirectionApiResponse
 import com.treflor.models.Journey
-import com.treflor.models.User
+import com.treflor.models.directionapi.DirectionApiResponse
 
 data class JourneyRequest(
-    @SerializedName("user")
-    val user: User?,
     @SerializedName("direction")
     val direction: DirectionApiResponse?,
     @SerializedName("journey")

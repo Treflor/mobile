@@ -5,11 +5,7 @@ import android.app.NotificationManager
 import android.os.Build
 import androidx.multidex.MultiDexApplication
 import com.treflor.data.db.TreflorDatabase
-import com.treflor.data.db.datasources.*
-import com.treflor.data.provider.JWTProvider
-import com.treflor.data.provider.JWTProviderImpl
-import com.treflor.data.provider.LocationProvider
-import com.treflor.data.provider.LocationProviderImpl
+import com.treflor.data.provider.*
 import com.treflor.data.remote.api.TreflorApiService
 import com.treflor.data.remote.datasources.*
 import com.treflor.data.remote.intercepters.ConnectivityInterceptor
@@ -19,6 +15,7 @@ import com.treflor.data.remote.intercepters.UnauthorizedInterceptorImpl
 import com.treflor.data.repository.Repository
 import com.treflor.data.repository.RepositoryImpl
 import com.treflor.ui.home.HomeViewModelFactory
+import com.treflor.ui.home.detailed.JourneyDetailsViewModelFactory
 import com.treflor.ui.journey.JourneyViewModelFactory
 import com.treflor.ui.journey.start.StartJourneyViewModelFactory
 import com.treflor.ui.login.LoginViewModelFactory
@@ -27,10 +24,7 @@ import com.treflor.ui.signup.SignUpViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.instance
-import org.kodein.di.generic.provider
-import org.kodein.di.generic.singleton
+import org.kodein.di.generic.*
 
 const val CHANNEL_ID = "treflorServiceChannel"
 
@@ -60,14 +54,16 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         // database
         bind() from singleton { TreflorDatabase(instance()) }
         bind() from singleton { instance<TreflorDatabase>().userDao() }
-        bind() from singleton { instance<TreflorDatabase>().journeyDao() }
         bind() from singleton { instance<TreflorDatabase>().directionDao() }
         bind() from singleton { instance<TreflorDatabase>().trackedLocationsDao() }
+        bind() from singleton { instance<TreflorDatabase>().journeyResponseDao() }
 
         // providers
         bind<JWTProvider>() with singleton { JWTProviderImpl(instance()) }
+        bind<CurrentJourneyProvider>() with singleton { CurrentJourneyProviderImpl(instance()) }
+        bind<CurrentUserProvider>() with singleton { CurrentUserProviderImpl(instance()) }
+        bind<CurrentDirectionProvider>() with singleton { CurrentDirectionProviderImpl(instance()) }
         bind<LocationProvider>() with singleton { LocationProviderImpl(instance()) }
-
         // interceptors
         bind<ConnectivityInterceptor>() with singleton {
             ConnectivityInterceptorImpl(
@@ -104,19 +100,11 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
             )
         }
 
-        //data sources - database
-        bind<UserDBDataSource>() with singleton { UserDBDataSourceImpl(instance()) }
-        bind<JourneyDBDataSource>() with singleton { JourneyDBDataSourceImpl(instance()) }
-        bind<DirectionDBDataSource>() with singleton { DirectionDBDataSourceImpl(instance()) }
-        bind<TrackedLocationsDBDataSource>() with singleton {
-            TrackedLocationsDBDataSourceImpl(
-                instance()
-            )
-        }
-
         //repository
         bind<Repository>() with singleton {
             RepositoryImpl(
+                instance(),
+                instance(),
                 instance(),
                 instance(),
                 instance(),
@@ -135,8 +123,9 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from provider { HomeViewModelFactory(instance()) }
         bind() from provider { ProfileViewModelFactory(instance()) }
         bind() from provider { SignUpViewModelFactory(instance()) }
-        bind() from provider { JourneyViewModelFactory(instance(),instance()) }
+        bind() from provider { JourneyViewModelFactory(instance(), instance()) }
         bind() from provider { StartJourneyViewModelFactory(instance(), instance()) }
+        bind() from factory { id: String -> JourneyDetailsViewModelFactory(instance(), id) }
     }
 
 }
