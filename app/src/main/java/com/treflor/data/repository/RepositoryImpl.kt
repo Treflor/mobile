@@ -18,6 +18,7 @@ import com.treflor.data.remote.response.IDResponse
 import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
+import com.treflor.models.Landmark
 import com.treflor.models.TrackedLocation
 import com.treflor.models.User
 import kotlinx.coroutines.*
@@ -33,6 +34,7 @@ class RepositoryImpl(
     private val trackedLocationsDao: TrackedLocationsDao,
     private val locationProvider: LocationProvider,
     private val currentDirectionProvider: CurrentDirectionProvider,
+    private val landmarkProvider: LandmarkProvider,
     private val currentUserProvider: CurrentUserProvider,
     private val currentJourneyProvider: CurrentJourneyProvider
 ) : Repository {
@@ -184,6 +186,12 @@ class RepositoryImpl(
         trackedLocationsDao.insert(trackedLocation)
 
     override fun clearTrackedLocations() = trackedLocationsDao.deleteTable()
+    override fun getCurrentLandmarks(): LiveData<List<Landmark>> = landmarkProvider.landmarks
+
+    override fun persistCurrentLandmark(landmark: Landmark) =
+        landmarkProvider.persistCurrentLandmark(landmark)
+
+    override fun deleteLandmarks() = landmarkProvider.deleteLandmarks()
 
     private fun unsetJWT(): Boolean = jwtProvider.unsetJWT()
     private fun getJWT(): String? = jwtProvider.getJWT()

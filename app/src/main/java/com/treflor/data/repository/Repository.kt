@@ -8,6 +8,7 @@ import com.treflor.data.remote.response.IDResponse
 import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
+import com.treflor.models.Landmark
 import com.treflor.models.TrackedLocation
 import com.treflor.models.User
 
@@ -60,4 +61,7 @@ interface Repository {
     fun insertTackedLocations(trackedLocation: TrackedLocation)
     fun clearTrackedLocations()
 
+    fun getCurrentLandmarks(): LiveData<List<Landmark>>
+    fun persistCurrentLandmark(landmark: Landmark)
+    fun deleteLandmarks()
 }

@@ -1,13 +1,21 @@
 package com.treflor.ui.journey.bottomsheets
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.esafirm.imagepicker.features.ImagePicker
+import com.esafirm.imagepicker.features.ReturnMode
+import com.esafirm.imagepicker.model.Image
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.treflor.R
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.bottomsheet_add_landmark.*
 
 class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
@@ -44,6 +52,16 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
         }
 
         btn_cancel.setOnClickListener { dismiss() }
+
+        btn_add_landmark_photos.setOnClickListener {
+            ImagePicker.create(this@LandmarkBottomSheetDialog)
+                .folderMode(true)
+                .toolbarImageTitle("Select Images")
+                .multi()
+                .limit(10)
+                .imageDirectory("treflor")
+                .start()
+        }
     }
 
     fun setLandmarkBottomSheetListener(landmarkBottomSheetListener: LandmarkBottomSheetListener) {
@@ -55,8 +73,41 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
         super.onDismiss(dialog)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            // Get a list of picked images
+            var images = ImagePicker.getImages(data)
+            initRecyclerView(images.toImageItems())
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     interface LandmarkBottomSheetListener {
         fun onDismiss(dialog: DialogInterface)
         fun onSave(title: String, snippet: String, type: String)
+    }
+
+    private fun initRecyclerView(items: List<ImageItem>) {
+        val groupAdapter = GroupAdapter<GroupieViewHolder>().apply {
+            addAll(items)
+//            setOnItemClickListener { item, _ ->
+//                (item as? JourneyItem)?.let {
+//                    val actionDetail =
+//                        HomeFragmentDirections.actionHomeFragmentToJourneyDetailsFragment(it.journeyResponse.id)
+//
+//                    navController.navigate(actionDetail)
+//                }
+//            }
+        }
+        rv_images.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = groupAdapter
+        }
+    }
+
+    private fun List<Image>.toImageItems(): List<ImageItem> {
+        return this.map {
+            ImageItem(it, context!!)
+        }
     }
 }

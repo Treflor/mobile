@@ -63,6 +63,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind<CurrentJourneyProvider>() with singleton { CurrentJourneyProviderImpl(instance()) }
         bind<CurrentUserProvider>() with singleton { CurrentUserProviderImpl(instance()) }
         bind<CurrentDirectionProvider>() with singleton { CurrentDirectionProviderImpl(instance()) }
+        bind<LandmarkProvider>() with singleton { LandmarkProviderImpl(instance()) }
         bind<LocationProvider>() with singleton { LocationProviderImpl(instance()) }
         // interceptors
         bind<ConnectivityInterceptor>() with singleton {
@@ -103,6 +104,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         //repository
         bind<Repository>() with singleton {
             RepositoryImpl(
+                instance(),
                 instance(),
                 instance(),
                 instance(),
