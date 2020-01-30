@@ -30,6 +30,8 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.bottomsheet_add_landmark, container, false)
     }
 
+    private var images: List<Image>? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         spinner_landmark_type.adapter = object : ArrayAdapter<String>(
@@ -47,7 +49,8 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
             listener?.onSave(
                 et_landmark_title.text.toString(),
                 et_landmark_snippet.text.toString(),
-                spinner_landmark_type.selectedItem.toString()
+                spinner_landmark_type.selectedItem.toString(),
+                images?.getImagePaths()
             )
         }
 
@@ -77,6 +80,7 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
             // Get a list of picked images
             var images = ImagePicker.getImages(data)
+            this.images = images
             initRecyclerView(images.toImageItems())
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -84,7 +88,7 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
 
     interface LandmarkBottomSheetListener {
         fun onDismiss(dialog: DialogInterface)
-        fun onSave(title: String, snippet: String, type: String)
+        fun onSave(title: String, snippet: String, type: String, imagesPaths: List<String>?)
     }
 
     private fun initRecyclerView(items: List<ImageItem>) {
@@ -109,5 +113,9 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
         return this.map {
             ImageItem(it, context!!)
         }
+    }
+
+    private fun List<Image>.getImagePaths(): List<String> {
+        return this.map { it.path }
     }
 }

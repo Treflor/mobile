@@ -161,7 +161,14 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                                     landmarkPicker?.remove()
                                     landmarkPicker = null
                                 }
-                                override fun onSave(title: String, snippet: String, type: String) {
+
+                                override fun onSave(
+                                    title: String,
+                                    snippet: String,
+                                    type: String,
+                                    imagesPaths: List<String>?
+                                ) {
+                                    // TODO: save images
                                 }
                             }
                         landmarkBottomSheet.show(activity!!.supportFragmentManager, "landmark")
