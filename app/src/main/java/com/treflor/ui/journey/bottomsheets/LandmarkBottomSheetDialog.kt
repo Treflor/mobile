@@ -46,11 +46,27 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
             )
         ) {}
         btn_add_landmark.setOnClickListener {
+
+            if (et_landmark_title.text.isNullOrEmpty()) {
+                til_landmark_title.error = "Title can't be empty!"
+                return@setOnClickListener
+            } else {
+                til_landmark_title.error = null
+            }
+
+            if (et_landmark_snippet.text.isNullOrEmpty()) {
+                til_landmark_snippet.error = "Description can't be empty!"
+                return@setOnClickListener
+            } else {
+                til_landmark_snippet.error = null
+            }
+
             listener?.onSave(
                 et_landmark_title.text.toString(),
                 et_landmark_snippet.text.toString(),
                 spinner_landmark_type.selectedItem.toString(),
-                images?.getImagePaths()
+                images?.getImagePaths(),
+                this
             )
         }
 
@@ -88,7 +104,13 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
 
     interface LandmarkBottomSheetListener {
         fun onDismiss(dialog: DialogInterface)
-        fun onSave(title: String, snippet: String, type: String, imagesPaths: List<String>?)
+        fun onSave(
+            title: String,
+            snippet: String,
+            type: String,
+            imagesPaths: List<String>?,
+            bottomSheetDialog: LandmarkBottomSheetDialog
+        )
     }
 
     private fun initRecyclerView(items: List<ImageItem>) {
