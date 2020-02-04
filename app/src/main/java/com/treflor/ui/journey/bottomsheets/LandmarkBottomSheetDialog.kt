@@ -37,6 +37,7 @@ class LandmarkBottomSheetDialog : BottomSheetDialogFragment() {
         spinner_landmark_type.adapter = object : ArrayAdapter<String>(
             this.context!!, android.R.layout.simple_spinner_dropdown_item,
             listOf(
+                "Sanitary",
                 "Fountain",
                 "Caves",
                 "Waterfall",

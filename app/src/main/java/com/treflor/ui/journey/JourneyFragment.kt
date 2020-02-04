@@ -27,6 +27,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.treflor.R
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.ui.base.TreflorScopedFragment
+import com.treflor.models.Landmark
 import com.treflor.ui.journey.bottomsheets.LandmarkBottomSheetDialog
 import kotlinx.android.synthetic.main.journey_fragment.*
 import kotlinx.coroutines.launch
@@ -49,6 +50,7 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
     private var camPosUpdatedOnFirstLaunch = false
     private var routePolyline: Polyline? = null
     private var trackedPolyline: Polyline? = null
+    private val landmarks: MutableList<Marker?> = mutableListOf()
 
     private lateinit var icLandmarkB: Bitmap
     private lateinit var icLandmarkOnMoveB: Bitmap
@@ -168,11 +170,11 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                                     snippet: String,
                                     type: String,
                                     imagesPaths: List<String>?,
-                                    bottomSheet: LandmarkBottomSheetDialog
+                                    bottomSheetDialog: LandmarkBottomSheetDialog
                                 ) {
-
-                                    Log.e("lnd",type)
-//                                    bottomSheet.dismiss()
+                                    viewModel.persistLandmark(Landmark("",title,snippet,type,imagesPaths,
+                                        landmarkPicker!!.position.latitude,landmarkPicker!!.position.longitude))
+                                    bottomSheetDialog.dismiss()
                                 }
                             }
                         landmarkBottomSheet.show(activity!!.supportFragmentManager, "landmark")
@@ -204,6 +206,17 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                         .zIndex(2f)
                 )
             }
+        })
+
+        viewModel.landmarks.observe(this@JourneyFragment, Observer {
+            landmarks.forEach { marker -> marker?.remove() }
+            landmarks.clear()
+            Log.e("land mark",it.size.toString() + "ff")
+            it?.map { landmark ->
+                MarkerOptions().title(landmark.title).snippet(landmark.snippet)
+                    .position(landmark.toLatLng())
+            }?.toList()?.forEach { markerOption -> landmarks.add(googleMap?.addMarker(markerOption)) }
+
         })
     }
 

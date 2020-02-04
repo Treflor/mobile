@@ -188,8 +188,8 @@ class RepositoryImpl(
     override fun clearTrackedLocations() = trackedLocationsDao.deleteTable()
     override fun getCurrentLandmarks(): LiveData<List<Landmark>> = landmarkProvider.landmarks
 
-    override fun persistCurrentLandmark(landmark: Landmark) =
-        landmarkProvider.persistCurrentLandmark(landmark)
+    override fun persistLandmark(landmark: Landmark) =
+        landmarkProvider.persistLandmark(landmark)
 
     override fun deleteLandmarks() = landmarkProvider.deleteLandmarks()
 

@@ -10,10 +10,10 @@ data class Landmark(
     val title: String,
     val snippet: String,
     val type: String,
-    val images: List<String>,
+    val images: List<String>?,
     val lat: Double,
     val lng: Double
 ) {
-    fun toJson() = Gson().toJson(this)
+    fun toJson(): String? = Gson().toJson(this)
     fun toLatLng(): LatLng = LatLng(lat, lng)
 }
