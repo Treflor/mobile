@@ -45,6 +45,7 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
     private lateinit var navController: NavController
     private lateinit var viewModel: JourneyViewModel
     private var myPositionMarker: Marker? = null
+    private var endLocationJourneyMarker: Marker? = null
     private var landmarkPicker: Marker? = null
     private var googleMap: GoogleMap? = null
     private var camPosUpdatedOnFirstLaunch = false
@@ -140,6 +141,8 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                 btn_start_journey.setOnClickListener { navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment) }
                 btn_add_landmark.visibility = View.GONE
                 btn_add_landmark.setOnClickListener(null)
+                endLocationJourneyMarker?.remove()
+                endLocationJourneyMarker = null
             } else {
                 btn_start_journey.setImageResource(R.drawable.ic_finish_journey)
                 btn_start_journey.setOnClickListener { viewModel.finishJourney() }
@@ -172,14 +175,34 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                                     imagesPaths: List<String>?,
                                     bottomSheetDialog: LandmarkBottomSheetDialog
                                 ) {
-                                    viewModel.persistLandmark(Landmark("",title,snippet,type,imagesPaths,
-                                        landmarkPicker!!.position.latitude,landmarkPicker!!.position.longitude))
+                                    viewModel.persistLandmark(
+                                        Landmark(
+                                            "",
+                                            title,
+                                            snippet,
+                                            type,
+                                            imagesPaths,
+                                            landmarkPicker!!.position.latitude,
+                                            landmarkPicker!!.position.longitude
+                                        )
+                                    )
                                     bottomSheetDialog.dismiss()
                                 }
                             }
                         landmarkBottomSheet.show(activity!!.supportFragmentManager, "landmark")
                     }
                 }
+                val icEndLandmarkB = BitmapFactory.decodeResource(resources, R.drawable.flag)
+                val icEndLandmarkSmall =
+                    Bitmap.createScaledBitmap(icEndLandmarkB, 70, 70, false)
+                endLocationJourneyMarker = googleMap?.addMarker(
+                    MarkerOptions()
+                        .title(it.destination.name)
+                        .icon(BitmapDescriptorFactory.fromBitmap(icEndLandmarkSmall))
+                        .snippet(it.destination.address)
+                        .position(LatLng(it.destination.latitude, it.destination.longitude))
+                )
+
             }
         })
 
@@ -211,11 +234,17 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
         viewModel.landmarks.observe(this@JourneyFragment, Observer {
             landmarks.forEach { marker -> marker?.remove() }
             landmarks.clear()
-            Log.e("land mark",it.size.toString() + "ff")
+            val icLandmarkPinB = BitmapFactory.decodeResource(resources, R.drawable.landmark_pin)
+            val icLandmarkPinSmall = Bitmap.createScaledBitmap(icLandmarkPinB, 70, 70, false)
+
             it?.map { landmark ->
-                MarkerOptions().title(landmark.title).snippet(landmark.snippet)
+                MarkerOptions()
+                    .title(landmark.title)
+                    .snippet(landmark.snippet)
+                    .icon(BitmapDescriptorFactory.fromBitmap(icLandmarkPinSmall))
                     .position(landmark.toLatLng())
-            }?.toList()?.forEach { markerOption -> landmarks.add(googleMap?.addMarker(markerOption)) }
+            }?.toList()
+                ?.forEach { markerOption -> landmarks.add(googleMap?.addMarker(markerOption)) }
 
         })
     }
