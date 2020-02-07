@@ -139,10 +139,17 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
             if (it == null) {
                 btn_start_journey.setImageResource(R.drawable.ic_hiking)
                 btn_start_journey.setOnClickListener { navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment) }
+
                 btn_add_landmark.visibility = View.GONE
                 btn_add_landmark.setOnClickListener(null)
+
+                btn_my_location.visibility = View.GONE
+                btn_my_location.setOnClickListener(null)
+
                 endLocationJourneyMarker?.remove()
                 endLocationJourneyMarker = null
+                landmarks.forEach { marker -> marker?.remove() }
+                landmarks.clear()
             } else {
                 btn_start_journey.setImageResource(R.drawable.ic_finish_journey)
                 btn_start_journey.setOnClickListener { viewModel.finishJourney() }
@@ -192,6 +199,17 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                         landmarkBottomSheet.show(activity!!.supportFragmentManager, "landmark")
                     }
                 }
+
+                btn_my_location.visibility = View.VISIBLE
+                btn_my_location.setOnClickListener {
+                    googleMap?.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            myPositionMarker?.position,
+                            17f
+                        )
+                    )
+                }
+
                 val icEndLandmarkB = BitmapFactory.decodeResource(resources, R.drawable.flag)
                 val icEndLandmarkSmall =
                     Bitmap.createScaledBitmap(icEndLandmarkB, 70, 70, false)

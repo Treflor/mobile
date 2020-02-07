@@ -116,6 +116,7 @@ class RepositoryImpl(
         currentJourneyProvider.deleteJourney()
         clearTrackedLocations()
         clearDirection()
+        landmarkProvider.deleteLandmarks()
     }
 
     override suspend fun finishJourney(
@@ -125,7 +126,7 @@ class RepositoryImpl(
     ): IDResponse {
         val trackedLocationsString =
             PolyUtil.encode(trackedLocations.map { tl -> LatLng(tl.lat, tl.lng) })
-        val journeyRequest = JourneyRequest(direction, journey, trackedLocationsString)
+        val journeyRequest = JourneyRequest(direction, journey, trackedLocationsString,landmarkProvider.getCurrentLandmarks())
         GlobalScope.launch(Dispatchers.IO) { breakJourney() }
         return withContext(Dispatchers.IO) {
             return@withContext journeyNetworkDataSource.uploadJourney(
