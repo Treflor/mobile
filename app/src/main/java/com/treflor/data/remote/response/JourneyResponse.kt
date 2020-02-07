@@ -5,6 +5,7 @@ import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.treflor.models.Journey
+import com.treflor.models.Landmark
 import com.treflor.models.User
 import com.treflor.models.directionapi.DirectionApiResponse
 import java.io.Serializable
@@ -28,5 +29,7 @@ data class JourneyResponse(
     @SerializedName("tracked_locations")
     val trackedLocations: String,
     @SerializedName("favorites")
-    val favorites: List<String>?
+    val favorites: List<String>?,
+    @SerializedName("landmarks")
+    val landmarks: List<Landmark>?
 )

@@ -26,6 +26,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.treflor.R
 import com.treflor.internal.eventexcecutor.ActivityNavigation
+import com.treflor.internal.imageToBase64
 import com.treflor.internal.ui.base.TreflorScopedFragment
 import com.treflor.models.Landmark
 import com.treflor.ui.journey.bottomsheets.LandmarkBottomSheetDialog
@@ -182,13 +183,15 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                                     imagesPaths: List<String>?,
                                     bottomSheetDialog: LandmarkBottomSheetDialog
                                 ) {
+
+                                    Log.e("gg?", imagesPaths?.map { path -> imageToBase64(path) }?.toList().toString())
                                     viewModel.persistLandmark(
                                         Landmark(
                                             "",
                                             title,
                                             snippet,
                                             type,
-                                            imagesPaths,
+                                            imagesPaths?.map { path -> imageToBase64(path) }?.toList(),
                                             landmarkPicker!!.position.latitude,
                                             landmarkPicker!!.position.longitude
                                         )
