@@ -67,4 +67,6 @@ class CurrentUserProviderImpl(context: Context) : PreferenceProvider(context), C
         editor.apply()
         _currentUser.postValue(null)
     }
+
+    override fun getCurrentUserId(): String? = preferences.getString(USER_ID,"")
 }

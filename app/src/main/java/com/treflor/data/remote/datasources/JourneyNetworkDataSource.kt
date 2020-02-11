@@ -11,5 +11,7 @@ interface JourneyNetworkDataSource {
 
     suspend fun uploadJourney(journeyRequest: JourneyRequest): IDResponse
     suspend fun fetchAllJourneys(): LiveData<List<JourneyResponse>>
-    fun fetchJourney(): LiveData<JourneyResponse>
+    suspend fun fetchJourneyById(journeyId: String): LiveData<JourneyResponse>
+    suspend fun addJourneyFavorite(journeyId: String): IDResponse
+    suspend fun removeJourneyFavorite(journeyId: String): IDResponse
 }
