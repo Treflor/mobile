@@ -43,6 +43,7 @@ class LandmarkProviderImpl(context: Context) : PreferenceProvider(context), Land
             preferences.edit().remove(LANDMARK + i).apply()
         }
         preferences.edit().remove(LANDMARK_ID).apply()
+        _landmarks.postValue(null)
     }
 
     private fun getLastId(): Int = preferences.getInt(LANDMARK_ID, 0)

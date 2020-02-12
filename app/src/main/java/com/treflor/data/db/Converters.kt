@@ -31,7 +31,7 @@ object Converters {
     @TypeConverter
     @JvmStatic
     fun fromLandmarkList(landmarks: List<Landmark>?): String? {
-        val type = object : TypeToken<List<String>>() {}.type
+        val type = object : TypeToken<List<Landmark>>() {}.type
         return Gson().toJson(landmarks, type)
     }
 }
