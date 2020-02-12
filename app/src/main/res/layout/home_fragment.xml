@@ -9,11 +9,10 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorWhite"
         app:title="Home"
         app:titleMarginStart="20dp"
         app:titleTextColor="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="" _toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" _toTopOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
     </androidx.appcompat.widget.Toolbar>
