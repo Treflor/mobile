@@ -2,13 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/gradient">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="109dp"
-        android:layout_height="73dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="80dp"
         android:layout_weight="1"
-        app:srcCompat="@drawable/TreflorLogo" />
+        app:srcCompat="@drawable/treflor_white" />
 </LinearLayout>
