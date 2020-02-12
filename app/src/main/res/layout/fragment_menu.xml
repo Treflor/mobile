@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.menu.MenuFragment">
+    tools:context=".ui.settings.SettingsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,6 @@
             android:id="@+id/toolbar2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:title="Settings"
@@ -42,16 +41,16 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:fontFamily="@font/roboto"
-                android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:text="Edit profile details"
-                android:textColor="@color/colorBlack"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:text="Edit profile details"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp" />
 
                 <View
                     android:id="@+id/divider4"
@@ -79,7 +78,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Change password"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/textColor"
                     android:textSize="16sp" />
 
                 <View
@@ -108,7 +107,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Privacy Policy"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/textColor"
                     android:textSize="16sp" />
 
                 <View
@@ -137,7 +136,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="FAQs"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/textColor"
                     android:textSize="16sp" />
 
                 <TextView
@@ -148,7 +147,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Provide Feedback"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/textColor"
                     android:textSize="16sp" />
 
                 <TextView
@@ -159,7 +158,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Rate on the Google Play Store"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/textColor"
                     android:textSize="16sp" />
 
                 <View
@@ -188,7 +187,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="About Treflor"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/textColor"
                     android:textSize="16sp" />
 
                 <TextView
@@ -199,7 +198,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Terms of Service"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/textColor"
                     android:textSize="16sp" />
 
                 <TextView
@@ -210,7 +209,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:text="Version: "
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/textColor"
                     android:textSize="16sp" />
 
                 <View

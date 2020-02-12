@@ -11,7 +11,7 @@
         tools:layout="@layout/camera_fragment" />
     <fragment
         android:id="@+id/menuFragment"
-        android:name="com.treflor.ui.menu.MenuFragment"
+        android:name="com.treflor.ui.settings.SettingsFragment"
         android:label="fragment_menu"
         tools:layout="@layout/fragment_menu" />
     <fragment
@@ -39,7 +39,8 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.treflor.ui.login.LoginFragment"
-        android:label="LoginFragment">
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment"
