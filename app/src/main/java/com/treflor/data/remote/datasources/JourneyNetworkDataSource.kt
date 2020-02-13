@@ -7,6 +7,7 @@ import com.treflor.data.remote.response.JourneyResponse
 
 interface JourneyNetworkDataSource {
     val journeys: LiveData<List<JourneyResponse>>
+    val userJourneys: LiveData<List<JourneyResponse>>
     val journey: LiveData<JourneyResponse>
 
     suspend fun uploadJourney(journeyRequest: JourneyRequest): IDResponse

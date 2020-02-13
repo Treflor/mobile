@@ -2,6 +2,7 @@ package com.treflor.ui.profile.journeys
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -40,23 +41,18 @@ class UserJourneyFragment : TreflorScopedFragment(), KodeinAware {
     }
 
     private fun bindUI() = launch {
-        viewModel.user.await().observe(this@UserJourneyFragment, Observer { user ->
-            if (user == null) return@Observer
 
-            GlobalScope.launch(Dispatchers.IO) {
-                viewModel.journeys.await().observe(this@UserJourneyFragment, Observer {
-                    initRecyclerView(it.toJourneyItems())
-                })
-            }
-
+        viewModel.journeys.await().observe(this@UserJourneyFragment, Observer {
+            if (it == null) return@Observer
+            Log.e("sex",it.size.toString() + " fdfsf")
+            initRecyclerView(it.toJourneyItems())
             progress_circular.visibility = View.GONE
         })
-
     }
 
     private fun List<JourneyResponse>.toJourneyItems(): List<JourneyItem> {
         return this.map {
-            JourneyItem(it)
+            JourneyItem(it, viewModel.userId)
         }
     }
 

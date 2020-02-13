@@ -58,7 +58,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
         listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
     private var startLocation: TreflorPlace? = null
     private var destination: TreflorPlace? = null
-    private var base64Image : String? = null
+    private var base64Image: String? = null
     private var colors = listOf(
         android.R.color.holo_red_light,
         android.R.color.holo_blue_light,
@@ -207,7 +207,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
                     return
                 }
                 if (base64Image.isNullOrEmpty()) {
-                    showSnackBar("Please enter one or more labels!")
+                    showSnackBar("Please select an image!")
                     return
                 }
                 viewModel.startJourney(
@@ -241,6 +241,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
             val image = ImagePicker.getFirstImageOrNull(data)
 
 //                load image in to imageview
+            add_image.setPadding(0, 0, 0, 0)
             Glide.with(this@StartJourneyFragment)
                 .load(image.path)
                 .centerCrop()
