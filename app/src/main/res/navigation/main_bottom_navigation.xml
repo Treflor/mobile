@@ -115,6 +115,10 @@
         tools:layout="@layout/user_journey_fragment" >
         <action
             android:id="@+id/action_userJourneyFragment_to_journeyDetailsFragment"
-            app:destination="@id/journeyDetailsFragment" />
+            app:destination="@id/journeyDetailsFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out_down"/>
     </fragment>
 </navigation>

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.treflor.R
@@ -18,8 +19,6 @@ import com.treflor.ui.home.list.JourneyItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.home_fragment.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -40,11 +39,18 @@ class UserJourneyFragment : TreflorScopedFragment(), KodeinAware {
         return inflater.inflate(R.layout.user_journey_fragment, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(UserJourneyViewModel::class.java)
+        navController = Navigation.findNavController(view)
+        bindUI()
+    }
+
     private fun bindUI() = launch {
 
         viewModel.journeys.await().observe(this@UserJourneyFragment, Observer {
             if (it == null) return@Observer
-            Log.e("sex",it.size.toString() + " fdfsf")
             initRecyclerView(it.toJourneyItems())
             progress_circular.visibility = View.GONE
         })
@@ -62,11 +68,8 @@ class UserJourneyFragment : TreflorScopedFragment(), KodeinAware {
             setOnItemClickListener { item, _ ->
                 (item as? JourneyItem)?.let {
                     val actionDetail =
-                        UserJourneyFragmentDirections.actionUserJourneyFragmentToJourneyDetailsFragment(
-                            it.journeyResponse.id
-                        )
-
-                    navController.navigate(actionDetail)
+                        UserJourneyFragmentDirections.actionUserJourneyFragmentToJourneyDetailsFragment(it.journeyResponse.id)
+//                    navController.navigate(actionDetail)
                 }
             }
         }
@@ -75,12 +78,4 @@ class UserJourneyFragment : TreflorScopedFragment(), KodeinAware {
             adapter = groupAdapter
         }
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(UserJourneyViewModel::class.java)
-        bindUI()
-    }
-
 }

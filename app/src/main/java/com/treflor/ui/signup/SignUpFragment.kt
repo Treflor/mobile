@@ -2,6 +2,7 @@ package com.treflor.ui.signup
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 import java.util.Calendar
+import java.util.regex.Pattern
 
 class SignUpFragment : Fragment(), View.OnClickListener, KodeinAware, ActivityNavigation {
 
@@ -94,15 +96,29 @@ class SignUpFragment : Fragment(), View.OnClickListener, KodeinAware, ActivityNa
                 navController.navigateUp()
             }
             R.id.btn_sign_up -> {
-                //TODO : validate
-                request.email = txt_email.text.toString()
-                request.password = txt_password.text.toString()
-                request.password2 = txt_password_again.text.toString()
-                request.firstName = txt_given_name.text.toString()
-                request.lastName = txt_family_name.text.toString()
+
+                request.email = et_email.text.toString()
+                request.password = et_password.text.toString()
+                request.password2 = et_password_again.text.toString()
+                request.firstName = et_given_name.text.toString()
+                request.lastName = et_family_name.text.toString()
                 request.gender = gender_spinner.selectedItem.toString()
                 request.birthday = getTimeInMillisFromDatePicker(birthday_picker)
                 viewModel.signUp(request)
+            }
+        }
+    }
+
+    fun validate():Boolean {
+        var valid = true
+        if(et_email.text.isNullOrEmpty()){
+            til_email.error = "Email can't be empty!"
+            valid = false
+        } else {
+            val pattern = Patterns.EMAIL_ADDRESS
+            if(!pattern.matcher(et_email.text).matches()){
+                til_email.error = "Enter an valid email!"
+                valid = false
             }
         }
     }
