@@ -1,4 +1,4 @@
-package com.treflor.ui.menu
+package com.treflor.ui.settings
 
 
 import android.os.Bundle
@@ -12,7 +12,7 @@ import com.treflor.R
 /**
  * A simple [Fragment] subclass.
  */
-class MenuFragment : Fragment() {
+class SettingsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
