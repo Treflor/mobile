@@ -2,6 +2,7 @@ package com.treflor.ui.signup
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -96,31 +97,80 @@ class SignUpFragment : Fragment(), View.OnClickListener, KodeinAware, ActivityNa
                 navController.navigateUp()
             }
             R.id.btn_sign_up -> {
-
-                request.email = et_email.text.toString()
-                request.password = et_password.text.toString()
-                request.password2 = et_password_again.text.toString()
-                request.firstName = et_given_name.text.toString()
-                request.lastName = et_family_name.text.toString()
-                request.gender = gender_spinner.selectedItem.toString()
-                request.birthday = getTimeInMillisFromDatePicker(birthday_picker)
-                viewModel.signUp(request)
+                if (validate()) {
+                    request.email = et_email.text.toString()
+                    request.password = et_password.text.toString()
+                    request.password2 = et_password_again.text.toString()
+                    request.firstName = et_given_name.text.toString()
+                    request.lastName = et_family_name.text.toString()
+                    request.gender = gender_spinner.selectedItem.toString()
+                    request.birthday = getTimeInMillisFromDatePicker(birthday_picker)
+                    viewModel.signUp(request)
+                }
             }
         }
     }
 
-    fun validate():Boolean {
+    private fun validate(): Boolean {
+        til_family_name.error = ""
+        til_given_name.error = ""
+        til_password.error = ""
+        til_email.error = ""
+        til_password_again.error = ""
+
         var valid = true
-        if(et_email.text.isNullOrEmpty()){
+        if (et_email.text.isNullOrEmpty()) {
             til_email.error = "Email can't be empty!"
             valid = false
         } else {
             val pattern = Patterns.EMAIL_ADDRESS
-            if(!pattern.matcher(et_email.text).matches()){
+            if (!pattern.matcher(et_email.text).matches()) {
                 til_email.error = "Enter an valid email!"
                 valid = false
             }
         }
+
+        if (et_password.text.isNullOrEmpty()) {
+            til_password.error = "Password can't be empty!"
+            valid = false
+        } else {
+            val pattern =
+                """^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#${'$'}%!\-_?&])(?=\S+${'$'}).{8,}""".toRegex()
+            if (!pattern.matches(et_password.text.toString())) {
+                til_password.error =
+                    "Password must contain at least 6 characters, one lowercase letter,one uppercase letter, one digit,one special character"
+                valid = false
+            }
+        }
+
+        if (et_password_again.text.isNullOrEmpty()) {
+            til_password_again.error = "Password again can't be empty!"
+            valid = false
+        } else {
+            Log.e("p1", et_password.text.toString())
+            Log.e("p1", et_password_again.text.toString())
+            if (et_password.text.toString() != et_password_again.text.toString()) {
+                til_password_again.error =
+                    "Passwords are not matching!"
+                valid = false
+            }
+        }
+        if (et_given_name.text.isNullOrEmpty()) {
+            til_given_name.error = "First name can't be empty!"
+            valid = false
+        }
+
+        if (et_family_name.text.isNullOrEmpty()) {
+            til_family_name.error = "Last name can't be empty!"
+            valid = false
+        }
+
+
+        if (gender_spinner.selectedItemPosition == 2) {
+            showSnackBar("please select a gender!")
+            valid = false
+        }
+        return valid
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -19,6 +19,7 @@ interface Repository {
 
     fun signIn(email: String, password: String)
     fun signUp(signUpRequest: SignUpRequest)
+    fun signOut()
     suspend fun getUser(): LiveData<User>
     fun getCurrentUserId(): String?
 
