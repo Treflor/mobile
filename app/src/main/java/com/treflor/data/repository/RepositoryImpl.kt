@@ -137,6 +137,13 @@ class RepositoryImpl(
         }
     }
 
+    override suspend fun userJourneys(): LiveData<List<JourneyResponse>> {
+        return withContext(Dispatchers.IO) {
+            journeyNetworkDataSource.userJourneys()
+            return@withContext journeyResponseDao.getAllUserJourneys(currentUserProvider.getCurrentUser()?.id!!)
+        }
+    }
+
     override suspend fun getJourneyById(id: String): LiveData<JourneyResponse> {
         return withContext(Dispatchers.IO) {
             return@withContext journeyResponseDao.getDetailedJourneyById(id)

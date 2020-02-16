@@ -16,6 +16,10 @@ interface JourneyResponseDao {
     fun getAllListJourneys(): LiveData<List<JourneyResponse>>
 
 
+    @Query("SELECT * FROM journey_responses where user_id = :uid;")
+    fun getAllUserJourneys(uid: String): LiveData<List<JourneyResponse>>
+
+
     @Query("SELECT * FROM journey_responses WHERE id = :id;")
     fun getDetailedJourneyById(id: String): LiveData<JourneyResponse>
 

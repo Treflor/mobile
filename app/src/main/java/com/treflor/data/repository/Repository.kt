@@ -40,6 +40,9 @@ interface Repository {
     suspend fun getAllJourneys(): LiveData<List<JourneyResponse>>
     suspend fun getJourneyById(id:String): LiveData<JourneyResponse>
 
+    //user journey
+    suspend fun userJourneys(): LiveData<List<JourneyResponse>>
+
     // direction
     suspend fun getDirection(): LiveData<DirectionApiResponse>
 

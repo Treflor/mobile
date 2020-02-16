@@ -43,6 +43,19 @@ class JourneyNetworkDataSourceImpl(
         }
     }
 
+    override suspend fun userJourneys(): LiveData<List<JourneyResponse>> {
+        return try {
+            Log.e("journeys", "fetching journeys")
+            val journeysV = mutableListOf<JourneyResponse>()
+            journeysV.addAll(treflorApiService.userJourneys(jwtProvider.getJWT()!!).await())
+            _journeys.postValue(journeysV)
+            _journeys
+        } catch (e: NoConnectivityException) {
+            Log.e("Connectivity", "No internet connection.", e)
+            _journeys
+        }
+    }
+
     override fun fetchJourney(): LiveData<JourneyResponse> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

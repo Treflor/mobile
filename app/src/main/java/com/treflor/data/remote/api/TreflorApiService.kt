@@ -58,6 +58,11 @@ interface TreflorApiService {
         @Header("authorization") jwt: String
     ): Deferred<List<JourneyResponse>>
 
+    @GET("user/journeys")
+    fun userJourneys(
+        @Header("authorization") jwt: String
+    ): Deferred<List<JourneyResponse>>
+
     companion object {
         operator fun invoke(
             connectivityInterceptor: ConnectivityInterceptor
