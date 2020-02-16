@@ -13,10 +13,14 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
+import com.esafirm.imagepicker.features.ImagePicker
+import com.esafirm.imagepicker.features.ReturnMode
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
@@ -30,6 +34,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.treflor.R
 import com.treflor.internal.eventexcecutor.ActivityNavigation
+import com.treflor.internal.imageToBase64
 import com.treflor.models.Journey
 import com.treflor.models.TreflorPlace
 import kotlinx.android.synthetic.main.start_journey_fragment.*
@@ -53,6 +58,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
         listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
     private var startLocation: TreflorPlace? = null
     private var destination: TreflorPlace? = null
+    private var base64Image : String? = null
     private var colors = listOf(
         android.R.color.holo_red_light,
         android.R.color.holo_blue_light,
@@ -98,6 +104,7 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
             false
         }
 
+        add_image.setOnClickListener(this)
         et_current_place.setOnClickListener(this)
         et_destination_place.setOnClickListener(this)
         fab_start_journey.setOnClickListener(this)
@@ -152,6 +159,15 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
 
     override fun onClick(v: View?) {
         when (v!!.id) {
+            R.id.add_image -> {
+                ImagePicker.create(this@StartJourneyFragment)
+                    .returnMode(ReturnMode.ALL)
+                    .folderMode(true)
+                    .toolbarImageTitle("Upload an Image")
+                    .single()
+                    .imageDirectory("treflor")
+                    .start()
+            }
             R.id.et_current_place -> {
                 getPlace(CURRENT_PLACE_AUTOCOMPLETE_REQUEST_CODE)
             }
@@ -190,6 +206,10 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
                     showSnackBar("Please enter one or more labels!")
                     return
                 }
+                if (base64Image.isNullOrEmpty()) {
+                    showSnackBar("Please enter one or more labels!")
+                    return
+                }
                 viewModel.startJourney(
                     Journey(
                         "",                     //will issue by server
@@ -198,7 +218,8 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
                         startLocation!!,
                         destination!!,
                         level,
-                        labels
+                        labels,
+                        base64Image!!
                     )
                 )
                 navController.navigate(R.id.action_startJourneyFragment_to_journeyFragment)
@@ -216,6 +237,19 @@ class StartJourneyFragment : Fragment(), View.OnClickListener, PlaceSelectionLis
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            val image = ImagePicker.getFirstImageOrNull(data)
+
+//                load image in to imageview
+            Glide.with(this@StartJourneyFragment)
+                .load(image.path)
+                .centerCrop()
+                .into(add_image)
+            add_image.updatePadding(top = 0, bottom = 0)
+
+//            set image in request
+            base64Image = imageToBase64(image.path)
+        }
         if (requestCode == CURRENT_PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
