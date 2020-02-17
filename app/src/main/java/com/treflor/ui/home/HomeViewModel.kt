@@ -6,7 +6,6 @@ import com.treflor.internal.lazyDeferred
 
 class HomeViewModel(private val repository: Repository) : ViewModel() {
 
-    val journeys by lazyDeferred {
-        repository.getAllJourneys()
-    }
+    val journeys by lazyDeferred { repository.getAllJourneys() }
+    val userId by lazy { repository.getCurrentUserId() }
 }

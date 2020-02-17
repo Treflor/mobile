@@ -62,6 +62,25 @@ interface TreflorApiService {
     fun userJourneys(
         @Header("authorization") jwt: String
     ): Deferred<List<JourneyResponse>>
+  
+    @GET("journey/{journeyId}")
+    fun journeyById(
+        @Header("authorization") jwt: String,
+        @Path(value = "journeyId", encoded = true) journeyId: String
+    ): Deferred<JourneyResponse>
+
+
+    @PUT("journey/{journeyId}/addFavorite")
+    fun addFavorite(
+        @Header("authorization") jwt: String,
+        @Path(value = "journeyId", encoded = true) journeyId: String
+    ): Deferred<IDResponse>
+
+    @PUT("journey/{journeyId}/removeFavorite")
+    fun removeFavorite(
+        @Header("authorization") jwt: String,
+        @Path(value = "journeyId", encoded = true) journeyId: String
+    ): Deferred<IDResponse>
 
     companion object {
         operator fun invoke(

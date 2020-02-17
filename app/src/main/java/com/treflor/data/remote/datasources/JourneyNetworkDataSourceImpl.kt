@@ -19,7 +19,8 @@ class JourneyNetworkDataSourceImpl(
     private val _journeys by lazy { MutableLiveData<List<JourneyResponse>>() }
 
     override val journey: LiveData<JourneyResponse>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = _journey
+    private val _journey by lazy { MutableLiveData<JourneyResponse>() }
 
     override suspend fun uploadJourney(journeyRequest: JourneyRequest): IDResponse {
         return try {
@@ -58,5 +59,37 @@ class JourneyNetworkDataSourceImpl(
 
     override fun fetchJourney(): LiveData<JourneyResponse> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    override suspend fun fetchJourneyById(journeyId: String): LiveData<JourneyResponse> {
+        return try {
+            Log.e("journeys", "fetching journey ${journeyId}")
+            val journey = treflorApiService.journeyById(jwtProvider.getJWT()!!, journeyId).await()
+            _journey.postValue(journey)
+            _journey
+        } catch (e: NoConnectivityException) {
+            Log.e("Connectivity", "No internet connection.", e)
+            _journey
+        }
     }
+
+    override suspend fun addJourneyFavorite(journeyId: String): IDResponse {
+        return try {
+            treflorApiService.addFavorite(jwtProvider.getJWT()!!, journeyId).await()
+        } catch (e: NoConnectivityException) {
+            Log.e("Connectivity", "No internet connection.", e)
+            IDResponse(false, "Connection Error", "")
+        }
+    }
+
+    override suspend fun removeJourneyFavorite(journeyId: String): IDResponse {
+        return try {
+            treflorApiService.removeFavorite(jwtProvider.getJWT()!!, journeyId).await()
+        } catch (e: NoConnectivityException) {
+            Log.e("Connectivity", "No internet connection.", e)
+            IDResponse(false, "Connection Error", "")
+        }
+
+    }
+
+
 }

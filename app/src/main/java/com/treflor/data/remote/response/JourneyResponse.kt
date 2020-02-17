@@ -26,5 +26,7 @@ data class JourneyResponse(
     @SerializedName("journey")
     val journey: Journey?,
     @SerializedName("tracked_locations")
-    val trackedLocations: String
+    val trackedLocations: String,
+    @SerializedName("favorites")
+    val favorites: List<String>?
 )

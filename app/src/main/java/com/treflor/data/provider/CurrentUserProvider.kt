@@ -8,4 +8,5 @@ interface CurrentUserProvider {
     fun getCurrentUser(): User?
     fun persistCurrentUser(user: User)
     fun deleteCurrentUser()
+    fun getCurrentUserId():String?
 }
