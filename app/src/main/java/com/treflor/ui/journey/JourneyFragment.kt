@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,9 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.treflor.R
 import com.treflor.internal.eventexcecutor.ActivityNavigation
+import com.treflor.internal.imageToBase64
 import com.treflor.internal.ui.base.TreflorScopedFragment
+import com.treflor.models.Landmark
 import com.treflor.ui.journey.bottomsheets.LandmarkBottomSheetDialog
 import kotlinx.android.synthetic.main.journey_fragment.*
 import kotlinx.coroutines.launch
@@ -43,11 +46,13 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
     private lateinit var navController: NavController
     private lateinit var viewModel: JourneyViewModel
     private var myPositionMarker: Marker? = null
+    private var endLocationJourneyMarker: Marker? = null
     private var landmarkPicker: Marker? = null
     private var googleMap: GoogleMap? = null
     private var camPosUpdatedOnFirstLaunch = false
     private var routePolyline: Polyline? = null
     private var trackedPolyline: Polyline? = null
+    private val landmarks: MutableList<Marker?> = mutableListOf()
 
     private lateinit var icLandmarkB: Bitmap
     private lateinit var icLandmarkOnMoveB: Bitmap
@@ -135,8 +140,17 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
             if (it == null) {
                 btn_start_journey.setImageResource(R.drawable.ic_hiking)
                 btn_start_journey.setOnClickListener { navController.navigate(R.id.action_journeyFragment_to_startJourneyFragment) }
+
                 btn_add_landmark.visibility = View.GONE
                 btn_add_landmark.setOnClickListener(null)
+
+                btn_my_location.visibility = View.GONE
+                btn_my_location.setOnClickListener(null)
+
+                endLocationJourneyMarker?.remove()
+                endLocationJourneyMarker = null
+                landmarks.forEach { marker -> marker?.remove() }
+                landmarks.clear()
             } else {
                 btn_start_journey.setImageResource(R.drawable.ic_finish_journey)
                 btn_start_journey.setOnClickListener { viewModel.finishJourney() }
@@ -166,14 +180,50 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                                     title: String,
                                     snippet: String,
                                     type: String,
-                                    imagesPaths: List<String>?
+                                    imagesPaths: List<String>?,
+                                    bottomSheetDialog: LandmarkBottomSheetDialog
                                 ) {
-                                    // TODO: save images
+
+                                    Log.e("gg?", imagesPaths?.map { path -> imageToBase64(path) }?.toList().toString())
+                                    viewModel.persistLandmark(
+                                        Landmark(
+                                            "",
+                                            title,
+                                            snippet,
+                                            type,
+                                            imagesPaths?.map { path -> imageToBase64(path) }?.toList(),
+                                            landmarkPicker!!.position.latitude,
+                                            landmarkPicker!!.position.longitude
+                                        )
+                                    )
+                                    bottomSheetDialog.dismiss()
                                 }
                             }
                         landmarkBottomSheet.show(activity!!.supportFragmentManager, "landmark")
                     }
                 }
+
+                btn_my_location.visibility = View.VISIBLE
+                btn_my_location.setOnClickListener {
+                    googleMap?.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            myPositionMarker?.position,
+                            17f
+                        )
+                    )
+                }
+
+                val icEndLandmarkB = BitmapFactory.decodeResource(resources, R.drawable.flag)
+                val icEndLandmarkSmall =
+                    Bitmap.createScaledBitmap(icEndLandmarkB, 70, 70, false)
+                endLocationJourneyMarker = googleMap?.addMarker(
+                    MarkerOptions()
+                        .title(it.destination.name)
+                        .icon(BitmapDescriptorFactory.fromBitmap(icEndLandmarkSmall))
+                        .snippet(it.destination.address)
+                        .position(LatLng(it.destination.latitude, it.destination.longitude))
+                )
+
             }
         })
 
@@ -200,6 +250,23 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                         .zIndex(2f)
                 )
             }
+        })
+
+        viewModel.landmarks.observe(this@JourneyFragment, Observer {
+            landmarks.forEach { marker -> marker?.remove() }
+            landmarks.clear()
+            val icLandmarkPinB = BitmapFactory.decodeResource(resources, R.drawable.landmark_pin)
+            val icLandmarkPinSmall = Bitmap.createScaledBitmap(icLandmarkPinB, 70, 70, false)
+
+            it?.map { landmark ->
+                MarkerOptions()
+                    .title(landmark.title)
+                    .snippet(landmark.snippet)
+                    .icon(BitmapDescriptorFactory.fromBitmap(icLandmarkPinSmall))
+                    .position(landmark.toLatLng())
+            }?.toList()
+                ?.forEach { markerOption -> landmarks.add(googleMap?.addMarker(markerOption)) }
+
         })
     }
 

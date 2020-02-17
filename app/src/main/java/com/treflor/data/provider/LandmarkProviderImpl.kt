@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.treflor.models.Landmark
 
-const val LANDMARK = "landmark__"
+const val LANDMARK = "landmark_"
 const val LANDMARK_ID = "landmark_id"
 
 class LandmarkProviderImpl(context: Context) : PreferenceProvider(context), LandmarkProvider {
@@ -28,7 +28,12 @@ class LandmarkProviderImpl(context: Context) : PreferenceProvider(context), Land
         return landmarks
     }
 
-    override fun persistCurrentLandmark(landmark: Landmark) {
+    override fun persistLandmark(landmark: Landmark) {
+
+        val newLandmarksList = _landmarks.value?.toMutableList()
+        newLandmarksList?.add(landmark)
+        _landmarks.postValue(newLandmarksList)
+
         preferences.edit().putString(LANDMARK + getLastId(), landmark.toJson()).apply()
         increaseLastId()
     }

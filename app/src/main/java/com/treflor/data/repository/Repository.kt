@@ -62,6 +62,6 @@ interface Repository {
     fun clearTrackedLocations()
 
     fun getCurrentLandmarks(): LiveData<List<Landmark>>
-    fun persistCurrentLandmark(landmark: Landmark)
+    fun persistLandmark(landmark: Landmark)
     fun deleteLandmarks()
 }

@@ -6,6 +6,6 @@ import com.treflor.models.Landmark
 interface LandmarkProvider {
     val landmarks: LiveData<List<Landmark>>
     fun getCurrentLandmarks(): List<Landmark>
-    fun persistCurrentLandmark(landmark: Landmark)
+    fun persistLandmark(landmark: Landmark)
     fun deleteLandmarks()
 }

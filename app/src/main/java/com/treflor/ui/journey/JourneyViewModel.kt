@@ -10,6 +10,7 @@ import com.treflor.internal.LocationUpdateReciever
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.eventexcecutor.LiveMessageEvent
 import com.treflor.internal.lazyDeferred
+import com.treflor.models.Landmark
 import com.treflor.services.LocationTrackService
 import kotlinx.coroutines.*
 
@@ -26,6 +27,7 @@ class JourneyViewModel(
     val journey by lazyDeferred { repository.getJourney() }
     val direction by lazyDeferred { repository.getDirection() }
     val trackedLocations by lazyDeferred { repository.getTrackedLocations() }
+    val landmarks by lazy { repository.getCurrentLandmarks() }
 
     fun stopJourney() {
         stopService()
@@ -55,4 +57,8 @@ class JourneyViewModel(
         val service = Intent(context, LocationTrackService::class.java)
         context.stopService(service)
     }
+
+    fun persistLandmark(landmark: Landmark) = repository.persistLandmark(landmark)
+
+
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -14,17 +15,37 @@
         android:tint="@android:color/holo_red_dark" />
 
 
-    <EditText
-        android:id="@+id/et_landmark_title"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_landmark_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Landmark title" />
+        app:errorEnabled="true">
 
-    <EditText
-        android:id="@+id/et_landmark_snippet"
+        <EditText
+            android:id="@+id/et_landmark_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Landmark title" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_landmark_snippet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Landmark description" />
+        app:errorEnabled="true">
+
+        <EditText
+            android:id="@+id/et_landmark_snippet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Landmark description" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Type" />
 
     <Spinner
         android:id="@+id/spinner_landmark_type"
