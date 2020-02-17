@@ -11,6 +11,12 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 def googleMapApiKey = properties.getProperty('google.map.key')
 def googleClientId = properties.getProperty('google.client-id')
 
+buildscript {
+    repositories {
+        maven { url 'https://google.bintray.com/tensorflow'}
+    }
+}
+
 android {
     compileSdkVersion 29
     defaultConfig {
@@ -46,6 +52,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildToolsVersion = '28.0.3'
+
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
 }
 
 dependencies {
@@ -160,6 +171,8 @@ dependencies {
 
     implementation 'com.google.android.libraries.places:places:2.1.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
+
+    implementation 'org.tensorflow:tensorflow-android:1.13.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
