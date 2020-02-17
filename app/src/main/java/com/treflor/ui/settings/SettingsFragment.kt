@@ -45,6 +45,7 @@ class SettingsFragment : Fragment(), View.OnClickListener , KodeinAware {
             R.id.edit_profile -> navController.navigate(R.id.action_settingsFragment_to_generalSettings)
             R.id.change_password -> navController.navigate(R.id.action_settingsFragment_to_securitySettings)
             R.id.privacy -> navController.navigate(R.id.action_settingsFragment_to_privacyPolicyFragment)
+            R.id.about -> navController.navigate(R.id.action_settingsFragment_to_aboutAppFragment)
         }
     }
 
