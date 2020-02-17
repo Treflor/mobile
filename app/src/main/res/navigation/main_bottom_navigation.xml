@@ -10,11 +10,6 @@
         android:label="camera_fragment"
         tools:layout="@layout/camera_fragment" />
     <fragment
-        android:id="@+id/menuFragment"
-        android:name="com.treflor.ui.settings.SettingsFragment"
-        android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" />
-    <fragment
         android:id="@+id/homeFragment"
         android:name="com.treflor.ui.home.HomeFragment"
         android:label="home_fragment"
@@ -116,5 +111,35 @@
         <action
             android:id="@+id/action_userJourneyFragment_to_journeyDetailsFragment"
             app:destination="@id/journeyDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/generalSettings"
+        android:name="com.treflor.ui.settings.general.generalSettings"
+        android:label="general_settings_fragment"
+        tools:layout="@layout/general_settings_fragment" />
+    <fragment
+        android:id="@+id/securitySettings"
+        android:name="com.treflor.ui.settings.security.securitySettings"
+        android:label="security_settings_fragment"
+        tools:layout="@layout/security_settings_fragment" />
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="com.treflor.ui.settings.privacy.PrivacyPolicyFragment"
+        android:label="fragment_privacy_policy"
+        tools:layout="@layout/fragment_privacy_policy" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.treflor.ui.settings.SettingsFragment"
+        android:label="settings_fragment"
+        tools:layout="@layout/settings_fragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_generalSettings"
+            app:destination="@id/generalSettings" />
+        <action
+            android:id="@+id/action_settingsFragment_to_securitySettings"
+            app:destination="@id/securitySettings" />
+        <action
+            android:id="@+id/action_settingsFragment_to_privacyPolicyFragment"
+            app:destination="@id/privacyPolicyFragment" />
     </fragment>
 </navigation>
