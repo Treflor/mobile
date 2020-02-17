@@ -19,5 +19,7 @@ data class Journey(
     @ColumnInfo(name = "level")
     val level: String,
     @ColumnInfo(name = "labels")
-    val labels: List<String>
+    val labels: List<String>,
+    @ColumnInfo(name = "image")
+    val image: String?
 )

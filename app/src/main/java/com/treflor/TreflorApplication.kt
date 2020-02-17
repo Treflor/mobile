@@ -20,6 +20,7 @@ import com.treflor.ui.journey.JourneyViewModelFactory
 import com.treflor.ui.journey.start.StartJourneyViewModelFactory
 import com.treflor.ui.login.LoginViewModelFactory
 import com.treflor.ui.profile.ProfileViewModelFactory
+import com.treflor.ui.profile.journeys.UserJourneyViewModelFactory
 import com.treflor.ui.signup.SignUpViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -128,6 +129,7 @@ class TreflorApplication : MultiDexApplication(), KodeinAware {
         bind() from provider { JourneyViewModelFactory(instance(), instance()) }
         bind() from provider { StartJourneyViewModelFactory(instance(), instance()) }
         bind() from factory { id: String -> JourneyDetailsViewModelFactory(instance(), id) }
+        bind() from provider { UserJourneyViewModelFactory(instance()) }
     }
 
 }

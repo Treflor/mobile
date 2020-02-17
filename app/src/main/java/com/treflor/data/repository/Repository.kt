@@ -44,6 +44,9 @@ interface Repository {
     suspend fun addJourneyFavorite(journeyId: String): IDResponse
     suspend fun removeJourneyFavorite(journeyId: String): IDResponse
 
+    //user journey
+    suspend fun userJourneys(): LiveData<List<JourneyResponse>>
+
     // direction
     suspend fun getDirection(): LiveData<DirectionApiResponse>
 

@@ -30,6 +30,16 @@
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/add_image"
+                android:layout_width="match_parent"
+                android:layout_height="205dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:paddingTop="80dp"
+                android:paddingBottom="80dp"
+                android:src="@drawable/camera_white" />
+
             <EditText
                 android:id="@+id/et_title"
                 android:layout_width="match_parent"
