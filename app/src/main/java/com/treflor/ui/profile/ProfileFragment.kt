@@ -4,15 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
 import com.treflor.R
+import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.databinding.ProfileFragmentBinding
 import com.treflor.internal.ui.base.TreflorScopedFragment
 import com.treflor.models.User
+import com.treflor.ui.profile.images.UserImagesFragment
+import com.treflor.ui.profile.journeys.UserJourneyFragment
 import kotlinx.android.synthetic.main.profile_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -29,6 +38,7 @@ class ProfileFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAwa
 
     private lateinit var viewModel: ProfileViewModel
     private lateinit var profileFragmentBinding: ProfileFragmentBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +71,11 @@ class ProfileFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAwa
             profileFragmentBinding.user = it
 
         })
+        val adapter = ViewPagerAdapter(childFragmentManager)
+        adapter.addFragment(UserJourneyFragment(), "TRIPS")
+        adapter.addFragment(UserImagesFragment(), "PHOTOS")
+        viewPager.adapter = adapter
+        tabs.setupWithViewPager(viewPager)
     }
 
     private fun profilePicture(user: User?) {
@@ -72,4 +87,29 @@ class ProfileFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAwa
             .centerCrop()
             .into(profile_image)
     }
+
+    class ViewPagerAdapter(supportFragmentManager: FragmentManager) :
+        FragmentStatePagerAdapter(supportFragmentManager) {
+
+        private val mFragmentList = ArrayList<Fragment>()
+        private val mFragmentTitleList = ArrayList<String>()
+
+        override fun getItem(position: Int): Fragment {
+            return mFragmentList[position]
+        }
+
+        override fun getCount(): Int {
+            return mFragmentList.size
+        }
+
+        override fun getPageTitle(position: Int): CharSequence? {
+            return mFragmentTitleList[position]
+        }
+
+        fun addFragment(fragment: Fragment, title: String) {
+            mFragmentList.add(fragment)
+            mFragmentTitleList.add(title)
+        }
+    }
+
 }

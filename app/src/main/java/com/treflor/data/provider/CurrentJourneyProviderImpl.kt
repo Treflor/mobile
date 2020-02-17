@@ -13,6 +13,7 @@ const val JOURNEY_ORIGIN = "journey_origin"
 const val JOURNEY_DESTINATION = "journey_destination"
 const val JOURNEY_LEVEL = "journey_level"
 const val JOURNEY_LABELS = "journey_labels"
+const val JOURNEY_iMAGE = "journey_image"
 
 class CurrentJourneyProviderImpl(context: Context) : PreferenceProvider(context),
     CurrentJourneyProvider {
@@ -31,6 +32,7 @@ class CurrentJourneyProviderImpl(context: Context) : PreferenceProvider(context)
         )
         val level = preferences.getString(JOURNEY_LEVEL, "")
         val labels = preferences.getStringSet(JOURNEY_LABELS, setOf())
+        val image = preferences.getString(JOURNEY_iMAGE, " ")
         return if (!title.isNullOrEmpty()) Journey(
             "",
             title,
@@ -38,7 +40,8 @@ class CurrentJourneyProviderImpl(context: Context) : PreferenceProvider(context)
             origin,
             destination,
             level!!,
-            labels!!.toList()
+            labels!!.toList(),
+            image!!
         ) else null
     }
 
@@ -50,6 +53,7 @@ class CurrentJourneyProviderImpl(context: Context) : PreferenceProvider(context)
         editor.putString(JOURNEY_DESTINATION, Gson().toJson(journey.destination))
         editor.putString(JOURNEY_LEVEL, journey.level)
         editor.putStringSet(JOURNEY_LABELS, journey.labels.toSet())
+        editor.putString(JOURNEY_iMAGE, journey.image)
         editor.apply()
         _currentJourney.postValue(journey)
     }
@@ -62,6 +66,7 @@ class CurrentJourneyProviderImpl(context: Context) : PreferenceProvider(context)
         editor.remove(JOURNEY_DESTINATION)
         editor.remove(JOURNEY_LEVEL)
         editor.remove(JOURNEY_LABELS)
+        editor.remove(JOURNEY_iMAGE)
         editor.apply()
         _currentJourney.postValue(null)
     }

@@ -108,4 +108,13 @@
             android:name="id"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/userJourneyFragment"
+        android:name="com.treflor.ui.profile.journeys.UserJourneyFragment"
+        android:label="user_journey_fragment"
+        tools:layout="@layout/user_journey_fragment" >
+        <action
+            android:id="@+id/action_userJourneyFragment_to_journeyDetailsFragment"
+            app:destination="@id/journeyDetailsFragment" />
+    </fragment>
 </navigation>
