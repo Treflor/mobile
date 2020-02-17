@@ -102,9 +102,7 @@
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/colorPrimary"
             app:tabTextAppearance="@style/TabText"
-            app:tabMode="fixed">
-
-        </com.google.android.material.tabs.TabLayout>
+            app:tabMode="fixed"/>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
