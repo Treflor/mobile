@@ -31,5 +31,7 @@ data class JourneyResponse(
     @SerializedName("favorites")
     val favorites: List<String>?,
     @SerializedName("landmarks")
-    val landmarks: List<Landmark>?
+    val landmarks: List<Landmark>?,
+    @SerializedName("images")
+    val images: List<String>?
 )
