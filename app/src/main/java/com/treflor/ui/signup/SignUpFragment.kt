@@ -147,8 +147,6 @@ class SignUpFragment : Fragment(), View.OnClickListener, KodeinAware, ActivityNa
             til_password_again.error = "Password again can't be empty!"
             valid = false
         } else {
-            Log.e("p1", et_password.text.toString())
-            Log.e("p1", et_password_again.text.toString())
             if (et_password.text.toString() != et_password_again.text.toString()) {
                 til_password_again.error =
                     "Passwords are not matching!"
