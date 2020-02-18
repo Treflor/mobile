@@ -117,16 +117,16 @@
                     android:layout_marginTop="15dp"
                     android:background="?android:attr/listDivider" />
 
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:text="Help"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:text="Help"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/textView19"
@@ -168,16 +168,16 @@
                     android:layout_marginTop="15dp"
                     android:background="?android:attr/listDivider" />
 
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:text="About"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:text="About"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/textView16"
@@ -213,23 +213,23 @@
                     android:textSize="16sp" />
 
                 <View
-                android:id="@+id/divider6"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="15dp"
-                android:background="?android:attr/listDivider" />
+                    android:id="@+id/divider6"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:background="?android:attr/listDivider" />
 
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:text="Sign Out"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_sign_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:text="Sign Out"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 

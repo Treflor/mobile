@@ -1,19 +1,21 @@
 package com.treflor.ui.settings
 
 
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.appcompat.app.AlertDialog
 
 import com.treflor.R
+import com.treflor.data.repository.Repository
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
 /**
  * A simple [Fragment] subclass.
@@ -21,6 +23,7 @@ import org.kodein.di.android.x.closestKodein
 class SettingsFragment : Fragment(), KodeinAware {
 
     override val kodein: Kodein by closestKodein()
+    private val repository: Repository by instance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +35,29 @@ class SettingsFragment : Fragment(), KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindUI()
     }
 
+    private fun bindUI() {
+        tv_sign_out.setOnClickListener {
 
+            val listener = DialogInterface.OnClickListener { dialog, which ->
+                when (which) {
+                    DialogInterface.BUTTON_POSITIVE -> {
+                        repository.signOut()
+                        dialog?.dismiss()
+                    }
+                    DialogInterface.BUTTON_NEGATIVE -> {
+                        dialog.dismiss()
+                    }
+                }
+            }
+
+            AlertDialog.Builder(context!!).setMessage("Sure you want to sign out!")
+                .setPositiveButton("Sign out", listener)
+                .setNegativeButton("cancel", listener)
+                .show()
+        }
+    }
 
 }

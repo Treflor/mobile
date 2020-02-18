@@ -51,8 +51,11 @@ class UserJourneyFragment : TreflorScopedFragment(), KodeinAware {
 
         if (!viewModel.userId.isNullOrEmpty())
             viewModel.journeys.await().observe(this@UserJourneyFragment, Observer {
-                if (it == null) return@Observer
-                initRecyclerView(it.toJourneyItems())
+                if (it == null) {
+                    initRecyclerView(listOf())
+                } else {
+                    initRecyclerView(it.toJourneyItems())
+                }
                 progress_circular.visibility = View.GONE
             })
     }
@@ -68,7 +71,7 @@ class UserJourneyFragment : TreflorScopedFragment(), KodeinAware {
             addAll(items)
             setOnItemClickListener { item, _ ->
                 (item as? JourneyItem)?.let {
-//                    val actionDetail =
+                    //                    val actionDetail =
 //                        UserJourneyFragmentDirections.actionUserJourneyFragmentToJourneyDetailsFragment(it.journeyResponse.id)
 //                    navController.navigate(actionDetail)
                 }
