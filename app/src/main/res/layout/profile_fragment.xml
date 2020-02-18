@@ -63,7 +63,7 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/roboto_medium"
             android:gravity="center"
-            android:text="@{user.toString()}"
+            android:text="@{user.givenName.toString() + ' ' + user.givenName.toString()}"
             android:textColor="@color/colorBlack"
             android:textSize="26dp"
             android:textStyle="bold" />

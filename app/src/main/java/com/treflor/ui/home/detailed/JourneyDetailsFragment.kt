@@ -68,7 +68,7 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware, ActivityNav
             tv_duration.text = journey.direction?.duration?.text
             if (viewModel.userId.isNullOrEmpty()) {
                 img_btn_favorite.setOnClickListener {
-                    navController.navigate(R.id.action_homeFragment_to_loginFragment)
+                    navController.navigate(R.id.action_journeyDetailsFragment_to_loginFragment)
                 }
             } else {
                 journey.favorites?.let {

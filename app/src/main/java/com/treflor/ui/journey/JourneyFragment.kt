@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -184,7 +183,6 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                                     bottomSheetDialog: LandmarkBottomSheetDialog
                                 ) {
 
-                                    Log.e("gg?", imagesPaths?.map { path -> imageToBase64(path) }?.toList().toString())
                                     viewModel.persistLandmark(
                                         Landmark(
                                             "",

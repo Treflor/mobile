@@ -9,7 +9,6 @@ import com.treflor.data.remote.requests.JourneyRequest
 import com.treflor.data.remote.response.IDResponse
 import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.NoConnectivityException
-import kotlinx.coroutines.*
 
 class JourneyNetworkDataSourceImpl(
     private val treflorApiService: TreflorApiService,
@@ -17,6 +16,9 @@ class JourneyNetworkDataSourceImpl(
 ) : JourneyNetworkDataSource {
     override val journeys: LiveData<List<JourneyResponse>> get() = _journeys
     private val _journeys by lazy { MutableLiveData<List<JourneyResponse>>() }
+
+    override val userJourneys: LiveData<List<JourneyResponse>> get() = _userJourneys
+    private val _userJourneys by lazy { MutableLiveData<List<JourneyResponse>>() }
 
     override val journey: LiveData<JourneyResponse>
         get() = _journey
@@ -46,24 +48,29 @@ class JourneyNetworkDataSourceImpl(
 
     override suspend fun userJourneys(): LiveData<List<JourneyResponse>> {
         return try {
-            Log.e("journeys", "fetching journeys")
+            Log.e("journeys", "fetching user journeys")
             val journeysV = mutableListOf<JourneyResponse>()
             journeysV.addAll(treflorApiService.userJourneys(jwtProvider.getJWT()!!).await())
-            _journeys.postValue(journeysV)
-            _journeys
+            _userJourneys.postValue(journeysV)
+            _userJourneys
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)
-            _journeys
+            _userJourneys
+        } catch (e: Exception) {
+            _userJourneys.postValue(null)
+            _userJourneys
         }
     }
 
     override fun fetchJourney(): LiveData<JourneyResponse> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override suspend fun fetchJourneyById(journeyId: String): LiveData<JourneyResponse> {
         return try {
             Log.e("journeys", "fetching journey ${journeyId}")
-            val journey = treflorApiService.journeyById(jwtProvider.getJWT()!!, journeyId).await()
+            val journey =
+                treflorApiService.journeyById(jwtProvider.getJWT()!!, journeyId).await()
             _journey.postValue(journey)
             _journey
         } catch (e: NoConnectivityException) {

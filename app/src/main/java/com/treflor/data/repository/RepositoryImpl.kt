@@ -90,6 +90,10 @@ class RepositoryImpl(
         }
     }
 
+    override fun signOut() {
+        unsetJWT()
+    }
+
     override suspend fun getUser(): LiveData<User> {
         return withContext(Dispatchers.IO) {
             userNetworkDataSource.fetchUser()
