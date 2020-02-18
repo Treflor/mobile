@@ -26,6 +26,7 @@
             android:id="@+id/txt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
             android:layout_marginTop="@dimen/ef_margin_small"
             android:layout_marginBottom="@dimen/ef_margin_small"
             android:fontFamily="@font/roboto"

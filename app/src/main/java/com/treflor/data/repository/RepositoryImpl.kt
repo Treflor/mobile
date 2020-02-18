@@ -16,6 +16,7 @@ import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.models.directionapi.DirectionApiResponse
 import com.treflor.data.remote.response.IDResponse
 import com.treflor.data.remote.response.JourneyResponse
+import com.treflor.internal.AuthState
 import com.treflor.internal.LocationUpdateReciever
 import com.treflor.models.Journey
 import com.treflor.models.Landmark
@@ -73,11 +74,11 @@ class RepositoryImpl(
     }
 
     override fun signIn(email: String, password: String) = runBlocking {
-        val jwt = withContext(Dispatchers.IO) {
+        val pair: Pair<String?, AuthState> = withContext(Dispatchers.IO) {
             authenticationNetworkDataSource.signIn(email, password)
         }
-        if (jwt != null) {
-            setJWT(jwt)
+        if (pair.first != null) {
+            setJWT(pair.first!!)
         }
     }
 
@@ -130,7 +131,12 @@ class RepositoryImpl(
     ): IDResponse {
         val trackedLocationsString =
             PolyUtil.encode(trackedLocations.map { tl -> LatLng(tl.lat, tl.lng) })
-        val journeyRequest = JourneyRequest(direction, journey, trackedLocationsString,landmarkProvider.getCurrentLandmarks())
+        val journeyRequest = JourneyRequest(
+            direction,
+            journey,
+            trackedLocationsString,
+            landmarkProvider.getCurrentLandmarks()
+        )
         GlobalScope.launch(Dispatchers.IO) { breakJourney() }
         return withContext(Dispatchers.IO) {
             return@withContext journeyNetworkDataSource.uploadJourney(

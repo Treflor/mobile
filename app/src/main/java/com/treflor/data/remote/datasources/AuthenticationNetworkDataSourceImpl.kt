@@ -3,6 +3,7 @@ package com.treflor.data.remote.datasources
 import android.util.Log
 import com.treflor.data.remote.api.TreflorApiService
 import com.treflor.data.remote.requests.SignUpRequest
+import com.treflor.internal.AuthState
 import com.treflor.internal.NoConnectivityException
 import retrofit2.HttpException
 
@@ -19,16 +20,16 @@ class AuthenticationNetworkDataSourceImpl(
         }
     }
 
-    override suspend fun signIn(email: String, password: String): String? {
+    override suspend fun signIn(email: String, password: String): Pair<String?, AuthState> {
         return try {
             val authResponse = treflorApiService.signIn(email, password).await()
-            authResponse.token
+            Pair(authResponse.token, AuthState.AUTHENTICATED)
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)
-            null
+            Pair(null, AuthState.ERROR)
         } catch (e: HttpException) {
             Log.e("Authentication", "401.", e)
-            null
+            Pair(null, AuthState.UNAUTHENTICATED)
         }
     }
 

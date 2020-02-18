@@ -19,6 +19,8 @@ import com.treflor.ui.home.list.JourneyItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -49,15 +51,15 @@ class UserJourneyFragment : TreflorScopedFragment(), KodeinAware {
 
     private fun bindUI() = launch {
 
-        if (!viewModel.userId.isNullOrEmpty())
+        if (!viewModel.userId.isNullOrEmpty()) {
             viewModel.journeys.await().observe(this@UserJourneyFragment, Observer {
-                if (it == null) {
-                    initRecyclerView(listOf())
-                } else {
-                    initRecyclerView(it.toJourneyItems())
-                }
+                if (it == null) return@Observer
+                initRecyclerView(it.toJourneyItems())
                 progress_circular.visibility = View.GONE
             })
+        } else {
+            progress_circular.visibility = View.GONE
+        }
     }
 
     private fun List<JourneyResponse>.toJourneyItems(): List<JourneyItem> {
