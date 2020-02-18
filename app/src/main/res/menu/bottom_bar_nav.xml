@@ -17,7 +17,7 @@
         android:icon="@drawable/ic_person"
         android:title="Account" />
     <item
-        android:id="@+id/menuFragment"
+        android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="Settings" />
 </menu>
