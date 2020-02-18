@@ -96,4 +96,9 @@ All information you provide to us through the Products is stored on our secure s
     <string name="policy_changes">
     We may update this Privacy Policy to reflect changes to our information practices. If we make any material changes we will notify you by in-Product message, email (sent to the e-mail address specified in your account) or by means of a notice in the Products prior to the change becoming effective. We encourage you to periodically review this page for the latest information on our privacy practices.
     </string>
+
+    <string name="about">
+        Treflor helps people explore the outdoors with the largest collection of detailed, hand-curated journey maps as well as journey reviews and photos crowdsourced from a community of in specially Sri Lanka."\n"
+        Treflor has built the most complete, accurate dataset for off-road recreation ever, along with the easiest-to-use product suite that helps users find, customize, record and share outdoor activities and the largest and most active digital community of outdoor enthusiasts.
+    </string>
 </resources>
