@@ -5,6 +5,7 @@ import com.treflor.data.remote.api.TreflorApiService
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.internal.AuthState
 import com.treflor.internal.NoConnectivityException
+import com.treflor.internal.SignUpState
 import retrofit2.HttpException
 
 class AuthenticationNetworkDataSourceImpl(
@@ -33,13 +34,16 @@ class AuthenticationNetworkDataSourceImpl(
         }
     }
 
-    override suspend fun signUp(signUpRequest: SignUpRequest): String? {
+    override suspend fun signUp(signUpRequest: SignUpRequest): Pair<String?, SignUpState> {
         return try {
             val authResponse = treflorApiService.signUp(signUpRequest).await()
-            authResponse.token
+            Pair(authResponse.token, SignUpState.DONE)
         } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)
-            null
+            Pair(null, SignUpState.ERROR)
+        } catch (e: HttpException) {
+            Log.e("Authentication", "403.", e)
+            Pair(null, SignUpState.EMAIL_ALL_READY)
         }
     }
 }

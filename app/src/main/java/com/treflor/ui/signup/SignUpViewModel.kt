@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.data.repository.Repository
+import com.treflor.internal.SignUpState
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.eventexcecutor.LiveMessageEvent
 import kotlinx.coroutines.Dispatchers
@@ -23,13 +24,27 @@ class SignUpViewModel(
         LiveMessageEvent<ActivityNavigation>()
 
     fun signUp(request: SignUpRequest) {
-//     TODO:   validateData()
         _signingIn.postValue(true)
-        repository.signUp(request)
-        // now we can navigate to profile
-        GlobalScope.launch(Dispatchers.Main) {
-            liveMessageEvent.sendEvent { showSnackBar("Signed up as: ${request.firstName} ${request.lastName}") }
-            liveMessageEvent.sendEvent { navigateUp() }
+        GlobalScope.launch(Dispatchers.IO) {
+            when (repository.signUp(request)) {
+                SignUpState.EMAIL_ALL_READY -> {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        liveMessageEvent.sendEvent { showSnackBar("Email already registered!") }
+                    }
+                }
+                SignUpState.ERROR -> {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        liveMessageEvent.sendEvent { showSnackBar("Something went wrong!") }
+                    }
+                }
+                SignUpState.DONE -> {
+                    // now we can navigate to profile
+                    GlobalScope.launch(Dispatchers.Main) {
+                        liveMessageEvent.sendEvent { showSnackBar("Signed up as: ${request.firstName} ${request.lastName}") }
+                        liveMessageEvent.sendEvent { navigateUp() }
+                    }
+                }
+            }
         }
         _signingIn.postValue(false)
     }

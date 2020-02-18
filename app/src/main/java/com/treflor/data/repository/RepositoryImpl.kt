@@ -17,7 +17,8 @@ import com.treflor.models.directionapi.DirectionApiResponse
 import com.treflor.data.remote.response.IDResponse
 import com.treflor.data.remote.response.JourneyResponse
 import com.treflor.internal.AuthState
-import com.treflor.internal.LocationUpdateReciever
+import com.treflor.internal.LocationUpdateReceiver
+import com.treflor.internal.SignUpState
 import com.treflor.models.Journey
 import com.treflor.models.Landmark
 import com.treflor.models.TrackedLocation
@@ -73,21 +74,24 @@ class RepositoryImpl(
         }
     }
 
-    override fun signIn(email: String, password: String) = runBlocking {
-        val pair: Pair<String?, AuthState> = withContext(Dispatchers.IO) {
-            authenticationNetworkDataSource.signIn(email, password)
+    override suspend fun signIn(email: String, password: String): AuthState {
+        return withContext(Dispatchers.IO) {
+            var pair = authenticationNetworkDataSource.signIn(email, password)
+            if (pair.first != null) {
+                setJWT(pair.first!!)
+            }
+            return@withContext pair.second!!
         }
-        if (pair.first != null) {
-            setJWT(pair.first!!)
-        }
+
     }
 
-    override fun signUp(signUpRequest: SignUpRequest) = runBlocking {
-        val jwt = withContext(Dispatchers.IO) {
-            authenticationNetworkDataSource.signUp(signUpRequest)
-        }
-        if (jwt != null) {
-            setJWT(jwt)
+    override suspend fun signUp(signUpRequest: SignUpRequest): SignUpState {
+        return withContext(Dispatchers.IO) {
+            val pair = authenticationNetworkDataSource.signUp(signUpRequest)
+            if (pair.first != null) {
+                setJWT(pair.first!!)
+            }
+            return@withContext pair.second
         }
     }
 
@@ -104,10 +108,10 @@ class RepositoryImpl(
 
     override fun getCurrentUserId(): String? = currentUserProvider.getCurrentUserId()
 
-    override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> =
+    override fun requestLocationUpdate(updateReceiver: LocationUpdateReceiver): LiveData<Location> =
         locationProvider.requestLocationUpdate(updateReceiver)
 
-    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever) =
+    override fun removeLocationUpdate(updateReceiver: LocationUpdateReceiver) =
         locationProvider.removeLocationUpdate(updateReceiver)
 
     override fun getLastKnownLocation(): LiveData<Location> =

@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.esafirm.imagepicker.model.Image
 import com.treflor.data.repository.Repository
-import com.treflor.internal.LocationUpdateReciever
+import com.treflor.internal.LocationUpdateReceiver
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.eventexcecutor.LiveMessageEvent
 import com.treflor.internal.imageToBase64
@@ -25,7 +25,7 @@ class JourneyViewModel(
     val liveMessageEvent =
         LiveMessageEvent<ActivityNavigation>()
 
-    val location: LiveData<Location> get() = repository.requestLocationUpdate(LocationUpdateReciever.LOCATION_VIEW_MODEL)
+    val location: LiveData<Location> get() = repository.requestLocationUpdate(LocationUpdateReceiver.LOCATION_VIEW_MODEL)
     val journey by lazyDeferred { repository.getJourney() }
     val direction by lazyDeferred { repository.getDirection() }
     val trackedLocations by lazyDeferred { repository.getTrackedLocations() }
@@ -37,10 +37,10 @@ class JourneyViewModel(
     }
 
     fun removeLocationUpdates() =
-        repository.removeLocationUpdate(LocationUpdateReciever.LOCATION_VIEW_MODEL)
+        repository.removeLocationUpdate(LocationUpdateReceiver.LOCATION_VIEW_MODEL)
 
     fun requestLocationUpdates() =
-        repository.requestLocationUpdate(LocationUpdateReciever.LOCATION_VIEW_MODEL)
+        repository.requestLocationUpdate(LocationUpdateReceiver.LOCATION_VIEW_MODEL)
 
     fun finishJourney() = runBlocking {
         stopService()
