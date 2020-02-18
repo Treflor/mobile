@@ -116,12 +116,20 @@ class RepositoryImpl(
     override fun persistJourney(journey: Journey) =
         currentJourneyProvider.persistCurrentJourney(journey)
 
+    override fun addImagesToJourney(base64Images: List<String>) =
+        currentJourneyProvider.persistImages(base64Images)
+
+    override fun deleteImagesOnJourney() = currentJourneyProvider.deleteImages()
+
+    override fun getImagesToJourney() = currentJourneyProvider.getImages()
+
     override suspend fun getJourney(): LiveData<Journey> = currentJourneyProvider.currentJourney
     override fun breakJourney() {
         currentJourneyProvider.deleteJourney()
         clearTrackedLocations()
         clearDirection()
         landmarkProvider.deleteLandmarks()
+        deleteImagesOnJourney()
     }
 
     override suspend fun finishJourney(
@@ -135,7 +143,8 @@ class RepositoryImpl(
             direction,
             journey,
             trackedLocationsString,
-            landmarkProvider.getCurrentLandmarks()
+            landmarkProvider.getCurrentLandmarks(),
+            getImagesToJourney()
         )
         GlobalScope.launch(Dispatchers.IO) { breakJourney() }
         return withContext(Dispatchers.IO) {

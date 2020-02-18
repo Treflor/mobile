@@ -31,6 +31,9 @@ interface Repository {
 
     // journey
     fun persistJourney(journey: Journey)
+    fun addImagesToJourney(base64Images:List<String>)
+    fun deleteImagesOnJourney()
+    fun getImagesToJourney():List<String>
 
     suspend fun getJourney(): LiveData<Journey>
     fun breakJourney()

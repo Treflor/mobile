@@ -94,8 +94,8 @@ interface TreflorApiService {
 
             return Retrofit.Builder()
                 .client(okHttpClient)
-//                .baseUrl("http://10.0.2.2:3000/")
-                .baseUrl("https://api-treflor.herokuapp.com/")
+                .baseUrl("http://10.0.2.2:3000/")
+//                .baseUrl("https://api-treflor.herokuapp.com/")
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

@@ -2,6 +2,7 @@ package com.treflor.ui.journey
 
 import android.Manifest
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -13,6 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.esafirm.imagepicker.features.ImagePicker
+import com.esafirm.imagepicker.features.ReturnMode
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.OnMapReadyCallback
@@ -146,6 +149,9 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                 btn_my_location.visibility = View.GONE
                 btn_my_location.setOnClickListener(null)
 
+                btn_upload_images.visibility = View.GONE
+                btn_upload_images.setOnClickListener(null)
+
                 endLocationJourneyMarker?.remove()
                 endLocationJourneyMarker = null
                 landmarks.forEach { marker -> marker?.remove() }
@@ -209,6 +215,17 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
                             17f
                         )
                     )
+                }
+
+                btn_upload_images.visibility = View.VISIBLE
+                btn_upload_images.setOnClickListener {
+                    ImagePicker.create(this@JourneyFragment)
+                        .folderMode(true)
+                        .toolbarImageTitle("Select a Profile Image")
+                        .multi()
+                        .limit(10)
+                        .imageDirectory("treflor")
+                        .start()
                 }
 
                 val icEndLandmarkB = BitmapFactory.decodeResource(resources, R.drawable.flag)
@@ -308,6 +325,15 @@ class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAwa
         googleMap?.setOnCameraIdleListener {
             landmarkPicker?.setIcon(BitmapDescriptorFactory.fromBitmap(icLandmarkSmall))
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            // Get a list of picked images
+            var images = ImagePicker.getImages(data)
+            viewModel.addImagesToJourney(images)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onDestroy() {
