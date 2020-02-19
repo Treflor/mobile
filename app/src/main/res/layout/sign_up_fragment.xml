@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Sign up with Treflor"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/textColor"
                     android:textSize="26dp"
                     android:textStyle="bold" />
 

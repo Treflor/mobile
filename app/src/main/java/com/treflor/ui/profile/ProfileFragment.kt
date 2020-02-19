@@ -57,6 +57,7 @@ class ProfileFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAwa
         bindUI()
     }
 
+//    Navigate to login
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.account_icon -> navController.navigate(R.id.action_profileFragment_to_loginFragment)
@@ -71,6 +72,8 @@ class ProfileFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAwa
             profileFragmentBinding.user = it
 
         })
+
+//        Tab View
         val adapter = ViewPagerAdapter(childFragmentManager)
         adapter.addFragment(UserJourneyFragment(), "TRIPS")
         adapter.addFragment(UserImagesFragment(), "PHOTOS")
@@ -78,6 +81,7 @@ class ProfileFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAwa
         tabs.setupWithViewPager(viewPager)
     }
 
+//    Display Profile Picture
     private fun profilePicture(user: User?) {
         account_icon.visibility = if (user == null) View.VISIBLE else View.GONE
         profile_image.visibility = if (user != null) View.VISIBLE else View.GONE
@@ -88,6 +92,7 @@ class ProfileFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAwa
             .into(profile_image)
     }
 
+//    ViewPager Adapter class for Tab View
     class ViewPagerAdapter(supportFragmentManager: FragmentManager) :
         FragmentStatePagerAdapter(supportFragmentManager) {
 
@@ -98,14 +103,17 @@ class ProfileFragment : TreflorScopedFragment(), View.OnClickListener, KodeinAwa
             return mFragmentList[position]
         }
 
+//    get the count of fragments created in the tab view
         override fun getCount(): Int {
             return mFragmentList.size
         }
 
+//    Get the title to display as the tab title
         override fun getPageTitle(position: Int): CharSequence? {
             return mFragmentTitleList[position]
         }
 
+//    Adding fragments to tabs accordingly
         fun addFragment(fragment: Fragment, title: String) {
             mFragmentList.add(fragment)
             mFragmentTitleList.add(title)
