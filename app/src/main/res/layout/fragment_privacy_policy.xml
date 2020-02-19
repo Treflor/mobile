@@ -17,9 +17,7 @@
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            app:logo="@drawable/ic_arrow_back_black"
             app:title="Privacy Policy"
-            app:titleMarginStart="40dp"
             app:titleTextColor="@color/colorPrimary" />
 
         <ScrollView
