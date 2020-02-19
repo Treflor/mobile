@@ -2,8 +2,6 @@ package com.treflor.services
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.os.Build
-import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
@@ -11,8 +9,7 @@ import androidx.lifecycle.Observer
 import com.treflor.CHANNEL_ID
 import com.treflor.data.db.dao.TrackedLocationsDao
 import com.treflor.data.provider.LocationProvider
-import com.treflor.data.repository.Repository
-import com.treflor.internal.LocationUpdateReciever
+import com.treflor.internal.LocationUpdateReceiver
 import com.treflor.models.TrackedLocation
 import com.treflor.ui.MainActivity
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +46,7 @@ class LocationTrackService : LifecycleService(), KodeinAware {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.e(TAG, "Location service started!")
 
-        locationProvider.requestLocationUpdate(LocationUpdateReciever.LOCATION_SERVICE)
+        locationProvider.requestLocationUpdate(LocationUpdateReceiver.LOCATION_SERVICE)
             .observe(this@LocationTrackService,
                 Observer {
                     Log.d("location", "location: ${it.latitude} ${it.longitude}")
@@ -67,7 +64,7 @@ class LocationTrackService : LifecycleService(), KodeinAware {
     }
 
     override fun onDestroy() {
-        locationProvider.removeLocationUpdate(LocationUpdateReciever.LOCATION_SERVICE)
+        locationProvider.removeLocationUpdate(LocationUpdateReceiver.LOCATION_SERVICE)
         super.onDestroy()
     }
 

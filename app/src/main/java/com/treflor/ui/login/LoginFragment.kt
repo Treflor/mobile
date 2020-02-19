@@ -3,6 +3,7 @@ package com.treflor.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -77,12 +78,36 @@ class LoginFragment : Fragment(), KodeinAware,
                 navController.navigate(R.id.action_loginFragment_to_signUpFragment)
             }
             R.id.btn_sign_in -> {
-                viewModel.signIn(txt_email.text.toString(), txt_password.text.toString())
+                if (validate()) {
+                    viewModel.signIn(txt_email.text.toString(), txt_password.text.toString())
+                }
             }
             R.id.btn_google_sign_in -> {
                 viewModel.signInWithGoogle()
             }
         }
+    }
+
+    private fun validate(): Boolean {
+        til_email.error = ""
+
+        var valid = true
+        if (txt_email.text.isNullOrEmpty()) {
+            til_email.error = "Email can't be empty!"
+            valid = false
+        } else {
+            val pattern = Patterns.EMAIL_ADDRESS
+            if (!pattern.matcher(txt_email.text).matches()) {
+                til_email.error = "Email not in valid format!"
+                valid = false
+            }
+        }
+
+        if (txt_password.text.isNullOrEmpty()) {
+            til_password.error = "Password can't be empty!"
+            valid = false
+        }
+        return valid
     }
 
     override fun showSnackBar(s: String) {

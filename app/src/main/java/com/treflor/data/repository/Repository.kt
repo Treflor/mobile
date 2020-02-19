@@ -6,7 +6,9 @@ import com.treflor.data.remote.requests.SignUpRequest
 import com.treflor.models.directionapi.DirectionApiResponse
 import com.treflor.data.remote.response.IDResponse
 import com.treflor.data.remote.response.JourneyResponse
-import com.treflor.internal.LocationUpdateReciever
+import com.treflor.internal.AuthState
+import com.treflor.internal.LocationUpdateReceiver
+import com.treflor.internal.SignUpState
 import com.treflor.models.Journey
 import com.treflor.models.Landmark
 import com.treflor.models.TrackedLocation
@@ -17,20 +19,24 @@ interface Repository {
     // account things
     fun signInWithGoogle(idToken: String)
 
-    fun signIn(email: String, password: String)
-    fun signUp(signUpRequest: SignUpRequest)
+    suspend fun signIn(email: String, password: String): AuthState
+    suspend fun signUp(signUpRequest: SignUpRequest): SignUpState
     fun signOut()
     suspend fun getUser(): LiveData<User>
     fun getCurrentUserId(): String?
 
     // local locations
-    fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location>
+    fun requestLocationUpdate(updateReceiver: LocationUpdateReceiver): LiveData<Location>
 
-    fun removeLocationUpdate(updateReceiver: LocationUpdateReciever)
+    fun removeLocationUpdate(updateReceiver: LocationUpdateReceiver)
     fun getLastKnownLocation(): LiveData<Location>
 
     // journey
     fun persistJourney(journey: Journey)
+
+    fun addImagesToJourney(base64Images: List<String>)
+    fun deleteImagesOnJourney()
+    fun getImagesToJourney(): List<String>
 
     suspend fun getJourney(): LiveData<Journey>
     fun breakJourney()

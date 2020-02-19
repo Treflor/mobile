@@ -42,13 +42,14 @@ class SettingsFragment : Fragment(), KodeinAware {
     private fun bindUI() {
 
 //        sign out
+        if (repository.getCurrentUserId() == null) tv_sign_out.visibility = View.GONE
         tv_sign_out.setOnClickListener {
-
             val listener = DialogInterface.OnClickListener { dialog, which ->
                 when (which) {
                     DialogInterface.BUTTON_POSITIVE -> {
                         repository.signOut()
                         dialog?.dismiss()
+                        tv_sign_out.visibility = View.GONE
                     }
                     DialogInterface.BUTTON_NEGATIVE -> {
                         dialog.dismiss()

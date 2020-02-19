@@ -55,7 +55,7 @@ class HomeFragment : TreflorScopedFragment(), KodeinAware {
 
     private fun List<JourneyResponse>.toJourneyItems(): List<JourneyItem> {
         return this.map {
-            JourneyItem(it, viewModel.userId)
+            JourneyItem(it, viewModel.userId, context!!)
         }
     }
 

@@ -13,5 +13,7 @@ data class JourneyRequest(
     @SerializedName("tracked_locations")
     val trackedLocations: String,
     @SerializedName("landmarks")
-    val landmarks:List<Landmark>?
+    val landmarks: List<Landmark>?,
+    @SerializedName("images")
+    val images: List<String>?
 )

@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.treflor.R
 import com.treflor.data.repository.Repository
+import com.treflor.internal.AuthState
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.eventexcecutor.LiveMessageEvent
 import kotlinx.coroutines.Dispatchers
@@ -63,9 +64,34 @@ class LoginViewModel(
     fun signIn(email: String?, password: String?) {
 //     TODO:   validateEmailAndPassword()
         _signingIn.postValue(true)
-        repository.signIn(email!!, password!!)
-        // now we can navigate to profile
-        GlobalScope.launch(Dispatchers.Main) { liveMessageEvent.sendEvent { navigateUp() } }
+        GlobalScope.launch(Dispatchers.IO) {
+            when (repository.signIn(email!!, password!!)) {
+                AuthState.UNAUTHENTICATED -> {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        liveMessageEvent.sendEvent {
+                            showSnackBar(
+                                "Email or password incorrect!"
+                            )
+                        }
+                    }
+                }
+
+                AuthState.AUTHENTICATED -> {
+                    GlobalScope.launch(Dispatchers.Main) { liveMessageEvent.sendEvent { navigateUp() } }
+                }
+                AuthState.ERROR -> {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        liveMessageEvent.sendEvent {
+                            showSnackBar(
+                                "Something went wrong!"
+                            )
+                        }
+                    }
+                }
+            }
+            // now we can navigate to profile
+
+        }
         _signingIn.postValue(false)
     }
 

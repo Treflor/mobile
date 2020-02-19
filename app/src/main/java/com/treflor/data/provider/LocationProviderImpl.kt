@@ -10,7 +10,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.treflor.internal.LocationUpdateReciever
+import com.treflor.internal.LocationUpdateReceiver
 
 const val PREF_LATITUDE = "pref_latitude"
 const val PREF_LONGITUDE = "pref_longitude"
@@ -23,7 +23,7 @@ class LocationProviderImpl(
     private val _location = MutableLiveData<Location>()
     private val fusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
-    private val locationUpdateReceiver = mutableListOf<LocationUpdateReciever>()
+    private val locationUpdateReceiver = mutableListOf<LocationUpdateReceiver>()
 
     private val locationRequest = LocationRequest().apply {
         interval = 3500
@@ -43,7 +43,7 @@ class LocationProviderImpl(
 
     }
 
-    override fun requestLocationUpdate(updateReceiver: LocationUpdateReciever): LiveData<Location> {
+    override fun requestLocationUpdate(updateReceiver: LocationUpdateReceiver): LiveData<Location> {
         if (locationUpdateReceiver.isEmpty()) {
             getLastKnownLocation()
             fusedLocationProviderClient.requestLocationUpdates(
@@ -56,7 +56,7 @@ class LocationProviderImpl(
         return location
     }
 
-    override fun removeLocationUpdate(updateReceiver: LocationUpdateReciever) {
+    override fun removeLocationUpdate(updateReceiver: LocationUpdateReceiver) {
         locationUpdateReceiver.remove(updateReceiver)
         if (locationUpdateReceiver.isEmpty()) {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)

@@ -8,11 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 
 import com.treflor.R
 import com.treflor.internal.eventexcecutor.ActivityNavigation
 import com.treflor.internal.ui.base.TreflorScopedFragment
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.journey_details_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
@@ -66,6 +71,16 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware, ActivityNav
             tv_content.text = journey.journey?.content ?: ""
             tv_distance.text = journey.direction?.distance?.text
             tv_duration.text = journey.direction?.duration?.text
+            journey.images?.let {
+                initRecyclerView(journey.images.toImageItems())
+            }
+            val options: RequestOptions = RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.background)
+                .error(R.drawable.background)
+            Glide.with(context!!).load(journey.journey?.image).apply(options)
+                .into(img_cover)
+
             if (viewModel.userId.isNullOrEmpty()) {
                 img_btn_favorite.setOnClickListener {
                     navController.navigate(R.id.action_journeyDetailsFragment_to_loginFragment)
@@ -114,6 +129,22 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware, ActivityNav
 
     override fun showSnackBar(s: String) {
         if (view != null) Snackbar.make(view!!, s, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun initRecyclerView(items: List<ImageItem>) {
+        val groupAdapter = GroupAdapter<GroupieViewHolder>().apply {
+            addAll(items)
+        }
+        rv_images.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = groupAdapter
+        }
+    }
+
+    private fun List<String>.toImageItems(): List<ImageItem> {
+        return this.map {
+            ImageItem(it, context!!)
+        }
     }
 
 }
