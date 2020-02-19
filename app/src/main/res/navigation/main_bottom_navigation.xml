@@ -13,7 +13,7 @@
         android:id="@+id/menuFragment"
         android:name="com.treflor.ui.settings.SettingsFragment"
         android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" />
+        tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.treflor.ui.home.HomeFragment"
@@ -121,4 +121,29 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out_down" />
     </fragment>
+    <fragment
+        android:id="@+id/generalSettings"
+        android:name="com.treflor.ui.settings.general.GeneralSettingsFragment"
+        android:label="general_settings_fragment"
+        tools:layout="@layout/general_settings_fragment" />
+    <fragment
+        android:id="@+id/securitySettings"
+        android:name="com.treflor.ui.settings.security.SecuritySettingsFragment"
+        android:label="security_settings_fragment"
+        tools:layout="@layout/security_settings_fragment" />
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="com.treflor.ui.settings.privacy.PrivacyPolicyFragment"
+        android:label="fragment_privacy_policy"
+        tools:layout="@layout/fragment_privacy_policy" />
+    <fragment
+        android:id="@+id/aboutAppFragment"
+        android:name="com.treflor.ui.settings.about.AboutAppFragment"
+        android:label="fragment_about_app"
+        tools:layout="@layout/fragment_about_app" />
+    <fragment
+        android:id="@+id/termsOfServiceFragment"
+        android:name="com.treflor.ui.settings.tos.TermsOfServiceFragment"
+        android:label="fragment_terms_of_service"
+        tools:layout="@layout/fragment_terms_of_service" />
 </navigation>

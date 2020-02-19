@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.Navigation
 
 import com.treflor.R
 import com.treflor.data.repository.Repository
@@ -39,6 +40,8 @@ class SettingsFragment : Fragment(), KodeinAware {
     }
 
     private fun bindUI() {
+
+//        sign out
         if (repository.getCurrentUserId() == null) tv_sign_out.visibility = View.GONE
         tv_sign_out.setOnClickListener {
             val listener = DialogInterface.OnClickListener { dialog, which ->
@@ -54,11 +57,26 @@ class SettingsFragment : Fragment(), KodeinAware {
                 }
             }
 
+//            Create Alert box
             AlertDialog.Builder(context!!).setMessage("Sure you want to sign out!")
                 .setPositiveButton("Sign out", listener)
                 .setNegativeButton("cancel", listener)
                 .show()
         }
+//        navigate to edit profile
+        edit_profile.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.generalSettings))
+
+//        navigate to change password
+        security.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.securitySettings))
+
+//        navigate to privacy policy
+        privacy.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.privacyPolicyFragment))
+
+//        navigate to about app
+        about.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.aboutAppFragment))
+
+//        navigate to terms of services
+        terms_of_service.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.termsOfServiceFragment))
     }
 
 }
