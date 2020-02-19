@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 
 import com.treflor.R
+import kotlinx.android.synthetic.main.security_settings_fragment.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -32,6 +34,10 @@ class SecuritySettingsFragment : Fragment(), KodeinAware {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(SecuritySettingsViewModel::class.java)
         navController = Navigation.findNavController(view)
+
+        //        Home up action
+        (activity as AppCompatActivity).setSupportActionBar(security_toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

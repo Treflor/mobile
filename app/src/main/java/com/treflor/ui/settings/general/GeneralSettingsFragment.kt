@@ -42,10 +42,6 @@ class GeneralSettingsFragment : TreflorScopedFragment(), KodeinAware {
 
     }
 
-    private fun displayUserDetails(user: User) {
-        ed_first_name.hint = user.givenName
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(GeneralSettingsViewModel::class.java)
