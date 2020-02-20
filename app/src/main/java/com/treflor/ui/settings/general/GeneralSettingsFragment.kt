@@ -19,7 +19,6 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
-import com.treflor.data.remote.requests.SignUpRequest
 
 
 class GeneralSettingsFragment : TreflorScopedFragment(), KodeinAware {
@@ -30,7 +29,6 @@ class GeneralSettingsFragment : TreflorScopedFragment(), KodeinAware {
     private lateinit var viewModel: GeneralSettingsViewModel
     private lateinit var navController: NavController
 
-    private lateinit var request: SignUpRequest
     private lateinit var generalSettingsFragmentBinding: GeneralSettingsFragmentBinding
 
     override fun onCreateView(
