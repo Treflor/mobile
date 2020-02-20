@@ -1,125 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.settings.general.GeneralSettingsFragment">
 
-    <data>
-
-        <variable
-            name="user"
-            type="com.treflor.models.User" />
-    </data>
-
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:title="Edit profile details"
+        app:titleTextColor="@color/colorPrimary" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:title="Edit profile details"
-            app:titleTextColor="@color/colorPrimary" />
+    <RelativeLayout
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="@dimen/ef_margin_small">
 
-        <RelativeLayout
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_profile_picture"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="@dimen/ef_margin_small">
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="20dp"
+            android:src="@drawable/profile_pic" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img_profile_picture"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                android:paddingBottom="20dp"
-                android:src="@drawable/profile_pic" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/img_edit_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="@dimen/ef_margin_medium"
-                android:layout_marginBottom="@dimen/ef_margin_medium"
-                android:alpha="0.9"
-                android:clickable="false"
-                android:src="@drawable/ic_edit_white_24dp"
-                app:backgroundTint="@color/colorButton"
-                app:elevation="6dp"
-                app:fabCustomSize="35dp"
-                app:fabSize="mini"
-                app:maxImageSize="20dp"
-                app:tint="@color/colorWhite" />
-
-        </RelativeLayout>
-
-        <EditText
-            android:id="@+id/ed_first_name"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="5dp"
-            android:fontFamily="@font/roboto"
-            android:hint="Given Name"
-            android:text="@{user.givenName.toString()}"
-            android:inputType="text"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/ed_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="5dp"
-            android:fontFamily="@font/roboto"
-            android:hint="Family Name"
-            android:text="@{user.familyName.toString()}"
-            android:inputType="text"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/ed_email"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="5dp"
-            android:fontFamily="@font/roboto"
-            android:hint="Email"
-            android:text="@{user.email.toString()}"
-            android:inputType="text"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/edit_profile_button"
-            android:layout_width="150dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/img_edit_btn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|end"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/btn1"
-            android:fontFamily="@font/roboto_medium"
-            android:text="Save Changes"
-            android:textSize="14sp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="@dimen/ef_margin_medium"
+            android:layout_marginBottom="@dimen/ef_margin_medium"
+            android:alpha="0.9"
+            android:clickable="false"
+            android:src="@drawable/ic_edit_white_24dp"
             app:backgroundTint="@color/colorButton"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:elevation="6dp"
+            app:fabCustomSize="35dp"
+            app:fabSize="mini"
+            app:maxImageSize="20dp"
+            app:tint="@color/colorWhite" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-</layout>
+    <EditText
+        android:id="@+id/ed_first_name"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/roboto"
+        android:hint="Given Name"
+        android:inputType="text"
+        android:textColor="@color/textColor"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/ed_last_name"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/roboto"
+        android:hint="Family Name"
+        android:inputType="text"
+        android:textColor="@color/textColor"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/ed_email"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/roboto"
+        android:hint="Email"
+        android:inputType="text"
+        android:textColor="@color/textColor"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/edit_profile_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|end"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/btn1"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Save Changes"
+        android:textSize="14sp"
+        app:backgroundTint="@color/colorButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</LinearLayout>

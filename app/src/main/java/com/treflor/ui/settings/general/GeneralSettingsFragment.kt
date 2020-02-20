@@ -10,7 +10,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 
-import com.treflor.databinding.GeneralSettingsFragmentBinding
 import com.treflor.internal.ui.base.TreflorScopedFragment
 import com.treflor.models.User
 import kotlinx.android.synthetic.main.general_settings_fragment.*
@@ -29,8 +28,6 @@ class GeneralSettingsFragment : TreflorScopedFragment(), KodeinAware {
     private lateinit var viewModel: GeneralSettingsViewModel
     private lateinit var navController: NavController
 
-    private lateinit var generalSettingsFragmentBinding: GeneralSettingsFragmentBinding
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,7 +38,8 @@ class GeneralSettingsFragment : TreflorScopedFragment(), KodeinAware {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(GeneralSettingsViewModel::class.java)
+        viewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(GeneralSettingsViewModel::class.java)
         bindUI()
 
     }
@@ -49,15 +47,12 @@ class GeneralSettingsFragment : TreflorScopedFragment(), KodeinAware {
     private fun bindUI() = launch {
         val user = viewModel.user.await()
         user.observe(this@GeneralSettingsFragment, Observer {
-            profilePicture(it)
             if (it == null) return@Observer
-            generalSettingsFragmentBinding.user = it
+            profilePicture(it)
         })
     }
 
-    private fun profilePicture(user: User?) {
-        img_profile_picture.visibility = if (user != null) View.VISIBLE else View.GONE
-        if (user == null) return
+    private fun profilePicture(user: User) {
         Glide.with(this@GeneralSettingsFragment)
             .load(user.photo)
             .centerCrop()
