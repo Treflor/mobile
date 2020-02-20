@@ -30,6 +30,7 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware, ActivityNav
     override val kodein: Kodein by closestKodein()
     private val viewModelFactory: ((String) -> JourneyDetailsViewModelFactory) by factory()
     private lateinit var navController: NavController
+    private lateinit var id: String
 
     private lateinit var viewModel: JourneyDetailsViewModel
 
@@ -43,6 +44,7 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware, ActivityNav
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val safeArgs = arguments?.let { JourneyDetailsFragmentArgs.fromBundle(it) }
+        id = safeArgs!!.id
         viewModel =
             ViewModelProviders.of(this, viewModelFactory(safeArgs!!.id))
                 .get(JourneyDetailsViewModel::class.java)
@@ -110,6 +112,12 @@ class JourneyDetailsFragment : TreflorScopedFragment(), KodeinAware, ActivityNav
                 }
             }
         })
+
+        fab_show_map.setOnClickListener {
+            val actionDetail =
+                JourneyDetailsFragmentDirections.actionJourneyDetailsFragmentToDetailedMapFragment(id)
+            navController.navigate(actionDetail)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -107,6 +107,13 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_journeyDetailsFragment_to_detailedMapFragment"
+            app:destination="@id/detailedMapFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out_down"/>
     </fragment>
     <fragment
         android:id="@+id/userJourneyFragment"
@@ -120,5 +127,14 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailedMapFragment"
+        android:name="com.treflor.ui.home.detailed.DetailedMapFragment"
+        android:label="detailed_map_fragment"
+        tools:layout="@layout/detailed_map_fragment" >
+        <argument
+            android:name="id"
+            app:argType="string" />
     </fragment>
 </navigation>

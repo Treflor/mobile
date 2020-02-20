@@ -17,7 +17,6 @@ class TreflorGoogleServicesNetworkDataSourceImpl(
     override val direction: LiveData<DirectionApiResponse> get() = _direction
     private val _direction by lazy { MutableLiveData<DirectionApiResponse>() }
 
-
     override suspend fun fetchDirection(
         origin: String,
         destination: String,
