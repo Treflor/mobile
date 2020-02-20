@@ -40,7 +40,7 @@ import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
 
-class JourneyFragment() : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware,
+class JourneyFragment : TreflorScopedFragment(), OnMapReadyCallback, KodeinAware,
     ActivityNavigation {
 
     override val kodein: Kodein by closestKodein()
