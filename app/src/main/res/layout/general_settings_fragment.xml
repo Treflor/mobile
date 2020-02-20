@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.settings.general.generalSettings">
+    tools:context=".ui.settings.general.GeneralSettingsFragment">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.treflor.models.User" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,9 +22,7 @@
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            app:logo="@drawable/ic_arrow_back_black"
             app:title="Edit profile details"
-            app:titleMarginStart="40dp"
             app:titleTextColor="@color/colorPrimary" />
 
         <RelativeLayout
@@ -58,7 +61,7 @@
         </RelativeLayout>
 
         <EditText
-            android:id="@+id/ed_name"
+            android:id="@+id/ed_first_name"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="20dp"
@@ -66,14 +69,27 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/roboto"
-            android:hint="User Name"
+            android:hint="First Name"
             android:inputType="text"
             android:textColor="@color/textColor"
-            android:textColorHint="@color/textColor"
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/ed_name2"
+            android:id="@+id/ed_last_name"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/roboto"
+            android:hint="Last Name"
+            android:inputType="text"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/ed_email"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="20dp"
@@ -83,23 +99,7 @@
             android:fontFamily="@font/roboto"
             android:hint="Email"
             android:inputType="text"
-            android:textColor="@color/colorBlack"
-            android:textColorHint="@color/textColor"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/ed_name3"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="5dp"
-            android:fontFamily="@font/roboto"
-            android:hint="Phone number"
-            android:inputType="text"
-            android:textColor="@color/colorBlack"
-            android:textColorHint="@color/textColor"
+            android:textColor="@color/textColor"
             android:textSize="16sp" />
 
         <Button
@@ -119,4 +119,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</layout>

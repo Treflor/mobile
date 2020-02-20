@@ -1,4 +1,4 @@
-package com.treflor.ui.settings.privacy
+package com.treflor.ui.settings.tos
 
 
 import android.os.Bundle
@@ -16,7 +16,7 @@ import org.kodein.di.android.x.closestKodein
 /**
  * A simple [Fragment] subclass.
  */
-class PrivacyPolicyFragment : Fragment(), KodeinAware {
+class TermsOfServiceFragment : Fragment(), KodeinAware {
 
     override val kodein: Kodein by closestKodein()
 
@@ -27,7 +27,7 @@ class PrivacyPolicyFragment : Fragment(), KodeinAware {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_privacy_policy, container, false)
+        return inflater.inflate(R.layout.fragment_terms_of_service, container, false)
     }
 
 

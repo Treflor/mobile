@@ -5,18 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.settings.security.securitySettings">
+    tools:context=".ui.settings.security.SecuritySettingsFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:logo="@drawable/ic_arrow_back_black"
         app:title="Change Password"
-        app:titleMarginStart="40dp"
         app:titleTextColor="@color/colorPrimary" />
 
     <LinearLayout
@@ -31,11 +28,10 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="50dp"
-            android:background="@android:drawable/editbox_background_normal"
             android:hint="Current Password"
             android:inputType="textPassword"
             android:password="true"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/textColor"
             android:textSize="14sp" />
 
         <EditText
@@ -43,11 +39,10 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="10dp"
-            android:background="@android:drawable/editbox_background_normal"
             android:hint="New Password"
             android:inputType="textPassword"
             android:password="true"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/textColor"
             android:textSize="14sp" />
 
         <EditText
@@ -55,11 +50,10 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="10dp"
-            android:background="@android:drawable/editbox_background_normal"
             android:hint="Confirm Password"
             android:inputType="textPassword"
             android:password="true"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/textColor"
             android:textSize="14sp" />
 
         <Button
