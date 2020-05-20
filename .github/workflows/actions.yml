@@ -18,7 +18,7 @@ jobs:
           sudo apt-get install gradle
       - name: Decrypt google-services.json
         run: |
-          openssl enc -aes-256-cbc -salt -in app/google-services.enc -out app/google-services.json -pass pass:${{ secrets.ENC_PASS }} -d
+          openssl enc -aes-256-cbc -salt -in app/google-services.json.enc -out app/google-services.json -pass pass:${{ secrets.ENC_PASS }} -d
       - name: Unit tests
         run: |
           echo "google.client-id=${{ secrets.GOOGLE_CLIENT_ID }}" >> local.properties
@@ -40,7 +40,7 @@ jobs:
           sudo apt-get install gradle
       - name: Decrypt google-services.json
         run: |
-          openssl enc -aes-256-cbc -salt -in app/google-services.enc -out app/google-services.json -pass pass:${{ secrets.ENC_PASS }} -d
+          openssl enc -aes-256-cbc -salt -in app/google-services.json.enc -out app/google-services.json -pass pass:${{ secrets.ENC_PASS }} -d
       - name: Build debug APK
         run: |
           echo "google.client-id=${{ secrets.GOOGLE_CLIENT_ID }}" >> local.properties
