@@ -84,7 +84,6 @@ interface TreflorApiService {
 
     companion object {
         operator fun invoke(
-//            catch no connectivity error
             connectivityInterceptor: ConnectivityInterceptor
         ): TreflorApiService {
             val okHttpClient = OkHttpClient.Builder()
